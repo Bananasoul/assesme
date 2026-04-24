@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------
+// ZONE SÉCURISÉE (COFFRE-FORT NUMÉRIQUE)
+// Dans une architecture cible, cette table serait dans une base de données isolée
+// ------------------------------------------------------
+model PatientVault {
+  id             String          @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String          @unique
+  dateOfBirth    DateTime?
+  createdAt      DateTime        @default(now())
+  
+  // Le lien vers le dossier clinique se fait uniquement via cet ID cryptographique
+  clinicalRecord ClinicalRecord?
+}
+
+// ------------------------------------------------------
+// ZONE CLINIQUE (PSEUDONYMISÉE)
+// Aucune information personnelle (IPI) ne réside ici.
+// ------------------------------------------------------
+model ClinicalRecord {
+  id          String       @id @default(uuid())
+  patientId   String       @unique // Référence à PatientVault.id
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  // Relation Prisma (seulement pour la facilité de la requête locale, 
+  // en prod on ne ferait pas de foreign key directe si BDD séparées)
+  patient     PatientVault @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  assessments Assessment[]
+}
+
+model Assessment {
+  id             String                @id @default(uuid())
+  recordId       String
+  timelineAnchor String                // "T0_INITIAL", "T1_MID_TREATMENT", "T2_FINAL"
+  timestamp      DateTime              @default(now())
+  practitionerNotes String?
+  
+  record         ClinicalRecord        @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  questionnaires QuestionnaireResult[]
+}
+
+model QuestionnaireResult {
+  id             String     @id @default(uuid())
+  assessmentId   String
+  type           String     // "TAMPA", "ODI", "START_BACK"
+  score          Int
+  maxScore       Int
+  rawResponses   String     // JSON string pour stocker les détails des réponses
+  completedAt    DateTime   @default(now())
+  isPatientInput Boolean    @default(true)
+  
+  assessment     Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+}
