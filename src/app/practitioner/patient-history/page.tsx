@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ChevronLeft, User, Calendar, Activity, Database } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
+import GenerateLinkButton from '@/components/GenerateLinkButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,7 +49,10 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
           Retour au mode Praticien
         </Link>
 
-        <PrintButton />
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <GenerateLinkButton recordId={record.id} patientName={`${patient.firstName} ${patient.lastName}`} />
+          <PrintButton />
+        </div>
       </nav>
 
       <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>

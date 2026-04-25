@@ -7,9 +7,11 @@ import Link from 'next/link';
 
 interface QuestionnaireEngineProps {
   questionnaire: QuestionnaireDef;
+  targetRecordId?: string;
+  isRemoteFill?: boolean;
 }
 
-export default function QuestionnaireEngine({ questionnaire }: QuestionnaireEngineProps) {
+export default function QuestionnaireEngine({ questionnaire, targetRecordId, isRemoteFill }: QuestionnaireEngineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [isCompleted, setIsCompleted] = useState(false);
@@ -43,7 +45,9 @@ export default function QuestionnaireEngine({ questionnaire }: QuestionnaireEngi
               type: questionnaire.id.toUpperCase(),
               score: totalScore,
               maxScore: questionnaire.maxScore,
-              rawResponses: newAnswers
+              rawResponses: newAnswers,
+              targetRecordId,
+              isPatientInput: !!isRemoteFill
             })
           });
           setIsCompleted(true);
@@ -71,22 +75,35 @@ export default function QuestionnaireEngine({ questionnaire }: QuestionnaireEngi
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem', marginBottom: '2rem', maxWidth: '400px' }}>
           Merci d'avoir complété le {questionnaire.title}. Vos réponses ont été transmises en toute sécurité à votre praticien.
         </p>
-        <Link 
-          href="/"
-          style={{
-            background: 'var(--primary)',
-            color: 'var(--text-inverse)',
-            padding: '1rem 2rem',
-            borderRadius: 'var(--radius-full)',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}
-        >
-          <CheckCircle2 size={20} />
-          Retour au Tableau de Bord
-        </Link>
+        
+        {!isRemoteFill ? (
+          <Link 
+            href="/"
+            style={{
+              background: 'var(--primary)',
+              color: 'var(--text-inverse)',
+              padding: '1rem 2rem',
+              borderRadius: 'var(--radius-full)',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <CheckCircle2 size={20} />
+            Retour au Tableau de Bord
+          </Link>
+        ) : (
+          <div style={{
+              background: 'var(--surface-hover)',
+              color: 'var(--text-secondary)',
+              padding: '1rem 2rem',
+              borderRadius: 'var(--radius-full)',
+              fontWeight: 500,
+            }}>
+            Vous pouvez maintenant fermer cette page.
+          </div>
+        )}
       </div>
     );
   }
