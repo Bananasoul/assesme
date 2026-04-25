@@ -1,9 +1,10 @@
 import { getPatientHistory } from '@/lib/data';
 import Link from 'next/link';
-import { ChevronLeft, User, Calendar, Activity, Database } from 'lucide-react';
+import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
 import GenerateLinkButton from '@/components/GenerateLinkButton';
+import EvolutionChart from '@/components/EvolutionChart';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,11 +72,22 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
           </div>
         </div>
 
-        {/* Timeline of Assessments */}
-        <div>
+        {/* Graphiques d'évolution (Recharts) */}
+        {assessments.length > 0 && (
+          <div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <TrendingUp size={24} color="var(--primary)" />
+              Tableau de Bord Clinique
+            </h2>
+            <EvolutionChart assessments={assessments} />
+          </div>
+        )}
+
+        {/* Timeline of Assessments (Raw Data) */}
+        <div style={{ marginTop: '1rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Activity size={24} color="var(--primary)" />
-            Historique des Évaluations Fonctionnelles
+            Historique détaillé des évaluations
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
