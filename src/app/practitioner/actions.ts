@@ -2,10 +2,19 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { createClient } from '@/utils/supabase/server';
 
 export async function getPatients() {
   try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return [];
+
     const patients = await prisma.patientVault.findMany({
+      where: {
+        practitionerId: user.id
+      },
       include: {
         clinicalRecord: {
           include: {
@@ -39,17 +48,28 @@ export async function createPatient(formData: FormData) {
   }
 
   try {
-    // Basic email check
-    const existingPatient = await prisma.patientVault.findUnique({
-      where: { email }
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { error: 'Vous devez être connecté.' };
+    }
+
+    // Basic email check for THIS practitioner
+    const existingPatient = await prisma.patientVault.findFirst({
+      where: { 
+        email,
+        practitionerId: user.id
+      }
     });
 
     if (existingPatient) {
-      return { error: 'Un patient avec cet email existe déjà.' };
+      return { error: 'Vous avez déjà un patient avec cet email.' };
     }
 
     const patient = await prisma.patientVault.create({
       data: {
+        practitionerId: user.id,
         firstName,
         lastName,
         email,

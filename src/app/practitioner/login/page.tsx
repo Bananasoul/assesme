@@ -1,12 +1,19 @@
 'use client';
 
-import { useActionState } from 'react';
-import { loginAction } from './actions';
-import { Lock, Stethoscope } from 'lucide-react';
+import { useActionState, useState } from 'react';
+import { loginAction, signupAction } from './actions';
+import { Lock, Mail, Stethoscope } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [state, formAction, pending] = useActionState(loginAction, null);
+  const [isLogin, setIsLogin] = useState(true);
+  // We use two different states for login and signup so they don't clash
+  const [loginState, loginFormAction, loginPending] = useActionState(loginAction, null);
+  const [signupState, signupFormAction, signupPending] = useActionState(signupAction, null);
+
+  const pending = isLogin ? loginPending : signupPending;
+  const state = isLogin ? loginState : signupState;
+  const action = isLogin ? loginFormAction : signupFormAction;
 
   return (
     <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background)', padding: '1rem' }}>
@@ -24,19 +31,39 @@ export default function LoginPage() {
         </div>
 
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-          Mode Expert
+          {isLogin ? 'Connexion Praticien' : 'Créer un compte'}
         </h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-          Veuillez saisir votre code d'accès professionnel.
+          Sécurisé par Supabase Auth
         </p>
 
-        <form action={formAction} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <form action={action} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ position: 'relative' }}>
+            <Mail size={20} color="var(--text-secondary)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email professionnel"
+              required
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem 0.75rem 2.75rem',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border)',
+                background: 'var(--background)',
+                fontSize: '1rem',
+                outline: 'none',
+                color: 'var(--text-primary)'
+              }}
+            />
+          </div>
+
           <div style={{ position: 'relative' }}>
             <Lock size={20} color="var(--text-secondary)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
             <input
               type="password"
-              name="pin"
-              placeholder="Code PIN"
+              name="password"
+              placeholder="Mot de passe"
               required
               style={{
                 width: '100%',
@@ -72,12 +99,19 @@ export default function LoginPage() {
               opacity: pending ? 0.7 : 1
             }}
           >
-            {pending ? 'Connexion...' : 'Accéder au dossier'}
+            {pending ? 'Chargement...' : (isLogin ? 'Se connecter' : 'Créer le compte')}
           </button>
         </form>
 
-        <p style={{ marginTop: '2rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-          Pour la démo, le code est : <strong>KINE2024</strong>
+        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          {isLogin ? "Vous n'avez pas de compte ?" : "Vous avez déjà un compte ?"}
+          <button 
+            type="button" 
+            onClick={() => setIsLogin(!isLogin)} 
+            style={{ color: 'var(--primary)', fontWeight: 600, marginLeft: '0.5rem', background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            {isLogin ? "S'inscrire" : "Se connecter"}
+          </button>
         </p>
       </div>
     </main>

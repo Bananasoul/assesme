@@ -53,10 +53,20 @@ export async function getPatientDashboardStats() {
   };
 }
 
+import { createClient } from '@/utils/supabase/server';
+
 // Récupérer l'historique complet pour le praticien
 export async function getPatientHistory(patientId?: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return null;
+
   return prisma.patientVault.findFirst({
-    where: patientId ? { id: patientId } : undefined,
+    where: { 
+      id: patientId ? patientId : undefined,
+      practitionerId: user.id
+    },
     include: {
       clinicalRecord: {
         include: {

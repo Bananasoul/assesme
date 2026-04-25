@@ -17,6 +17,7 @@ datasource db {
 // ------------------------------------------------------
 model PatientVault {
   id             String          @id @default(uuid())
+  practitionerId String          @default("kine2024") // Temporaire pour la migration, on mettra l'UUID Supabase
   firstName      String
   lastName       String
   email          String          @unique

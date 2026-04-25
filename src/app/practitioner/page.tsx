@@ -3,15 +3,19 @@ import { Activity, ClipboardList, TrendingUp, Users, Search, Calendar, ChevronRi
 import PractitionerDashboard from '@/components/PractitionerDashboard';
 import { getPatients } from './actions';
 import NewPatientModal from '@/components/NewPatientModal';
+import LogoutButton from '@/components/LogoutButton';
+import { createClient } from '@/utils/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
 export default async function PractitionerPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const patients = await getPatients();
 
   return (
     <main style={{ padding: '2rem 1rem', background: 'var(--background)', minHeight: '100vh' }}>
-      <nav style={{ maxWidth: '1200px', margin: '0 auto 2rem auto', display: 'flex', justifyContent: 'flex-start' }}>
+      <nav style={{ maxWidth: '1200px', margin: '0 auto 2rem auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Link 
           href="/" 
           style={{ 
@@ -36,10 +40,13 @@ export default async function PractitionerPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Espace Praticien</h1>
-            <p style={{ color: 'var(--text-secondary)' }}>Gérez vos patients et suivez leur évolution fonctionnelle.</p>
+            <p style={{ color: 'var(--text-secondary)' }}>
+              Bienvenue, {user?.email}
+            </p>
           </div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <NewPatientModal />
+            <LogoutButton />
           </div>
         </div>
 
