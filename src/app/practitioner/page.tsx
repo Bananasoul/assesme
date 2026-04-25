@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Activity, ClipboardList, TrendingUp, Users, Search, Calendar, ChevronRight } from 'lucide-react';
+import { Calendar, User, Search, Activity, FileText, Settings, Users, ChevronRight } from 'lucide-react';
 import PractitionerDashboard from '@/components/PractitionerDashboard';
 import { getPatients } from './actions';
 import NewPatientModal from '@/components/NewPatientModal';
@@ -45,6 +45,10 @@ export default async function PractitionerPage() {
             </p>
           </div>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Link href="/practitioner/settings" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', color: 'var(--text-secondary)', background: 'var(--surface)', borderRadius: 'var(--radius-full)', border: '1px solid var(--border)', fontWeight: 500 }}>
+              <Settings size={18} />
+              Paramètres
+            </Link>
             <NewPatientModal />
             <LogoutButton />
           </div>

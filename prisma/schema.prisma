@@ -15,6 +15,21 @@ datasource db {
 // ZONE SÉCURISÉE (COFFRE-FORT NUMÉRIQUE)
 // Dans une architecture cible, cette table serait dans une base de données isolée
 // ------------------------------------------------------
+
+model PractitionerProfile {
+  id             String   @id @default(uuid())
+  practitionerId String   @unique // Supabase Auth User ID
+  firstName      String
+  lastName       String
+  title          String?  // e.g. Masseur-Kinésithérapeute
+  inamiNumber    String?
+  address        String?
+  phone          String?
+  email          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
 model PatientVault {
   id             String          @id @default(uuid())
   practitionerId String          @default("kine2024") // Temporaire pour la migration, on mettra l'UUID Supabase

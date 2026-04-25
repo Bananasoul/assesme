@@ -57,6 +57,8 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
       </nav>
 
       <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <MedicalHeader />
+        
         {/* Patient Identity Card */}
         <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <div style={{ background: 'var(--surface-hover)', padding: '1.5rem', borderRadius: '50%' }}>
