@@ -6,8 +6,14 @@ import PrintButton from '@/components/PrintButton';
 
 export const dynamic = 'force-dynamic';
 
-export default async function PatientHistoryPage() {
-  const patient = await getPatientHistory();
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function PatientHistoryPage({ searchParams }: Props) {
+  const resolvedParams = await searchParams;
+  const patientId = typeof resolvedParams.id === 'string' ? resolvedParams.id : undefined;
+  const patient = await getPatientHistory(patientId);
 
   if (!patient || !patient.clinicalRecord) {
     return (

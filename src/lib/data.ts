@@ -54,8 +54,9 @@ export async function getPatientDashboardStats() {
 }
 
 // Récupérer l'historique complet pour le praticien
-export async function getPatientHistory() {
+export async function getPatientHistory(patientId?: string) {
   return prisma.patientVault.findFirst({
+    where: patientId ? { id: patientId } : undefined,
     include: {
       clinicalRecord: {
         include: {
