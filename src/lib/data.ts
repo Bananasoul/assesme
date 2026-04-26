@@ -73,6 +73,9 @@ export async function getPatientHistory(patientId?: string) {
           assessments: {
             include: { questionnaires: true },
             orderBy: { timestamp: 'desc' }
+          },
+          exercises: {
+            orderBy: { createdAt: 'desc' }
           }
         }
       }

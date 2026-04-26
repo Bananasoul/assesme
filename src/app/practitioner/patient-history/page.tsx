@@ -1,10 +1,12 @@
 import { getPatientHistory } from '@/lib/data';
 import Link from 'next/link';
-import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp } from 'lucide-react';
+import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
 import GenerateLinkButton from '@/components/GenerateLinkButton';
 import EvolutionChart from '@/components/EvolutionChart';
+import MedicalHeader from '@/components/MedicalHeader';
+import AddExerciseModal from '@/components/AddExerciseModal';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +30,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
   const record = patient.clinicalRecord;
   const assessments = record.assessments;
+  const exercises = record.exercises || [];
 
   return (
     <main style={{ padding: '2rem 1rem', background: 'var(--background)', minHeight: '100vh' }}>
@@ -76,7 +79,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
         {/* Graphiques d'évolution (Recharts) */}
         {assessments.length > 0 && (
-          <div>
+          <div className="no-print">
             <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <TrendingUp size={24} color="var(--primary)" />
               Tableau de Bord Clinique
@@ -84,6 +87,58 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
             <EvolutionChart assessments={assessments} />
           </div>
         )}
+
+        {/* Plan de Traitement à Domicile (HEP) */}
+        <div style={{ marginTop: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Dumbbell size={24} color="var(--primary)" />
+              Plan de Traitement à Domicile
+            </h2>
+            <AddExerciseModal recordId={record.id} patientId={patient.id} />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+            {exercises.length === 0 ? (
+              <p className="no-print" style={{ color: 'var(--text-secondary)' }}>Aucun exercice n'a encore été prescrit.</p>
+            ) : (
+              exercises.map(ex => (
+                <div key={ex.id} style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>{ex.name}</h3>
+                    {ex.videoUrl && (
+                      <a href={ex.videoUrl} target="_blank" rel="noopener noreferrer" className="no-print" style={{ color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem', fontWeight: 500 }}>
+                        <Video size={16} />
+                        Vidéo
+                      </a>
+                    )}
+                  </div>
+                  
+                  {(ex.sets || ex.reps) && (
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                      {ex.sets && (
+                        <span style={{ background: 'var(--primary-light)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.875rem', fontWeight: 600 }}>
+                          Séries: {ex.sets}
+                        </span>
+                      )}
+                      {ex.reps && (
+                        <span style={{ background: 'var(--secondary-light)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.875rem', fontWeight: 600 }}>
+                          Répétitions: {ex.reps}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {ex.instructions && (
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5, background: 'var(--surface-hover)', padding: '0.75rem', borderRadius: 'var(--radius-md)', margin: 0 }}>
+                      {ex.instructions}
+                    </p>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
 
         {/* Timeline of Assessments (Raw Data) */}
         <div style={{ marginTop: '1rem' }}>

@@ -48,16 +48,26 @@ model PatientVault {
 // Aucune information personnelle (IPI) ne réside ici.
 // ------------------------------------------------------
 model ClinicalRecord {
-  id          String       @id @default(uuid())
-  patientId   String       @unique // Référence à PatientVault.id
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  
-  // Relation Prisma (seulement pour la facilité de la requête locale, 
-  // en prod on ne ferait pas de foreign key directe si BDD séparées)
-  patient     PatientVault @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  
-  assessments Assessment[]
+  id           String        @id @default(uuid())
+  patient      PatientVault  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId    String        @unique
+  pathology    String?       // Optionnel: motif principal de consultation
+  assessments  Assessment[]
+  exercises    Exercise[]    // Nouveau: liste des exercices prescrits
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Exercise {
+  id               String         @id @default(uuid())
+  clinicalRecord   ClinicalRecord @relation(fields: [clinicalRecordId], references: [id], onDelete: Cascade)
+  clinicalRecordId String
+  name             String
+  sets             String?
+  reps             String?
+  instructions     String?
+  videoUrl         String?
+  createdAt        DateTime       @default(now())
 }
 
 model Assessment {
