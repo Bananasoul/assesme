@@ -1,5 +1,5 @@
 import React from 'react';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { createClient } from '@/utils/supabase/server';
 import { Building2 } from 'lucide-react';
 

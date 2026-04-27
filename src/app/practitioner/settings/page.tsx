@@ -1,6 +1,6 @@
 import React from 'react';
 import { createClient } from '@/utils/supabase/server';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { ChevronLeft, Save, Building2, User } from 'lucide-react';
 import { saveProfile } from './actions';
@@ -53,7 +53,10 @@ export default async function SettingsPage() {
           </div>
         </div>
 
-        <form action={saveProfile} style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-md)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <form action={async (formData) => {
+          'use server';
+          await saveProfile(formData);
+        }} style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-md)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
             <div>
