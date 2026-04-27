@@ -39,13 +39,28 @@ export default function QuestionnaireEngine({ questionnaire, targetRecordId, isR
         try {
           let totalScore = 0;
           
-          if (questionnaire.id === 'quickdash') {
+          if (questionnaire.id === 'quickdash' || questionnaire.id === 'dash') {
             // Formule QuickDASH: ((Sum / n) - 1) * 25
             const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
             const n = Object.keys(newAnswers).length;
             totalScore = Math.round(((sum / n) - 1) * 25);
+          } else if (questionnaire.id === 'ndi' || questionnaire.id === 'odi') {
+            // NDI & ODI: Score = (Sum / (n * 5)) * 100
+            const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+            const n = Object.keys(newAnswers).length;
+            totalScore = Math.round((sum / (n * 5)) * 100);
+          } else if (questionnaire.id === 'spadi') {
+            // SPADI: Score = (Sum / (n * 10)) * 100
+            const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+            const n = Object.keys(newAnswers).length;
+            totalScore = Math.round((sum / (n * 10)) * 100);
+          } else if (questionnaire.id === 'koos' || questionnaire.id === 'hoos') {
+            // KOOS & HOOS: 100 - (Sum / (n * 4)) * 100 (100 = sain, 0 = sévère)
+            const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+            const n = Object.keys(newAnswers).length;
+            totalScore = 100 - Math.round((sum / (n * 4)) * 100);
           } else {
-            // Somme classique
+            // Somme classique (ex: RMDQ)
             totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);
           }
 
