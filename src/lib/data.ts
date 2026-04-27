@@ -76,6 +76,9 @@ export async function getPatientHistory(patientId?: string) {
           },
           exercises: {
             orderBy: { createdAt: 'desc' }
+          },
+          sessionNotes: {
+            orderBy: { date: 'desc' }
           }
         }
       }

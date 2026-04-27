@@ -54,8 +54,18 @@ model ClinicalRecord {
   pathology    String?       // Optionnel: motif principal de consultation
   assessments  Assessment[]
   exercises    Exercise[]    // Nouveau: liste des exercices prescrits
+  sessionNotes SessionNote[] // Nouveau: journal des séances
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+}
+
+model SessionNote {
+  id               String         @id @default(uuid())
+  clinicalRecord   ClinicalRecord @relation(fields: [clinicalRecordId], references: [id], onDelete: Cascade)
+  clinicalRecordId String
+  date             DateTime       // Date de la séance (choisie par le praticien)
+  content          String         // Contenu textuel de la note
+  createdAt        DateTime       @default(now())
 }
 
 model Exercise {

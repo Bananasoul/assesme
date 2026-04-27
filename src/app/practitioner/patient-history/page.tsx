@@ -1,6 +1,6 @@
 import { getPatientHistory } from '@/lib/data';
 import Link from 'next/link';
-import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video } from 'lucide-react';
+import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
 import GenerateLinkButton from '@/components/GenerateLinkButton';
@@ -8,6 +8,7 @@ import EvolutionChart from '@/components/EvolutionChart';
 import MedicalHeader from '@/components/MedicalHeader';
 import AddExerciseModal from '@/components/AddExerciseModal';
 import PortalLinkButton from '@/components/PortalLinkButton';
+import AddNoteModal from '@/components/AddNoteModal';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +33,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
   const record = patient.clinicalRecord;
   const assessments = record.assessments;
   const exercises = record.exercises || [];
+  const sessionNotes = record.sessionNotes || [];
 
   return (
     <main style={{ padding: '2rem 1rem', background: 'var(--background)', minHeight: '100vh' }}>
@@ -184,6 +186,43 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                         </div>
                       );
                     })}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Journal des Séances (SOAP Notes) */}
+        <div style={{ marginTop: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <FileText size={24} color="var(--primary)" />
+              Journal des Séances
+            </h2>
+            <AddNoteModal recordId={record.id} />
+          </div>
+
+          <div style={{ position: 'relative', paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {/* Ligne verticale de timeline */}
+            <div style={{ position: 'absolute', left: '0.375rem', top: '0', bottom: '0', width: '2px', background: 'var(--border)' }}></div>
+
+            {sessionNotes.length === 0 ? (
+              <p style={{ color: 'var(--text-secondary)' }}>Aucune note de séance pour le moment.</p>
+            ) : (
+              sessionNotes.map(note => (
+                <div key={note.id} style={{ position: 'relative' }}>
+                  {/* Point de timeline */}
+                  <div style={{ position: 'absolute', left: '-1.5rem', top: '0.25rem', width: '1rem', height: '1rem', background: 'var(--surface)', border: '2px solid var(--primary)', borderRadius: '50%', zIndex: 10 }}></div>
+                  
+                  <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', padding: '1.25rem', boxShadow: 'var(--shadow-sm)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+                      <Calendar size={16} />
+                      {new Date(note.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                    </div>
+                    <p style={{ color: 'var(--text-primary)', margin: 0, whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                      {note.content}
+                    </p>
                   </div>
                 </div>
               ))
