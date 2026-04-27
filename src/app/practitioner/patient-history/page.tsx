@@ -7,6 +7,7 @@ import GenerateLinkButton from '@/components/GenerateLinkButton';
 import EvolutionChart from '@/components/EvolutionChart';
 import MedicalHeader from '@/components/MedicalHeader';
 import AddExerciseModal from '@/components/AddExerciseModal';
+import PortalLinkButton from '@/components/PortalLinkButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,6 +55,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
         </Link>
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <PortalLinkButton recordId={record.id} patientName={patient.firstName} />
           <GenerateLinkButton recordId={record.id} patientName={`${patient.firstName} ${patient.lastName}`} />
           <PrintButton />
         </div>

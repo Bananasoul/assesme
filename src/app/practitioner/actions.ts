@@ -43,8 +43,8 @@ export async function createPatient(formData: FormData) {
   const email = formData.get('email') as string;
   const dobString = formData.get('dateOfBirth') as string;
   
-  if (!firstName || !lastName || !email) {
-    return { error: 'Veuillez remplir tous les champs obligatoires.' };
+  if (!firstName || !lastName || !email || !dobString) {
+    return { error: 'Veuillez remplir tous les champs obligatoires, y compris la date de naissance.' };
   }
 
   try {
