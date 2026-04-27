@@ -37,7 +37,18 @@ export default function QuestionnaireEngine({ questionnaire, targetRecordId, isR
       } else {
         // Submit
         try {
-          const totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+          let totalScore = 0;
+          
+          if (questionnaire.id === 'quickdash') {
+            // Formule QuickDASH: ((Sum / n) - 1) * 25
+            const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+            const n = Object.keys(newAnswers).length;
+            totalScore = Math.round(((sum / n) - 1) * 25);
+          } else {
+            // Somme classique
+            totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+          }
+
           await fetch('/api/assessments', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

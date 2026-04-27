@@ -133,5 +133,69 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         { id: '3', label: 'Presque plus', value: 3 },
       ]}
     ]
+  },
+
+  'quickdash': {
+    id: 'quickdash',
+    title: 'QuickDASH (Membre Supérieur)',
+    description: 'Évaluation des incapacités du bras, de l\'épaule ou de la main.',
+    estimatedTime: '3 min',
+    maxScore: 100, // Le calcul est un pourcentage
+    questions: [
+      { id: 'qd1', text: "Ouvrir un bocal neuf ou très serré", options: [
+        { id: '1', label: 'Aucune difficulté', value: 1 },
+        { id: '2', label: 'Difficulté légère', value: 2 },
+        { id: '3', label: 'Difficulté moyenne', value: 3 },
+        { id: '4', label: 'Difficulté extrême', value: 4 },
+        { id: '5', label: 'Incapable de le faire', value: 5 },
+      ]},
+      { id: 'qd2', text: "Faire des travaux ménagers lourds (ex: laver les murs, les planchers)", options: [
+        { id: '1', label: 'Aucune difficulté', value: 1 },
+        { id: '2', label: 'Difficulté légère', value: 2 },
+        { id: '3', label: 'Difficulté moyenne', value: 3 },
+        { id: '4', label: 'Difficulté extrême', value: 4 },
+        { id: '5', label: 'Incapable de le faire', value: 5 },
+      ]},
+      { id: 'qd3', text: "Au cours de la dernière semaine, à quel point la douleur a-t-elle interféré avec vos activités sociales ?", options: [
+        { id: '1', label: 'Pas du tout', value: 1 },
+        { id: '2', label: 'Légèrement', value: 2 },
+        { id: '3', label: 'Modérément', value: 3 },
+        { id: '4', label: 'Beaucoup', value: 4 },
+        { id: '5', label: 'Extrêmement', value: 5 },
+      ]}
+    ]
+  },
+
+  'lefs': {
+    id: 'lefs',
+    title: 'LEFS (Membre Inférieur)',
+    description: 'Lower Extremity Functional Scale. Évalue la fonction de la hanche, du genou, de la cheville ou du pied.',
+    estimatedTime: '5 min',
+    maxScore: 80,
+    questions: [
+      { id: 'lefs1', text: "Votre travail habituel ou vos tâches ménagères", options: [
+        { id: '0', label: 'Difficulté extrême ou incapable', value: 0 },
+        { id: '1', label: 'Assez de difficulté', value: 1 },
+        { id: '2', label: 'Difficulté modérée', value: 2 },
+        { id: '3', label: 'Peu de difficulté', value: 3 },
+        { id: '4', label: 'Aucune difficulté', value: 4 },
+      ]},
+      { id: 'lefs2', text: "S'accroupir", options: [
+        { id: '0', label: 'Difficulté extrême ou incapable', value: 0 },
+        { id: '1', label: 'Assez de difficulté', value: 1 },
+        { id: '2', label: 'Difficulté modérée', value: 2 },
+        { id: '3', label: 'Peu de difficulté', value: 3 },
+        { id: '4', label: 'Aucune difficulté', value: 4 },
+      ]},
+      { id: 'lefs3', text: "Marcher entre les pièces de la maison", options: [
+        { id: '0', label: 'Difficulté extrême ou incapable', value: 0 },
+        { id: '1', label: 'Assez de difficulté', value: 1 },
+        { id: '2', label: 'Difficulté modérée', value: 2 },
+        { id: '3', label: 'Peu de difficulté', value: 3 },
+        { id: '4', label: 'Aucune difficulté', value: 4 },
+      ]}
+    ]
   }
 };
+
+export const questionnaires = Object.values(QUESTIONNAIRES);
