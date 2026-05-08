@@ -2919,7 +2919,8 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The VISA-A questionnaire: a valid and reliable index of the clinical severity of Achilles tendinopathy',
-        url: 'https://pubmed.ncbi.nlm.nih.gov/11533405/'
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11533405/',
+        type: 'scientific_article' as const
       }
     ],
     sections: [
@@ -2977,7 +2978,8 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The VISA score: an index of severity of symptoms in patients with jumper\'s knee (patellar tendinosis)',
-        url: 'https://pubmed.ncbi.nlm.nih.gov/9536867/'
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9536867/',
+        type: 'scientific_article' as const
       }
     ],
     sections: [
@@ -3024,7 +3026,8 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The Timed "Up & Go": a test of basic functional mobility for frail elderly persons',
-        url: 'https://pubmed.ncbi.nlm.nih.gov/1991946/'
+        url: 'https://pubmed.ncbi.nlm.nih.gov/1991946/',
+        type: 'scientific_article' as const
       }
     ],
     sections: [
@@ -3068,7 +3071,8 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'A questionnaire on the perceptions of patients about physical activity and work',
-        url: 'https://pubmed.ncbi.nlm.nih.gov/8422742/'
+        url: 'https://pubmed.ncbi.nlm.nih.gov/8422742/',
+        type: 'scientific_article' as const
       }
     ],
     sections: [
@@ -3114,7 +3118,8 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The patient-specific functional scale: pharmacokinetics and clinimetric properties',
-        url: 'https://pubmed.ncbi.nlm.nih.gov/8290618/'
+        url: 'https://pubmed.ncbi.nlm.nih.gov/8290618/',
+        type: 'scientific_article' as const
       }
     ],
     sections: [
