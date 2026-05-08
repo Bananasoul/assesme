@@ -79,6 +79,10 @@ export async function getPatientHistory(patientId?: string) {
           },
           sessionNotes: {
             orderBy: { date: 'desc' }
+          },
+          requests: {
+            where: { status: 'PENDING' },
+            orderBy: { createdAt: 'desc' }
           }
         }
       }

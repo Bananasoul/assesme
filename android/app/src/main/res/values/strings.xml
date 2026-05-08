@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AssesMe</string>
+    <string name="title_activity_main">AssesMe</string>
+    <string name="package_name">assesme.app</string>
+    <string name="custom_url_scheme">assesme.app</string>
+</resources>

@@ -37,6 +37,41 @@ export async function getPatients() {
   }
 }
 
+export async function getPendingRequests() {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return [];
+
+    const pendingRequests = await prisma.assessmentRequest.findMany({
+      where: {
+        status: 'PENDING',
+        clinicalRecord: {
+          patient: {
+            practitionerId: user.id
+          }
+        }
+      },
+      include: {
+        clinicalRecord: {
+          include: {
+            patient: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+
+    return pendingRequests;
+  } catch (error) {
+    console.error("Error fetching pending requests:", error);
+    return [];
+  }
+}
+
 export async function createPatient(formData: FormData) {
   const firstName = formData.get('firstName') as string;
   const lastName = formData.get('lastName') as string;

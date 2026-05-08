@@ -1,14 +1,16 @@
 import { getPatientHistory } from '@/lib/data';
 import Link from 'next/link';
-import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText } from 'lucide-react';
+import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText, ClipboardList } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
-import GenerateLinkButton from '@/components/GenerateLinkButton';
+import AssignTestsModal from '@/components/AssignTestsModal';
 import EvolutionChart from '@/components/EvolutionChart';
 import MedicalHeader from '@/components/MedicalHeader';
 import AddExerciseModal from '@/components/AddExerciseModal';
 import PortalLinkButton from '@/components/PortalLinkButton';
 import AddNoteModal from '@/components/AddNoteModal';
+import { QUESTIONNAIRES } from '@/data/questionnaires';
+import CopyLinkButton from '@/components/CopyLinkButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,7 +60,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <PortalLinkButton recordId={record.id} patientName={patient.firstName} />
-          <GenerateLinkButton recordId={record.id} patientName={`${patient.firstName} ${patient.lastName}`} />
+          <AssignTestsModal recordId={record.id} />
           <PrintButton />
         </div>
       </nav>
@@ -144,6 +146,58 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
           </div>
         </div>
 
+        {/* Demandes de Bilans en Attente */}
+        <div style={{ marginTop: '1rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <ClipboardList size={24} color="var(--primary)" />
+            Bilans en attente
+          </h2>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {(!record.requests || record.requests.length === 0) ? (
+              <p style={{ color: 'var(--text-secondary)' }}>Aucun bilan en attente pour ce patient.</p>
+            ) : (
+              record.requests.map(req => {
+                const requestedIds = JSON.parse(req.questionnaireIds) as string[];
+                const tests = requestedIds.map(id => QUESTIONNAIRES[id]).filter(Boolean);
+                const hasTherapistTest = tests.some(t => t.administrationType === 'therapist' || t.administrationType === 'both');
+                
+                return (
+                  <div key={req.id} style={{ background: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                        <Calendar size={18} color="var(--secondary)" />
+                        Ordonnance du {new Date(req.createdAt).toLocaleDateString('fr-FR')}
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {tests.map(t => (
+                          <span key={t.id} style={{ background: 'var(--surface-hover)', padding: '0.25rem 0.5rem', borderRadius: 'var(--radius-sm)', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                            {t.title}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <span style={{ background: '#FEF08A', color: '#854D0E', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                        En attente
+                      </span>
+                      <CopyLinkButton link={`/fill?requestId=${req.id}`} />
+                      {hasTherapistTest && (
+                        <Link 
+                          href={`/fill?requestId=${req.id}`}
+                          style={{ background: 'var(--primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}
+                        >
+                          Remplir maintenant
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
         {/* Timeline of Assessments (Raw Data) */}
         <div style={{ marginTop: '1rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -183,6 +237,66 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                             <Database size={14} />
                             Données brutes enregistrées ({Object.keys(JSON.parse(q.rawResponses || '{}')).length} réponses)
                           </div>
+
+                          {/* Clinical Decision Support */}
+                          {(() => {
+                            const qDef = QUESTIONNAIRES[q.type];
+                            if (!qDef) return null;
+                            return (
+                              <div style={{ marginTop: '1.5rem', background: 'var(--background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+                                <div style={{ padding: '0.75rem 1rem', background: 'var(--primary-light)', color: 'white', fontWeight: 600, fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                  <Activity size={16} />
+                                  Aide à la décision clinique
+                                </div>
+                                <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                  {qDef.clinicalValue && (
+                                    <div>
+                                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Valeur Clinique</span>
+                                      <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)', margin: 0 }}>{qDef.clinicalValue}</p>
+                                    </div>
+                                  )}
+                                  {qDef.decisionAlgorithm && (
+                                    <div style={{ background: '#FEF3C7', padding: '0.75rem', borderRadius: 'var(--radius-sm)' }}>
+                                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#92400E', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Algorithme d'Interprétation</span>
+                                      <p style={{ fontSize: '0.875rem', color: '#92400E', margin: 0, fontWeight: 500 }}>{qDef.decisionAlgorithm}</p>
+                                    </div>
+                                  )}
+                                  {qDef.therapeuticInterventions && (
+                                    <div>
+                                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Interventions Suggérées</span>
+                                      <div style={{ display: 'flex', gap: '1rem' }}>
+                                        <div style={{ flex: 1 }}>
+                                          <strong style={{ fontSize: '0.75rem', color: 'var(--primary)', display: 'block', marginBottom: '0.25rem' }}>Exercices</strong>
+                                          <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.875rem', color: 'var(--text-primary)' }}>
+                                            {qDef.therapeuticInterventions.exercises.map((ex, i) => <li key={i}>{ex}</li>)}
+                                          </ul>
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                          <strong style={{ fontSize: '0.75rem', color: 'var(--secondary)', display: 'block', marginBottom: '0.25rem' }}>Éducation</strong>
+                                          <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.875rem', color: 'var(--text-primary)' }}>
+                                            {qDef.therapeuticInterventions.education.map((ed, i) => <li key={i}>{ed}</li>)}
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {qDef.references && qDef.references.length > 0 && (
+                                    <div>
+                                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Méthodologie & Preuves</span>
+                                      <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                                        {qDef.references.map((ref, i) => (
+                                          <li key={i}>
+                                            {ref.url ? <a href={ref.url} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)' }}>{ref.title}</a> : ref.title}
+                                            <span style={{ fontStyle: 'italic', marginLeft: '0.5rem' }}>({ref.type === 'methodology' ? 'Méthodologie' : 'Article scientifique'})</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })()}
                         </div>
                       );
                     })}

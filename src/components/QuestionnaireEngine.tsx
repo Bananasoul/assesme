@@ -9,9 +9,10 @@ interface QuestionnaireEngineProps {
   questionnaire: QuestionnaireDef;
   targetRecordId?: string;
   isRemoteFill?: boolean;
+  onComplete?: () => void;
 }
 
-export default function QuestionnaireEngine({ questionnaire, targetRecordId, isRemoteFill }: QuestionnaireEngineProps) {
+export default function QuestionnaireEngine({ questionnaire, targetRecordId, isRemoteFill, onComplete }: QuestionnaireEngineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [isCompleted, setIsCompleted] = useState(false);
@@ -76,10 +77,19 @@ export default function QuestionnaireEngine({ questionnaire, targetRecordId, isR
               isPatientInput: !!isRemoteFill
             })
           });
-          setIsCompleted(true);
+          
+          if (onComplete) {
+            onComplete();
+          } else {
+            setIsCompleted(true);
+          }
         } catch (e) {
           console.error("Failed to save", e);
-          setIsCompleted(true);
+          if (onComplete) {
+            onComplete();
+          } else {
+            setIsCompleted(true);
+          }
         }
       }
     }, 400);

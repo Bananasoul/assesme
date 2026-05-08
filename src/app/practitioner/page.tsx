@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { Calendar, User, Search, Activity, FileText, Settings, Users, ChevronRight } from 'lucide-react';
 import PractitionerDashboard from '@/components/PractitionerDashboard';
-import { getPatients } from './actions';
+import { getPatients, getPendingRequests } from './actions';
+import CopyLinkButton from '@/components/CopyLinkButton';
+import { QUESTIONNAIRES } from '@/data/questionnaires';
 import NewPatientModal from '@/components/NewPatientModal';
 import LogoutButton from '@/components/LogoutButton';
 import { createClient } from '@/utils/supabase/server';
@@ -11,7 +13,10 @@ export const dynamic = 'force-dynamic';
 export default async function PractitionerPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const patients = await getPatients();
+  const [patients, pendingRequests] = await Promise.all([
+    getPatients(),
+    getPendingRequests()
+  ]);
 
   return (
     <main style={{ padding: '2rem 1rem', background: 'var(--background)', minHeight: '100vh' }}>
@@ -65,6 +70,16 @@ export default async function PractitionerPage() {
               <h3 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{patients.length}</h3>
             </div>
           </div>
+
+          <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ padding: '1rem', background: '#FEF08A', color: '#854D0E', borderRadius: 'var(--radius-md)' }}>
+              <Activity size={24} />
+            </div>
+            <div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Bilans en attente</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{pendingRequests.length}</h3>
+            </div>
+          </div>
           
           {/* Quick Access to Triage (Old dashboard feature) */}
           <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem', gridColumn: 'span 2' }}>
@@ -80,6 +95,69 @@ export default async function PractitionerPage() {
             </Link>
           </div>
         </div>
+
+        {/* Pending Requests */}
+        {pendingRequests.length > 0 && (
+          <div style={{ marginBottom: '3rem' }}>
+            <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Activity size={20} color="var(--primary)" />
+              Bilans en attente
+            </h2>
+            <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {pendingRequests.map((req, index) => {
+                  const testIds = JSON.parse(req.questionnaireIds || '[]');
+                  const tests = testIds.map((id: string) => QUESTIONNAIRES[id as keyof typeof QUESTIONNAIRES]);
+                  const hasTherapistTest = tests.some((t: any) => t?.administrationType === 'therapist');
+                  const patient = req.clinicalRecord?.patient;
+
+                  if (!patient) return null;
+
+                  return (
+                    <div 
+                      key={req.id} 
+                      style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between',
+                        padding: '1.25rem 1.5rem',
+                        borderBottom: index < pendingRequests.length - 1 ? '1px solid var(--border)' : 'none',
+                        flexWrap: 'wrap',
+                        gap: '1rem'
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                          <span style={{ background: '#FEF08A', color: '#854D0E', padding: '0.125rem 0.5rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                            En attente
+                          </span>
+                          <Link href={`/practitioner/patient-history?id=${patient.id}`} style={{ fontWeight: 600, color: 'var(--text-primary)', textDecoration: 'none' }}>
+                            {patient.firstName} {patient.lastName}
+                          </Link>
+                        </div>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                          Tests : {tests.map((t: any) => t?.title || 'Test Inconnu').join(', ')}
+                        </p>
+                      </div>
+                      
+                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <CopyLinkButton link={`/fill?requestId=${req.id}`} />
+                        {hasTherapistTest && (
+                          <Link 
+                            href={`/fill?requestId=${req.id}`}
+                            style={{ background: 'var(--primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}
+                          >
+                            Remplir
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Patient List */}
         <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Mes Patients</h2>
