@@ -141,10 +141,10 @@ export default async function PractitionerPage() {
                       </div>
                       
                       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        <CopyLinkButton link={`/fill?requestId=${req.id}`} />
+                        <CopyLinkButton link={`/test/${req.anonymousCode}`} />
                         {hasTherapistTest && (
                           <Link 
-                            href={`/fill?requestId=${req.id}`}
+                            href={`/test/${req.anonymousCode}`}
                             style={{ background: 'var(--primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }}
                           >
                             Remplir

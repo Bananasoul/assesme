@@ -56,6 +56,7 @@ model ClinicalRecord {
   exercises    Exercise[]    // Nouveau: liste des exercices prescrits
   sessionNotes SessionNote[] // Nouveau: journal des séances
   requests     AssessmentRequest[] // Nouveau: demandes de tests envoyées au patient
+  anonymousSessions AnonymousSession[] // Sessions anonymes pour les liens patients
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -67,6 +68,17 @@ model AssessmentRequest {
   questionnaireIds String         // JSON array of test IDs, ex: '["ndi", "tampa"]'
   status           String         @default("PENDING") // PENDING, COMPLETED, CANCELLED
   createdAt        DateTime       @default(now())
+}
+
+model AnonymousSession {
+  id               String         @id @default(uuid())
+  anonymousCode    String         @unique  // ex: "AM-7X3K"
+  clinicalRecord   ClinicalRecord @relation(fields: [clinicalRecordId], references: [id], onDelete: Cascade)
+  clinicalRecordId String
+  questionnaireIds String         // JSON array of test IDs
+  status           String         @default("PENDING") // PENDING, COMPLETED
+  createdAt        DateTime       @default(now())
+  completedAt      DateTime?
 }
 
 model SessionNote {

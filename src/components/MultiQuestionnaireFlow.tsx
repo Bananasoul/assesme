@@ -5,7 +5,7 @@ import { QuestionnaireDef } from '@/data/questionnaires';
 import QuestionnaireEngine from './QuestionnaireEngine';
 import { Award, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
-import { completeAssessmentRequest } from '@/app/actions/assessmentRequests';
+import { completeAnonymousSession } from '@/app/actions/anonymousSession';
 
 type Props = {
   questionnaires: QuestionnaireDef[];
@@ -21,8 +21,8 @@ export default function MultiQuestionnaireFlow({ questionnaires, recordId, reque
     if (currentIndex < questionnaires.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      // Finished all
-      await completeAssessmentRequest(requestId);
+      // Finished all. Since we pass the anonymousCode as requestId, we can complete it here.
+      await completeAnonymousSession(requestId);
       setIsFullyCompleted(true);
     }
   };
@@ -43,8 +43,8 @@ export default function MultiQuestionnaireFlow({ questionnaires, recordId, reque
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem', marginBottom: '2rem', maxWidth: '400px', margin: '0 auto' }}>
           Merci de votre participation. Vos réponses ont été transmises en toute sécurité à votre praticien.
         </p>
-        <Link 
-          href="/portal"
+        <button 
+          onClick={() => window.close()}
           style={{
             background: 'var(--primary)',
             color: 'var(--text-inverse)',
@@ -54,12 +54,13 @@ export default function MultiQuestionnaireFlow({ questionnaires, recordId, reque
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            textDecoration: 'none'
+            border: 'none',
+            cursor: 'pointer'
           }}
         >
           <CheckCircle2 size={20} />
-          Fermer et retourner à la boîte de réception
-        </Link>
+          Fermer cette page
+        </button>
       </div>
     );
   }

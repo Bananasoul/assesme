@@ -44,7 +44,7 @@ export async function getPendingRequests() {
 
     if (!user) return [];
 
-    const pendingRequests = await prisma.assessmentRequest.findMany({
+    const pendingRequests = await prisma.anonymousSession.findMany({
       where: {
         status: 'PENDING',
         clinicalRecord: {

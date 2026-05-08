@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from 'react';
 import { ClipboardList, X, Check, Copy, MessageCircle } from 'lucide-react';
-import { createAssessmentRequest } from '@/app/actions/assessmentRequests';
+import { createAnonymousSession } from '@/app/actions/anonymousSession';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -18,6 +18,7 @@ export default function AssignTestsModal({ recordId }: Props) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
+  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   // Extract all unique tags and force base categories
@@ -50,12 +51,13 @@ export default function AssignTestsModal({ recordId }: Props) {
     
     setError(null);
     startTransition(async () => {
-      const result = await createAssessmentRequest(recordId, selectedTests);
-      if (result.error || !result.requestId) {
+      const result = await createAnonymousSession(recordId, selectedTests);
+      if (result.error || !result.anonymousCode) {
         setError(result.error || 'Erreur inconnue');
       } else {
-        const link = `${window.location.origin}/fill?requestId=${result.requestId}`;
+        const link = `${window.location.origin}/test/${result.anonymousCode}`;
         setGeneratedLink(link);
+        setGeneratedCode(result.anonymousCode);
       }
     });
   };
@@ -116,9 +118,15 @@ export default function AssignTestsModal({ recordId }: Props) {
                 <div style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#16a34a', padding: '1rem', borderRadius: '50%' }}>
                   <Check size={48} />
                 </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>Ordonnance générée avec succès !</h3>
-                <p style={{ color: 'var(--text-secondary)', textAlign: 'center', maxWidth: '500px' }}>
-                  Faites scanner ce QR Code à votre patient, ou envoyez-lui le lien directement sur son smartphone.
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>Lien anonyme généré !</h3>
+                
+                <div style={{ background: 'var(--primary-light)', padding: '1rem 2rem', borderRadius: 'var(--radius-md)', textAlign: 'center', border: '2px dashed var(--primary)' }}>
+                  <p style={{ color: 'var(--primary-dark)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem', textTransform: 'uppercase' }}>Code Patient</p>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em' }}>{generatedCode}</div>
+                </div>
+
+                <p style={{ color: 'var(--text-secondary)', textAlign: 'center', maxWidth: '500px', fontSize: '0.875rem' }}>
+                  Ce code est strictement anonyme. Le patient ne verra jamais son nom lors du remplissage.
                 </p>
 
                 <div style={{ display: 'flex', gap: '3rem', width: '100%', justifyContent: 'center', alignItems: 'center', margin: '1rem 0' }}>
@@ -136,12 +144,12 @@ export default function AssignTestsModal({ recordId }: Props) {
                       </button>
                     </div>
 
-                    <a href={`https://wa.me/?text=${encodeURIComponent(`Bonjour, voici le lien sécurisé pour accéder à vos questionnaires de suivi à remplir avant notre prochaine séance : ${generatedLink}`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#25D366', color: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontWeight: 600, textDecoration: 'none' }}>
+                    <a href={`https://wa.me/?text=${encodeURIComponent(`Bonjour,\n\nVotre praticien vous a prescrit un bilan fonctionnel à remplir.\n\n🔑 Votre code personnel : ${generatedCode}\n🔗 Lien : ${generatedLink}\n\nCe code est strictement confidentiel. Le remplissage est anonyme.\nTemps estimé : 5-10 minutes.`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#25D366', color: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontWeight: 600, textDecoration: 'none' }}>
                       <MessageCircle size={20} />
                       Envoyer par WhatsApp
                     </a>
 
-                    <a href={`mailto:?subject=Vos questionnaires de suivi Kinésithérapie&body=Bonjour,%0A%0AVoici le lien sécurisé pour accéder à vos questionnaires de suivi à remplir avant notre prochaine séance :%0A%0A${generatedLink}%0A%0AÀ très vite !`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: 'var(--primary)', color: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontWeight: 600, textDecoration: 'none' }}>
+                    <a href={`mailto:?subject=Votre bilan fonctionnel&body=${encodeURIComponent(`Bonjour,\n\nVotre praticien vous a prescrit un bilan fonctionnel à remplir.\n\n🔑 Votre code personnel : ${generatedCode}\n🔗 Lien : ${generatedLink}\n\nCe code est strictement confidentiel. Le remplissage est anonyme.\nTemps estimé : 5-10 minutes.`)}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: 'var(--primary)', color: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontWeight: 600, textDecoration: 'none' }}>
                       Envoyer par Email
                     </a>
                   </div>
