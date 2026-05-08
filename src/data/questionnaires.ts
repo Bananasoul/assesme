@@ -2900,9 +2900,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Orthopédique', 'Membre Inférieur', 'Tendon', 'Achille'],
     estimatedTime: '3-5 min',
     administrationType: 'auto',
-    scoringMethod: 'sum',
     maxScore: 100,
-    interpretation: 'Un score plus élevé indique une meilleure fonction et moins de symptômes (100 = asymptomatique).',
     clinicalValue: 'Le VISA-A est le test validé de référence pour évaluer la douleur et la fonction dans la tendinopathie d\'Achille. Il est essentiel pour déterminer la tolérance à la charge du tendon et guider la progression de la rééducation (isométrique -> isotonique lourd -> pliométrique).',
     decisionAlgorithm: 'Score < 50 : Tendinopathie sévère ou très réactive. Repos relatif, gestion de la charge et isométrique prioritaire. Score 50-80 : Tendinopathie modérée, phase de renforcement lourd lent (HSR) indiquée. Score > 80 : Reprise progressive des activités pliométriques et sportives (Energy Storage Phase). MCID: 10-12 points.',
     therapeuticInterventions: {
@@ -2959,9 +2957,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Orthopédique', 'Genou', 'Tendon', 'Sport'],
     estimatedTime: '3-5 min',
     administrationType: 'auto',
-    scoringMethod: 'sum',
     maxScore: 100,
-    interpretation: 'Un score plus élevé indique une meilleure fonction et moins de symptômes (100 = asymptomatique).',
     clinicalValue: 'Le VISA-P est spécifiquement conçu pour quantifier la douleur et l\'incapacité liées au tendon rotulien, pathologie très fréquente dans les sports de saut (basket, volley). Il permet de dicter le timing de réintroduction des sauts.',
     decisionAlgorithm: 'Score < 50 : Douleur limitant fortement l\'activité. Isométrique de type leg extension (45s) pour l\'effet analgésique cortical. Score 50-80 : Phase de renforcement lourd (Squat décliné, leg press lourd lent). Score > 80 : Introduction des tâches d\'accumulation d\'énergie (sauts, changements de direction rapides).',
     therapeuticInterventions: {
@@ -3007,9 +3003,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Neurologique', 'Gériatrie', 'Équilibre'],
     estimatedTime: '2 min',
     administrationType: 'therapist',
-    scoringMethod: 'sum',
     maxScore: 60,
-    interpretation: 'Le score est le temps en secondes. Plus le temps est long, plus le risque de chute est élevé.',
     clinicalValue: 'Le TUG est un test physique essentiel (à chronométrer par le thérapeute). Le patient part assis d\'une chaise avec accoudoirs, se lève, marche 3 mètres, fait demi-tour, revient et s\'assoit. Il évalue la force des jambes, l\'équilibre dynamique et la vitesse de marche en une seule tâche écologique.',
     decisionAlgorithm: '< 10 secondes : Mobilité normale. 10 - 19 secondes : Mobilité légèrement altérée. 20 - 29 secondes : Mobilité réduite, risque de chute avéré (une aide à la marche doit être envisagée). >= 30 secondes : Mobilité très réduite, dépendance pour de nombreuses ADL (activités de la vie quotidienne).',
     therapeuticInterventions: {
@@ -3053,9 +3047,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Lombaire', 'Psychologique', 'Général'],
     estimatedTime: '5-7 min',
     administrationType: 'auto',
-    scoringMethod: 'sum',
     maxScore: 96,
-    interpretation: 'Un score élevé indique de fortes croyances de peur et d\'évitement vis-à-vis de l\'activité physique et du travail.',
     clinicalValue: 'Le FABQ est essentiel pour détecter les patients lombalgiques qui développent une phobie du mouvement (kinesiophobie). Il comprend 2 sous-échelles : FABQ-Physique et FABQ-Travail. Il explique souvent pourquoi un traitement purement biomécanique échoue si les croyances ne sont pas adressées.',
     decisionAlgorithm: 'FABQ-Physique > 14 (sur 24) : Forte peur liée à l\'activité physique. Une exposition graduelle est nécessaire. FABQ-Travail > 34 (sur 42) : Fort risque de non-retour au travail (indicateur pronostique majeur d\'invalidité prolongée). L\'éducation aux neurosciences de la douleur est prioritaire.',
     therapeuticInterventions: {
@@ -3100,9 +3092,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Général', 'Fonctionnel'],
     estimatedTime: '3 min',
     administrationType: 'therapist',
-    scoringMethod: 'average',
     maxScore: 10,
-    interpretation: 'Moyenne des scores (0 = impossible, 10 = comme avant la blessure).',
     clinicalValue: 'C\'est l\'outil le plus centré sur le patient. Au lieu d\'imposer des questions standardisées qui peuvent ne pas concerner le patient, celui-ci identifie 3 à 5 activités importantes pour LUI qu\'il ne peut plus faire ou qui sont difficiles (ex: jouer du violon, porter son petit-fils).',
     decisionAlgorithm: 'Un score bas définit les objectifs prioritaires de la rééducation. Le PSFS est extrêmement réactif au changement clinique. Un gain de 2 points sur l\'échelle de 10 est considéré comme un changement cliniquement significatif (MCID) validant l\'efficacité de votre traitement.',
     therapeuticInterventions: {
