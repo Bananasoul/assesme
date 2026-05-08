@@ -215,6 +215,12 @@ export default function AssignTestsModal({ recordId }: Props) {
                             {isSelected && <Check size={16} color="var(--primary-dark)" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />}
                           </div>
                           
+                          {q.clinicalValue && (
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
+                              {q.clinicalValue}
+                            </p>
+                          )}
+
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                             <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>{q.estimatedTime}</p>
                             {q.administrationType && (
