@@ -2914,14 +2914,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       education: [
         'Explication du modèle du continuum de la pathologie tendineuse (Cook & Purdam)',
         'Gestion stricte de la charge : la douleur est autorisée jusqu\'à 4/10 pendant l\'exercice si elle redescend dans les 24h'
-      ],
-      references: [
-        {
-          title: 'The VISA-A questionnaire: a valid and reliable index of the clinical severity of Achilles tendinopathy',
-          url: 'https://pubmed.ncbi.nlm.nih.gov/11533405/'
-        }
       ]
     },
+    references: [
+      {
+        title: 'The VISA-A questionnaire: a valid and reliable index of the clinical severity of Achilles tendinopathy',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11533405/'
+      }
+    ],
     sections: [
       {
         id: 's1',
@@ -2972,14 +2972,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       education: [
         'Gestion de la charge (Load Management) : éviter les pics d\'entraînement soudains',
         'Explication que les étirements passifs du quadriceps peuvent compresser le tendon rotulien et aggraver l\'irritation en phase aiguë'
-      ],
-      references: [
-        {
-          title: 'The VISA score: an index of severity of symptoms in patients with jumper\'s knee (patellar tendinosis)',
-          url: 'https://pubmed.ncbi.nlm.nih.gov/9536867/'
-        }
       ]
     },
+    references: [
+      {
+        title: 'The VISA score: an index of severity of symptoms in patients with jumper\'s knee (patellar tendinosis)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9536867/'
+      }
+    ],
     sections: [
       {
         id: 's1',
@@ -3019,14 +3019,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       education: [
         'Conseils sur l\'utilisation d\'une aide à la marche (canne, déambulateur)',
         'Aménagement du domicile pour prévenir les chutes (retrait des tapis, bon éclairage)'
-      ],
-      references: [
-        {
-          title: 'The Timed "Up & Go": a test of basic functional mobility for frail elderly persons',
-          url: 'https://pubmed.ncbi.nlm.nih.gov/1991946/'
-        }
       ]
     },
+    references: [
+      {
+        title: 'The Timed "Up & Go": a test of basic functional mobility for frail elderly persons',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/1991946/'
+      }
+    ],
     sections: [
       {
         id: 's1',
@@ -3063,14 +3063,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       education: [
         'Éducation aux neurosciences : Douleur ≠ Dommage tissulaire',
         'Changer le vocabulaire (éviter les termes comme "déchirure", "usure", "disque usé") par des termes rassurants'
-      ],
-      references: [
-        {
-          title: 'A questionnaire on the perceptions of patients about physical activity and work',
-          url: 'https://pubmed.ncbi.nlm.nih.gov/8422742/'
-        }
       ]
     },
+    references: [
+      {
+        title: 'A questionnaire on the perceptions of patients about physical activity and work',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/8422742/'
+      }
+    ],
     sections: [
       {
         id: 's1',
@@ -3109,14 +3109,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       education: [
         'Utilisation de l\'activité choisie comme motivation principale (Goal-setting)',
         'Gestion des attentes concernant le délai de retour à l\'activité complète'
-      ],
-      references: [
-        {
-          title: 'The patient-specific functional scale: pharmacokinetics and clinimetric properties',
-          url: 'https://pubmed.ncbi.nlm.nih.gov/8290618/'
-        }
       ]
     },
+    references: [
+      {
+        title: 'The patient-specific functional scale: pharmacokinetics and clinimetric properties',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/8290618/'
+      }
+    ],
     sections: [
       {
         id: 's1',
