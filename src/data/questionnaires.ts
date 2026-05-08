@@ -2204,7 +2204,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     category: 'Orthopédique',
     administrationType: 'auto',
     clinicalValue: 'Le HOOS-PS est essentiel pour détecter, évaluer et suivre la coxarthrose (arthrose de la hanche) ou les conflits fémoro-acétabulaires. Il guide la décision entre un traitement conservateur et une orientation chirurgicale (Prothèse Totale de Hanche).',
-    decisionAlgorithm: 'Un score global bas avec de fortes limitations sur les items de flexion (s\\'asseoir/mettre ses chaussettes) est typique d\\'une coxarthrose avancée. Une non-amélioration après 3 mois de traitement conservateur bien conduit justifie un avis chirurgical.',
+    decisionAlgorithm: 'Un score global bas avec de fortes limitations sur les items de flexion (s\'asseoir/mettre ses chaussettes) est typique d\'une coxarthrose avancée. Une non-amélioration après 3 mois de traitement conservateur bien conduit justifie un avis chirurgical.',
     therapeuticInterventions: {
       exercises: [
         'Renforcement des abducteurs (Moyen fessier) pour stabiliser le bassin à la marche',
@@ -2633,7 +2633,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     category: 'Général',
     administrationType: 'auto',
     clinicalValue: 'Bien que l\'on soit kinésithérapeute, le dépistage de l\'état psychologique est crucial. L\'anxiété et la dépression amplifient le signal nociceptif (douleur) et réduisent drastiquement l\'observance aux exercices de rééducation.',
-    decisionAlgorithm: 'Sous-score Anxiété (A) ou Dépression (D) : 0-7 = Normal. 8-10 = Limite / À surveiller. 11-21 = Problème clinique probable. Un score >= 11 dans l\\'une des catégories justifie une communication transparente avec le patient et une réorientation vers son médecin traitant ou un psychologue.',
+    decisionAlgorithm: 'Sous-score Anxiété (A) ou Dépression (D) : 0-7 = Normal. 8-10 = Limite / À surveiller. 11-21 = Problème clinique probable. Un score >= 11 dans l\'une des catégories justifie une communication transparente avec le patient et une réorientation vers son médecin traitant ou un psychologue.',
     therapeuticInterventions: {
       exercises: [
         'Activité physique aérobie d\'intensité modérée (30 min/jour) pour stimuler les endorphines',
@@ -2673,7 +2673,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     category: 'Orthopédique',
     administrationType: 'auto',
     clinicalValue: 'Le QuickDASH est le test le plus performant pour l\'ensemble du membre supérieur, car le bras, l\'épaule et la main travaillent toujours ensemble (chaîne cinétique). Idéal pour les troubles musculo-squelettiques (TMS) professionnels.',
-    decisionAlgorithm: 'Le score est calculé sur 100 (pire état). Un score élevé avec des difficultés de force (ex: ouvrir un bocal) oriente vers une pathologie distale (tendinopathie du poignet/coude, canal carpien). Un score élevé sur les tâches amples oriente vers l\\'épaule. MCID : 14 points.',
+    decisionAlgorithm: 'Le score est calculé sur 100 (pire état). Un score élevé avec des difficultés de force (ex: ouvrir un bocal) oriente vers une pathologie distale (tendinopathie du poignet/coude, canal carpien). Un score élevé sur les tâches amples oriente vers l\'épaule. MCID : 14 points.',
     therapeuticInterventions: {
       exercises: [
         'Renforcement global de la chaîne de poussée et de tirage',
@@ -2722,7 +2722,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     category: 'Orthopédique',
     administrationType: 'auto',
     clinicalValue: 'Le LEFS offre une vision globale de la fonction du membre inférieur. Son grand avantage est sa validité sur une multitude de pathologies : entorse de cheville, fasciite plantaire, tendinopathie rotulienne, etc.',
-    decisionAlgorithm: 'Score sur 80 (80 = fonction parfaite). Un score bas (<40) nécessite l\\'utilisation d\\'aides techniques et un travail en chaîne ouverte. Un score élevé (>60) indique que le patient est prêt pour des exercices fonctionnels avancés (sauts, course, changements de direction).',
+    decisionAlgorithm: 'Score sur 80 (80 = fonction parfaite). Un score bas (<40) nécessite l\'utilisation d\'aides techniques et un travail en chaîne ouverte. Un score élevé (>60) indique que le patient est prêt pour des exercices fonctionnels avancés (sauts, course, changements de direction).',
     therapeuticInterventions: {
       exercises: [
         'Progression des charges : chaîne cinétique ouverte vers fermée',
@@ -2772,7 +2772,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     category: 'Neurologique',
     administrationType: 'therapist',
     clinicalValue: 'La Modified Rankin Scale (mRS) est l\'échelle universelle en neurologie pour quantifier le handicap global post-AVC. Elle sert de boussole pour fixer les objectifs de rééducation : vise-t-on le retour à l\'emploi ou la sécurisation des transferts à domicile ?',
-    decisionAlgorithm: 'Score 0-1 : Excellent pronostic, retour à une vie normale. Score 2-3 : Indépendance possible pour la marche, mais handicap limitant le travail. Cible la rééducation à la marche et l\\'équilibre. Score 4-5 : Dépendance sévère. La priorité est la prévention des complications de décubitus, la verticalisation et l\\'aide aux aidants familiaux.',
+    decisionAlgorithm: 'Score 0-1 : Excellent pronostic, retour à une vie normale. Score 2-3 : Indépendance possible pour la marche, mais handicap limitant le travail. Cible la rééducation à la marche et l\'équilibre. Score 4-5 : Dépendance sévère. La priorité est la prévention des complications de décubitus, la verticalisation et l\'aide aux aidants familiaux.',
     therapeuticInterventions: {
       exercises: [
         'Rééducation neurologique orientée sur la tâche (Task-oriented training)',
@@ -2810,7 +2810,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     category: 'Neurologique',
     administrationType: 'therapist',
     clinicalValue: 'La Berg Balance Scale (BBS) est le gold-standard pour l\'équilibre statique et dynamique. C\'est l\'outil le plus précis pour évaluer objectivement le risque de chute chez la personne âgée ou souffrant de troubles neurologiques.',
-    decisionAlgorithm: 'Score < 45/56 : Le patient a un risque de chute avéré. La prescription d\\'une aide à la marche (canne, déambulateur) est fortement recommandée. La rééducation doit cibler l\\'équilibre. Score > 45 : Risque faible, on peut se concentrer sur l\\'endurance et la force globale.',
+    decisionAlgorithm: 'Score < 45/56 : Le patient a un risque de chute avéré. La prescription d\'une aide à la marche (canne, déambulateur) est fortement recommandée. La rééducation doit cibler l\'équilibre. Score > 45 : Risque faible, on peut se concentrer sur l\'endurance et la force globale.',
     therapeuticInterventions: {
       exercises: [
         'Parcours d\'équilibre avec franchissement d\'obstacles',
