@@ -21,24 +21,34 @@ export default function AssignTestsModal({ recordId }: Props) {
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Extract all unique tags and force base categories
-  const baseTags = ['Orthopédique', 'Neurologique', 'Vestibulaire', 'Général'];
-  const extractedTags = Array.from(new Set(Object.values(QUESTIONNAIRES).flatMap(q => q.tags || [])));
-  const allTags = Array.from(new Set([...baseTags, ...extractedTags])).sort();
+  // Categories for grouping
+  const CATEGORIES = [
+    { id: 'Lombaire', label: 'Dos (Lombaire)', icon: '🧍', matchTags: ['Lombaire'] },
+    { id: 'Cervical', label: 'Cou (Cervicale)', icon: '👤', matchTags: ['Cervical'] },
+    { id: 'Épaule', label: 'Épaule / Bras', icon: '💪', matchTags: ['Épaule', 'Membre Supérieur'] },
+    { id: 'Genou', label: 'Genou / Hanche', icon: '🦵', matchTags: ['Genou', 'Hanche', 'Membre Inférieur'] },
+    { id: 'Neurologique', label: 'Neurologique', icon: '🧠', matchTags: ['Neurologique'] },
+    { id: 'Général', label: 'Général / Psycho', icon: '🎯', matchTags: ['Général', 'Psychologique', 'Fonctionnel'] },
+  ];
 
-  // Filter tests based on selected tags and search term
+  // Filter tests based on search term (tags selection removed for simpler UI with categories)
   const filteredTests = Object.values(QUESTIONNAIRES).filter(q => {
     const matchesSearch = q.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           q.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => q.tags?.includes(tag));
-    return matchesSearch && matchesTags;
+    return matchesSearch;
   });
 
-  const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    );
-  };
+  // Group tests
+  const groupedTests = CATEGORIES.map(cat => ({
+    ...cat,
+    tests: filteredTests.filter(q => q.tags?.some(tag => cat.matchTags.includes(tag)))
+  }));
+  const unassignedTests = filteredTests.filter(q => !CATEGORIES.some(cat => q.tags?.some(tag => cat.matchTags.includes(tag))));
+  if (unassignedTests.length > 0) {
+    groupedTests.push({ id: 'Autre', label: 'Autres Bilans', icon: '🧩', matchTags: [], tests: unassignedTests });
+  }
+
+
 
   const toggleTest = (id: string) => {
     setSelectedTests(prev => 
@@ -96,7 +106,7 @@ export default function AssignTestsModal({ recordId }: Props) {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div className="animate-slide-up" style={{ background: 'var(--surface)', width: '100%', maxWidth: '800px', borderRadius: 'var(--radius-lg)', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
             <button 
-              onClick={() => { setIsOpen(false); setGeneratedLink(null); setSelectedTests([]); setSelectedTags([]); }}
+              onClick={() => { setIsOpen(false); setGeneratedLink(null); setGeneratedCode(null); setSelectedTests([]); }}
               style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: 'var(--text-secondary)', cursor: 'pointer', background: 'transparent', border: 'none' }}
             >
               <X size={24} />
@@ -156,7 +166,7 @@ export default function AssignTestsModal({ recordId }: Props) {
                 </div>
 
                 <div style={{ marginTop: '1rem' }}>
-                  <button onClick={() => { setIsOpen(false); setGeneratedLink(null); setSelectedTests([]); setSelectedTags([]); }} style={{ background: 'var(--surface-hover)', color: 'var(--text-primary)', padding: '0.75rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+                  <button onClick={() => { setIsOpen(false); setGeneratedLink(null); setGeneratedCode(null); setSelectedTests([]); }} style={{ background: 'var(--surface-hover)', color: 'var(--text-primary)', padding: '0.75rem 2rem', borderRadius: 'var(--radius-full)', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                     Fermer
                   </button>
                 </div>
@@ -172,86 +182,72 @@ export default function AssignTestsModal({ recordId }: Props) {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', background: 'var(--background)', color: 'var(--text-primary)', outline: 'none' }}
                   />
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {allTags.map(tag => {
-                      const isSelected = selectedTags.includes(tag);
-                      return (
-                        <button
-                          key={tag}
-                          onClick={() => toggleTag(tag)}
-                          style={{
-                            padding: '0.5rem 1rem',
-                            borderRadius: 'var(--radius-full)',
-                            fontSize: '0.875rem',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                            border: `1px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}`,
-                            background: isSelected ? 'var(--primary-light)' : 'var(--surface)',
-                            color: isSelected ? 'var(--primary-dark)' : 'var(--text-secondary)',
-                            transition: 'all 0.2s'
-                          }}
-                        >
-                          {tag}
-                        </button>
-                      );
-                    })}
-                  </div>
                 </div>
 
-                {/* Main area (Tests) */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem', overflowY: 'auto', paddingRight: '0.5rem' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
-                    {filteredTests.map(q => {
-                      const isSelected = selectedTests.includes(q.id);
-                      return (
-                        <div 
-                          key={q.id} 
-                          onClick={() => toggleTest(q.id)}
-                          style={{ 
-                            padding: '1rem', 
-                            border: `2px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}`, 
-                            borderRadius: 'var(--radius-md)', 
-                            cursor: 'pointer',
-                            background: isSelected ? 'var(--primary-light)' : 'var(--surface)',
-                            transition: 'all 0.1s',
-                            display: 'flex',
-                            flexDirection: 'column'
-                          }}
-                        >
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                            <h4 style={{ fontWeight: 600, color: isSelected ? 'var(--primary-dark)' : 'var(--text-primary)', fontSize: '0.875rem' }}>{q.title}</h4>
-                            {isSelected && <Check size={16} color="var(--primary-dark)" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />}
-                          </div>
-                          
-                          {q.clinicalValue && (
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
-                              {q.clinicalValue}
-                            </p>
-                          )}
+                {/* Main area (Tests grouped) */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                  {groupedTests.map(group => {
+                    if (group.tests.length === 0) return null;
+                    return (
+                      <div key={group.id}>
+                        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+                          <span>{group.icon}</span> {group.label}
+                        </h3>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+                          {group.tests.map(q => {
+                            const isSelected = selectedTests.includes(q.id);
+                            return (
+                              <div 
+                                key={q.id} 
+                                onClick={() => toggleTest(q.id)}
+                                style={{ 
+                                  padding: '1rem', 
+                                  border: `2px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}`, 
+                                  borderRadius: 'var(--radius-md)', 
+                                  cursor: 'pointer',
+                                  background: isSelected ? 'var(--primary-light)' : 'var(--surface)',
+                                  transition: 'all 0.1s',
+                                  display: 'flex',
+                                  flexDirection: 'column'
+                                }}
+                              >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                                  <h4 style={{ fontWeight: 600, color: isSelected ? 'var(--primary-dark)' : 'var(--text-primary)', fontSize: '0.875rem' }}>{q.title}</h4>
+                                  {isSelected && <Check size={16} color="var(--primary-dark)" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />}
+                                </div>
+                                
+                                {q.clinicalValue && (
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
+                                    {q.clinicalValue}
+                                  </p>
+                                )}
 
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>{q.estimatedTime}</p>
-                            {q.administrationType && (
-                              <span style={{ 
-                                fontSize: '0.65rem', 
-                                padding: '0.15rem 0.4rem', 
-                                borderRadius: 'var(--radius-full)', 
-                                fontWeight: 600,
-                                background: q.administrationType === 'auto' ? '#E0E7FF' : '#FEF3C7',
-                                color: q.administrationType === 'auto' ? '#3730A3' : '#92400E'
-                              }}>
-                                {q.administrationType === 'auto' ? 'Auto-administré' : q.administrationType === 'therapist' ? 'Thérapeute' : 'Mixte'}
-                              </span>
-                            )}
-                          </div>
-                          
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: 'auto', paddingTop: '0.5rem' }}>
-                            {q.tags?.map(t => <span key={t} style={{ fontSize: '0.65rem', background: 'var(--background)', padding: '0.1rem 0.3rem', borderRadius: '0.25rem' }}>{t}</span>)}
-                          </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>{q.estimatedTime}</p>
+                                  {q.administrationType && (
+                                    <span style={{ 
+                                      fontSize: '0.65rem', 
+                                      padding: '0.15rem 0.4rem', 
+                                      borderRadius: 'var(--radius-full)', 
+                                      fontWeight: 600,
+                                      background: q.administrationType === 'auto' ? '#E0E7FF' : '#FEF3C7',
+                                      color: q.administrationType === 'auto' ? '#3730A3' : '#92400E'
+                                    }}>
+                                      {q.administrationType === 'auto' ? 'Auto-administré' : q.administrationType === 'therapist' ? 'Thérapeute' : 'Mixte'}
+                                    </span>
+                                  )}
+                                </div>
+                                
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: 'auto', paddingTop: '0.5rem' }}>
+                                  {q.tags?.filter(t => !group.matchTags.includes(t)).map(t => <span key={t} style={{ fontSize: '0.65rem', background: 'var(--background)', padding: '0.1rem 0.3rem', borderRadius: '0.25rem' }}>{t}</span>)}
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
-                      );
-                    })}
-                  </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
