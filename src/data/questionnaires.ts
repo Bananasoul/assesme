@@ -2921,31 +2921,25 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
-    sections: [
+    questions: [
       {
-        id: 's1',
-        title: 'Douleur et Raideur',
-        questions: [
-          {
-            id: 'q1',
-            text: 'Combien de minutes êtes-vous raide au réveil ?',
-            type: 'choice',
-            options: [
-              { value: 10, label: '0 min' },
-              { value: 7, label: '0-10 min' },
-              { value: 4, label: '10-30 min' },
-              { value: 0, label: '> 100 min' }
-            ]
-          },
-          {
-            id: 'q2',
-            text: 'Avez-vous mal en vous étirant fort le tendon d\'Achille au bord d\'une marche ?',
-            type: 'choice',
-            options: [
-              { value: 0, label: 'Douleur forte (0)' },
-              { value: 10, label: 'Aucune douleur (10)' }
-            ]
-          }
+        id: 'q1',
+        text: 'Combien de minutes êtes-vous raide au réveil ?',
+        options: [
+          { id: '0', label: '0 min', value: 10 },
+          { id: '1', label: '0-10 min', value: 7 },
+          { id: '2', label: '10-30 min', value: 4 },
+          { id: '3', label: '> 100 min', value: 0 }
+        ]
+      },
+      {
+        id: 'q2',
+        text: 'Avez-vous mal en vous étirant fort le tendon d\'Achille au bord d\'une marche ?',
+        options: [
+          { id: '0', label: 'Douleur forte', value: 0 },
+          { id: '1', label: 'Douleur modérée', value: 3 },
+          { id: '2', label: 'Douleur légère', value: 7 },
+          { id: '3', label: 'Aucune douleur', value: 10 }
         ]
       }
     ]
@@ -2978,20 +2972,15 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
-    sections: [
+    questions: [
       {
-        id: 's1',
-        title: 'Symptômes et Activité',
-        questions: [
-          {
-            id: 'q1',
-            text: 'Avez-vous mal au tendon en descendant les escaliers ?',
-            type: 'choice',
-            options: [
-              { value: 0, label: 'Douleur intense (0)' },
-              { value: 10, label: 'Aucune douleur (10)' }
-            ]
-          }
+        id: 'q1',
+        text: 'Avez-vous mal au tendon en descendant les escaliers ?',
+        options: [
+          { id: '0', label: 'Douleur intense', value: 0 },
+          { id: '1', label: 'Douleur modérée', value: 3 },
+          { id: '2', label: 'Douleur légère', value: 7 },
+          { id: '3', label: 'Aucune douleur', value: 10 }
         ]
       }
     ]
@@ -3024,18 +3013,15 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
-    sections: [
+    questions: [
       {
-        id: 's1',
-        title: 'Chronomètre',
-        questions: [
-          {
-            id: 'q1',
-            text: 'Temps mis pour réaliser le test (en secondes) ?',
-            type: 'number',
-            min: 0,
-            max: 120
-          }
+        id: 'q1',
+        text: 'Temps mis pour réaliser le test (en secondes)',
+        options: [
+          { id: '0', label: 'Moins de 10 secondes (Mobilité normale)', value: 0 },
+          { id: '1', label: '10-19 secondes (Légèrement altérée)', value: 1 },
+          { id: '2', label: '20-29 secondes (Risque de chute)', value: 2 },
+          { id: '3', label: '30 secondes ou plus (Mobilité très réduite)', value: 3 }
         ]
       }
     ]
@@ -3067,20 +3053,16 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
-    sections: [
+    questions: [
       {
-        id: 's1',
-        title: 'Croyances',
-        questions: [
-          {
-            id: 'q1',
-            text: 'Je ne devrais pas faire d\'activités physiques qui pourraient aggraver ma douleur.',
-            type: 'choice',
-            options: [
-              { value: 0, label: 'Pas du tout d\'accord (0)' },
-              { value: 6, label: 'Tout à fait d\'accord (6)' }
-            ]
-          }
+        id: 'q1',
+        text: 'Je ne devrais pas faire d\'activités physiques qui pourraient aggraver ma douleur.',
+        options: [
+          { id: '0', label: 'Pas du tout d\'accord', value: 0 },
+          { id: '1', label: 'Plutôt pas d\'accord', value: 2 },
+          { id: '2', label: 'Indécis', value: 3 },
+          { id: '3', label: 'Plutôt d\'accord', value: 4 },
+          { id: '4', label: 'Tout à fait d\'accord', value: 6 }
         ]
       }
     ]
@@ -3112,32 +3094,41 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
-    sections: [
+    questions: [
       {
-        id: 's1',
-        title: 'Activités',
-        questions: [
-          {
-            id: 'q1',
-            text: 'Score pour l\'activité 1 (0 = impossible, 10 = normal)',
-            type: 'number',
-            min: 0,
-            max: 10
-          },
-          {
-            id: 'q2',
-            text: 'Score pour l\'activité 2',
-            type: 'number',
-            min: 0,
-            max: 10
-          },
-          {
-            id: 'q3',
-            text: 'Score pour l\'activité 3',
-            type: 'number',
-            min: 0,
-            max: 10
-          }
+        id: 'q1',
+        text: 'Niveau de difficulté pour l\'activité 1 choisie par le patient',
+        options: [
+          { id: '0', label: 'Impossible (0)', value: 0 },
+          { id: '1', label: 'Très difficile (2)', value: 2 },
+          { id: '2', label: 'Difficile (4)', value: 4 },
+          { id: '3', label: 'Modérément difficile (6)', value: 6 },
+          { id: '4', label: 'Légèrement difficile (8)', value: 8 },
+          { id: '5', label: 'Comme avant (10)', value: 10 }
+        ]
+      },
+      {
+        id: 'q2',
+        text: 'Niveau de difficulté pour l\'activité 2 choisie par le patient',
+        options: [
+          { id: '0', label: 'Impossible (0)', value: 0 },
+          { id: '1', label: 'Très difficile (2)', value: 2 },
+          { id: '2', label: 'Difficile (4)', value: 4 },
+          { id: '3', label: 'Modérément difficile (6)', value: 6 },
+          { id: '4', label: 'Légèrement difficile (8)', value: 8 },
+          { id: '5', label: 'Comme avant (10)', value: 10 }
+        ]
+      },
+      {
+        id: 'q3',
+        text: 'Niveau de difficulté pour l\'activité 3 choisie par le patient',
+        options: [
+          { id: '0', label: 'Impossible (0)', value: 0 },
+          { id: '1', label: 'Très difficile (2)', value: 2 },
+          { id: '2', label: 'Difficile (4)', value: 4 },
+          { id: '3', label: 'Modérément difficile (6)', value: 6 },
+          { id: '4', label: 'Légèrement difficile (8)', value: 8 },
+          { id: '5', label: 'Comme avant (10)', value: 10 }
         ]
       }
     ]
