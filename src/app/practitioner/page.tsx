@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Calendar, User, Search, Activity, FileText, Settings, Users, ChevronRight } from 'lucide-react';
+import { Calendar, User, Search, Activity, FileText, Settings, Users, ChevronRight, BookOpen } from 'lucide-react';
 import PractitionerDashboard from '@/components/PractitionerDashboard';
 import { getPatients, getPendingRequests } from './actions';
 import CopyLinkButton from '@/components/CopyLinkButton';
@@ -49,8 +49,12 @@ export default async function PractitionerPage() {
               Bienvenue, {user?.email}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <Link href="/practitioner/settings" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', color: 'var(--text-secondary)', background: 'var(--surface)', borderRadius: 'var(--radius-full)', border: '1px solid var(--border)', fontWeight: 500 }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Link href="/practitioner/library" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', color: 'var(--primary)', background: 'var(--surface)', borderRadius: 'var(--radius-full)', border: '1px solid var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
+              <BookOpen size={18} />
+              Bibliothèque
+            </Link>
+            <Link href="/practitioner/settings" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', color: 'var(--text-secondary)', background: 'var(--surface)', borderRadius: 'var(--radius-full)', border: '1px solid var(--border)', fontWeight: 500, textDecoration: 'none' }}>
               <Settings size={18} />
               Paramètres
             </Link>
