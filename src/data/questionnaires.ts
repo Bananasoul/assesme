@@ -73,7 +73,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The Tampa Scale for Kinesiophobia: further examination of psychometric properties',
-        url: 'https://pubmed.ncbi.nlm. fractional_link',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/15324776/',
         type: 'scientific_article'
       }
     ],
