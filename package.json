@@ -15,9 +15,6 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@capacitor/android": "^8.3.2",
-    "@capacitor/core": "^8.3.2",
-    "@capacitor/ios": "^8.3.2",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@prisma/client": "^6.4.1",
     "@supabase/ssr": "^0.10.2",
@@ -30,7 +27,6 @@
     "recharts": "^3.8.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.3.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
