@@ -9,7 +9,13 @@ import { ClipboardList, HelpCircle, FileText, ChevronRight } from 'lucide-react'
 
 type Tab = 'tests' | 'questions' | 'detail';
 
-export default function LibraryView() {
+export type PatientContext = {
+  patientId: string;
+  recordId: string;
+  patientName: string;
+};
+
+export default function LibraryView({ patientContext = null }: { patientContext?: PatientContext | null }) {
   const [zone, setZone] = useState<BodyPartKey | null>('lumbar');
   const [selectedTestId, setSelectedTestId] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('tests');
@@ -234,7 +240,7 @@ export default function LibraryView() {
         {tab === 'detail' && (
           <TabPanel>
             {selectedTest ? (
-              <TestDetailPanel test={selectedTest} />
+              <TestDetailPanel test={selectedTest} patientContext={patientContext} />
             ) : (
               <Empty>Sélectionnez un test pour voir ses détails.</Empty>
             )}

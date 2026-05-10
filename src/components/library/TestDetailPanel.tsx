@@ -1,24 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useTransition } from 'react';
 import { QuestionnaireDef } from '@/data/questionnaires';
 import { getMeta, BODY_PART_LABELS } from '@/data/questionnaires-meta';
+import { createAnonymousSession } from '@/app/actions/anonymousSession';
+import type { PatientContext } from './LibraryView';
 import {
   Activity,
   AlertCircle,
   BookOpen,
   CheckCircle2,
+  ClipboardCheck,
   Clock,
+  Copy,
   ExternalLink,
   Globe,
   Lightbulb,
   ListChecks,
+  Send,
   Stethoscope,
   Target,
   Video,
 } from 'lucide-react';
 
-export default function TestDetailPanel({ test }: { test: QuestionnaireDef }) {
+type Props = {
+  test: QuestionnaireDef;
+  patientContext?: PatientContext | null;
+};
+
+export default function TestDetailPanel({ test, patientContext = null }: Props) {
   const meta = getMeta(test.id);
 
   return (
@@ -45,6 +55,11 @@ export default function TestDetailPanel({ test }: { test: QuestionnaireDef }) {
           ))}
         </div>
       </div>
+
+      {/* CTA Prescrire (mode patient uniquement) */}
+      {patientContext && (
+        <PrescribeBlock test={test} patientContext={patientContext} />
+      )}
 
       {/* Valeur clinique */}
       {test.clinicalValue && (
@@ -276,6 +291,147 @@ function NotProvided({ children }: { children: React.ReactNode }) {
       }}
     >
       <AlertCircle size={14} /> {children}
+    </div>
+  );
+}
+
+function PrescribeBlock({ test, patientContext }: { test: QuestionnaireDef; patientContext: PatientContext }) {
+  const [isPending, startTransition] = useTransition();
+  const [code, setCode] = useState<string | null>(null);
+  const [link, setLink] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handlePrescribe = () => {
+    setError(null);
+    startTransition(async () => {
+      const res = await createAnonymousSession(patientContext.recordId, [test.id]);
+      if (res.success && res.anonymousCode) {
+        setCode(res.anonymousCode);
+        setLink(`${window.location.origin}/test/${res.anonymousCode}`);
+      } else {
+        setError(res.error || 'Échec de la création du lien.');
+      }
+    });
+  };
+
+  const copy = () => {
+    if (link) {
+      navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  if (code && link) {
+    return (
+      <div
+        style={{
+          marginBottom: '1.75rem',
+          padding: '1.25rem',
+          background: '#DCFCE7',
+          border: '1px solid #16a34a',
+          borderRadius: 'var(--radius-md)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+          <CheckCircle2 size={20} color="#166534" />
+          <strong style={{ color: '#166534' }}>Lien anonyme créé pour {patientContext.patientName}</strong>
+        </div>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              padding: '0.4rem 0.85rem',
+              background: 'white',
+              borderRadius: 'var(--radius-sm)',
+              fontWeight: 800,
+              fontSize: '1.1rem',
+              letterSpacing: '0.08em',
+              color: 'var(--primary)',
+              border: '1px solid #16a34a',
+            }}
+          >
+            {code}
+          </div>
+          <button
+            onClick={copy}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.5rem 0.85rem',
+              background: 'white',
+              border: '1px solid #16a34a',
+              color: '#166534',
+              borderRadius: 'var(--radius-sm)',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+            }}
+          >
+            <Copy size={14} /> {copied ? 'Copié !' : 'Copier le lien'}
+          </button>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: '0.85rem',
+              color: '#166534',
+              textDecoration: 'underline',
+              fontWeight: 600,
+            }}
+          >
+            Ouvrir le lien
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        marginBottom: '1.75rem',
+        padding: '1.25rem',
+        background: 'var(--primary-light)',
+        borderRadius: 'var(--radius-md)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '1rem',
+        flexWrap: 'wrap',
+      }}
+    >
+      <div style={{ color: 'white' }}>
+        <div style={{ fontWeight: 700, marginBottom: '0.15rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <ClipboardCheck size={18} /> Prescrire à {patientContext.patientName}
+        </div>
+        <div style={{ fontSize: '0.85rem', opacity: 0.9 }}>
+          Génère un lien anonyme à transmettre au patient.
+        </div>
+      </div>
+      <button
+        onClick={handlePrescribe}
+        disabled={isPending}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          padding: '0.65rem 1.25rem',
+          background: 'white',
+          color: 'var(--primary)',
+          border: 'none',
+          borderRadius: 'var(--radius-full)',
+          fontWeight: 700,
+          fontSize: '0.9rem',
+          cursor: isPending ? 'not-allowed' : 'pointer',
+          opacity: isPending ? 0.7 : 1,
+        }}
+      >
+        <Send size={16} /> {isPending ? 'Création…' : 'Générer le lien'}
+      </button>
+      {error && <div style={{ width: '100%', color: 'white', fontSize: '0.85rem' }}>⚠️ {error}</div>}
     </div>
   );
 }

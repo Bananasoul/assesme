@@ -1,6 +1,6 @@
 import { getPatientHistory } from '@/lib/data';
 import Link from 'next/link';
-import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText, ClipboardList } from 'lucide-react';
+import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText, ClipboardList, BookOpen } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
 import AssignTestsModal from '@/components/AssignTestsModal';
@@ -58,7 +58,25 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
           Retour au mode Praticien
         </Link>
 
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Link
+            href={`/practitioner/library?patientId=${patient.id}&recordId=${record.id}&patientName=${encodeURIComponent(patient.firstName)}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: 'var(--surface)',
+              color: 'var(--primary)',
+              padding: '0.5rem 1rem',
+              borderRadius: 'var(--radius-full)',
+              fontWeight: 600,
+              border: '1px solid var(--primary)',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+            }}
+          >
+            <BookOpen size={16} /> Bibliothèque
+          </Link>
           <PortalLinkButton recordId={record.id} patientName={patient.firstName} />
           <AssignTestsModal recordId={record.id} />
           <PrintButton />
