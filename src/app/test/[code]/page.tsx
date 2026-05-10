@@ -72,10 +72,9 @@ export default async function AnonymousTestPage({ params }: Props) {
           </div>
         </div>
 
-        <MultiQuestionnaireFlow 
-          questionnaires={defs} 
-          recordId={session.clinicalRecordId} 
-          requestId={session.anonymousCode} 
+        <MultiQuestionnaireFlow
+          questionnaires={defs}
+          requestId={session.anonymousCode}
         />
       </div>
     </main>

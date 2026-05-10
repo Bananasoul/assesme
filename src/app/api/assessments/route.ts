@@ -1,63 +1,101 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { createClient } from '@/utils/supabase/server';
+
+type Body = {
+  type?: string;
+  score?: number;
+  maxScore?: number;
+  rawResponses?: Record<string, unknown>;
+  submissionToken?: string; // anonymousCode (AM-XXXX) ou AssessmentRequest.id
+  isPatientInput?: boolean;
+};
+
+function bad(message: string, status = 400) {
+  return NextResponse.json({ success: false, error: message }, { status });
+}
 
 export async function POST(request: Request) {
+  let body: Body;
   try {
-    const body = await request.json();
-    const { type, score, maxScore, rawResponses, targetRecordId, isPatientInput } = body;
+    body = await request.json();
+  } catch {
+    return bad('Corps JSON invalide.');
+  }
 
-    let recordIdToUse = targetRecordId;
+  const { type, score, maxScore, rawResponses, submissionToken, isPatientInput } = body;
 
-    if (!recordIdToUse) {
-      // Fallback for the demo patient dashboard
-      let patient = await prisma.patientVault.findFirst();
-      if (!patient) {
-        patient = await prisma.patientVault.create({
-          data: {
-            firstName: 'Jean',
-            lastName: 'Dupont',
-            email: 'jean.dupont@example.com',
-            clinicalRecord: { create: {} }
-          },
-          include: { clinicalRecord: true }
-        });
-      }
+  if (typeof type !== 'string' || !type.trim()) return bad('type requis.');
+  if (typeof score !== 'number' || !Number.isFinite(score)) return bad('score numérique requis.');
+  if (typeof maxScore !== 'number' || !Number.isFinite(maxScore) || maxScore <= 0) {
+    return bad('maxScore numérique > 0 requis.');
+  }
+  if (score < 0 || score > maxScore) return bad('score hors bornes.');
 
-      let clinicalRecord = await prisma.clinicalRecord.findUnique({
-        where: { patientId: patient.id }
-      });
+  // ----- Résolution du recordId via un canal authentifié -----
+  let recordId: string | null = null;
+  let isPatient = !!isPatientInput;
 
-      if (!clinicalRecord) {
-          clinicalRecord = await prisma.clinicalRecord.create({
-              data: { patientId: patient.id }
-          });
-      }
-      recordIdToUse = clinicalRecord.id;
+  if (submissionToken && submissionToken.startsWith('AM-')) {
+    // Lien anonyme patient
+    const session = await prisma.anonymousSession.findUnique({
+      where: { anonymousCode: submissionToken }
+    });
+    if (!session) return bad('Code anonyme inconnu.', 404);
+    if (session.status === 'COMPLETED') return bad('Session déjà complétée.', 410);
+    recordId = session.clinicalRecordId;
+    isPatient = true;
+  } else if (submissionToken) {
+    // Demande nominative AssessmentRequest
+    const req = await prisma.assessmentRequest.findUnique({ where: { id: submissionToken } });
+    if (!req) return bad('Demande inconnue.', 404);
+    if (req.status === 'COMPLETED') return bad('Demande déjà complétée.', 410);
+    recordId = req.clinicalRecordId;
+    isPatient = true;
+  } else {
+    // Pas de token → exige un praticien authentifié + recordId explicite via header
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return bad('Non authentifié.', 401);
+
+    const headerRecordId = request.headers.get('x-record-id');
+    if (!headerRecordId) return bad('Record cible non spécifié.', 400);
+
+    // Vérifie que le record appartient bien à un patient de ce praticien
+    const record = await prisma.clinicalRecord.findUnique({
+      where: { id: headerRecordId },
+      include: { patient: true }
+    });
+    if (!record || record.patient.practitionerId !== user.id) {
+      return bad('Record introuvable ou accès interdit.', 403);
     }
+    recordId = headerRecordId;
+    isPatient = false;
+  }
 
-    // Création de l'évaluation (Assessment)
+  if (!recordId) return bad('Impossible de résoudre le record cible.', 500);
+
+  try {
     const assessment = await prisma.assessment.create({
       data: {
-        recordId: recordIdToUse,
-        timelineAnchor: 'T0_INITIAL', // Simplifié pour la démo
+        recordId,
+        timelineAnchor: 'T0_INITIAL',
         questionnaires: {
           create: {
-            type: type || 'TAMPA',
-            score: score || 0,
-            maxScore: maxScore || 68,
-            rawResponses: JSON.stringify(rawResponses || {}),
-            isPatientInput: isPatientInput !== undefined ? isPatientInput : true
+            type,
+            score,
+            maxScore,
+            rawResponses: JSON.stringify(rawResponses ?? {}),
+            isPatientInput: isPatient
           }
         }
       },
-      include: {
-        questionnaires: true
-      }
+      include: { questionnaires: true }
     });
 
     return NextResponse.json({ success: true, assessment }, { status: 201 });
   } catch (error) {
-    console.error("Erreur lors de la sauvegarde :", error);
-    return NextResponse.json({ success: false, error: "Erreur serveur" }, { status: 500 });
+    console.error('Erreur sauvegarde assessment :', error);
+    return NextResponse.json({ success: false, error: 'Erreur serveur' }, { status: 500 });
   }
 }

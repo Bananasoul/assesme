@@ -44,7 +44,7 @@ export default async function QuestionnairePage({ params }: { params: Promise<{ 
         </p>
       </div>
 
-      <QuestionnaireEngine questionnaire={questionnaire} />
+      <QuestionnaireEngine questionnaire={questionnaire} demoMode />
     </main>
   );
 }

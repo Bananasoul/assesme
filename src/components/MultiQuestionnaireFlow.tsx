@@ -6,14 +6,15 @@ import QuestionnaireEngine from './QuestionnaireEngine';
 import { Award, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { completeAnonymousSession } from '@/app/actions/anonymousSession';
+import { completeAssessmentRequest } from '@/app/actions/assessmentRequests';
 
 type Props = {
   questionnaires: QuestionnaireDef[];
-  recordId: string;
+  /** anonymousCode (AM-XXXX) ou AssessmentRequest.id */
   requestId: string;
 };
 
-export default function MultiQuestionnaireFlow({ questionnaires, recordId, requestId }: Props) {
+export default function MultiQuestionnaireFlow({ questionnaires, requestId }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullyCompleted, setIsFullyCompleted] = useState(false);
 
@@ -21,8 +22,11 @@ export default function MultiQuestionnaireFlow({ questionnaires, recordId, reque
     if (currentIndex < questionnaires.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      // Finished all. Since we pass the anonymousCode as requestId, we can complete it here.
-      await completeAnonymousSession(requestId);
+      if (requestId.startsWith('AM-')) {
+        await completeAnonymousSession(requestId);
+      } else if (requestId !== 'legacy') {
+        await completeAssessmentRequest(requestId);
+      }
       setIsFullyCompleted(true);
     }
   };
@@ -76,11 +80,11 @@ export default function MultiQuestionnaireFlow({ questionnaires, recordId, reque
         <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>{currentQ.title}</h2>
       </div>
 
-      <QuestionnaireEngine 
+      <QuestionnaireEngine
         key={currentQ.id} // Important so it resets state when changing questionnaire
-        questionnaire={currentQ} 
-        targetRecordId={recordId} 
-        isRemoteFill={true} 
+        questionnaire={currentQ}
+        submissionToken={requestId}
+        isRemoteFill={true}
         onComplete={handleNext}
       />
     </div>

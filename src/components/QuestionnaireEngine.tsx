@@ -7,12 +7,13 @@ import Link from 'next/link';
 
 interface QuestionnaireEngineProps {
   questionnaire: QuestionnaireDef;
-  targetRecordId?: string;
+  submissionToken?: string; // anonymousCode (AM-XXXX) ou AssessmentRequest.id
   isRemoteFill?: boolean;
+  demoMode?: boolean; // si true, ne sauvegarde rien (page /questionnaire/[id])
   onComplete?: () => void;
 }
 
-export default function QuestionnaireEngine({ questionnaire, targetRecordId, isRemoteFill, onComplete }: QuestionnaireEngineProps) {
+export default function QuestionnaireEngine({ questionnaire, submissionToken, isRemoteFill, demoMode, onComplete }: QuestionnaireEngineProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [isCompleted, setIsCompleted] = useState(false);
@@ -65,18 +66,20 @@ export default function QuestionnaireEngine({ questionnaire, targetRecordId, isR
             totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);
           }
 
-          await fetch('/api/assessments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: questionnaire.id.toUpperCase(),
-              score: totalScore,
-              maxScore: questionnaire.maxScore,
-              rawResponses: newAnswers,
-              targetRecordId,
-              isPatientInput: !!isRemoteFill
-            })
-          });
+          if (!demoMode) {
+            await fetch('/api/assessments', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: questionnaire.id.toUpperCase(),
+                score: totalScore,
+                maxScore: questionnaire.maxScore,
+                rawResponses: newAnswers,
+                submissionToken,
+                isPatientInput: !!isRemoteFill
+              })
+            });
+          }
           
           if (onComplete) {
             onComplete();
