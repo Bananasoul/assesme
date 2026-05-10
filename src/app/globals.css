@@ -104,6 +104,10 @@ button {
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.patient-row:hover {
+  background: var(--surface-hover);
+}
+
 /* === PRINT / PDF EXPORT === */
 @media print {
   body {

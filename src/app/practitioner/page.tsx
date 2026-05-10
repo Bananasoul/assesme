@@ -171,20 +171,19 @@ export default async function PractitionerPage() {
               {patients.map((patient, index) => {
                 const latestAssessment = patient.clinicalRecord?.assessments?.[0];
                 return (
-                  <Link 
-                    key={patient.id} 
+                  <Link
+                    key={patient.id}
                     href={`/practitioner/patient-history?id=${patient.id}`}
-                    style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                    className="patient-row"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '1.25rem 1.5rem',
                       borderBottom: index < patients.length - 1 ? '1px solid var(--border)' : 'none',
                       textDecoration: 'none',
                       transition: 'background 0.2s'
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = 'var(--surface-hover)'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary-light)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '1.125rem' }}>
