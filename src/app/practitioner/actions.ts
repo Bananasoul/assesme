@@ -37,6 +37,36 @@ export async function getPatients() {
   }
 }
 
+export async function getOnboardingState() {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { hasCreatedPatient: false, hasAssignedTest: false, hasCompletedTest: false };
+
+    const [patientCount, anyAssigned, anyCompleted] = await Promise.all([
+      prisma.patientVault.count({ where: { practitionerId: user.id } }),
+      prisma.anonymousSession.count({
+        where: { clinicalRecord: { patient: { practitionerId: user.id } } }
+      }),
+      prisma.anonymousSession.count({
+        where: {
+          status: 'COMPLETED',
+          clinicalRecord: { patient: { practitionerId: user.id } }
+        }
+      })
+    ]);
+
+    return {
+      hasCreatedPatient: patientCount > 0,
+      hasAssignedTest: anyAssigned > 0,
+      hasCompletedTest: anyCompleted > 0,
+    };
+  } catch (error) {
+    console.error('Error fetching onboarding state:', error);
+    return { hasCreatedPatient: false, hasAssignedTest: false, hasCompletedTest: false };
+  }
+}
+
 export async function getPendingRequests() {
   try {
     const supabase = await createClient();

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { Calendar, User, Search, Activity, FileText, Settings, Users, ChevronRight, BookOpen } from 'lucide-react';
 import PractitionerDashboard from '@/components/PractitionerDashboard';
-import { getPatients, getPendingRequests } from './actions';
+import { getPatients, getPendingRequests, getOnboardingState } from './actions';
+import OnboardingChecklist from '@/components/OnboardingChecklist';
 import CopyLinkButton from '@/components/CopyLinkButton';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
 import NewPatientModal from '@/components/NewPatientModal';
@@ -13,9 +14,10 @@ export const dynamic = 'force-dynamic';
 export default async function PractitionerPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const [patients, pendingRequests] = await Promise.all([
+  const [patients, pendingRequests, onboarding] = await Promise.all([
     getPatients(),
-    getPendingRequests()
+    getPendingRequests(),
+    getOnboardingState(),
   ]);
 
   return (
@@ -63,6 +65,9 @@ export default async function PractitionerPage() {
           </div>
         </div>
 
+        {/* Onboarding Checklist (auto-disappears once complete) */}
+        <OnboardingChecklist {...onboarding} />
+
         {/* Stats Summary */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
           <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -85,17 +90,20 @@ export default async function PractitionerPage() {
             </div>
           </div>
           
-          {/* Quick Access to Triage (Old dashboard feature) */}
+          {/* Lien rapide bibliothèque (aide à la décision clinique) */}
           <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem', gridColumn: 'span 2' }}>
-            <div style={{ flex: 1 }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.25rem' }}>Arbre de Décision Clinique</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Outil d'aide à la décision pour sélectionner le bon questionnaire fonctionnel.</p>
+            <div style={{ padding: '1rem', background: 'var(--primary-light)', color: 'white', borderRadius: 'var(--radius-md)' }}>
+              <BookOpen size={24} />
             </div>
-            <Link 
-              href="#triage"
-              style={{ padding: '0.75rem 1.5rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-full)', fontWeight: 500, color: 'var(--primary)' }}
+            <div style={{ flex: 1 }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.25rem' }}>Bibliothèque clinique</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Body chart interactif, 29 questionnaires validés, propriétés psychométriques détaillées.</p>
+            </div>
+            <Link
+              href="/practitioner/library"
+              style={{ padding: '0.75rem 1.5rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-full)', fontWeight: 500, color: 'var(--primary)', textDecoration: 'none' }}
             >
-              Ouvrir l'outil
+              Ouvrir
             </Link>
           </div>
         </div>
@@ -167,8 +175,32 @@ export default async function PractitionerPage() {
         <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Mes Patients</h2>
         <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', overflow: 'hidden' }}>
           {patients.length === 0 ? (
-            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-              Aucun patient trouvé. Ajoutez votre premier patient !
+            <div style={{ padding: '3.5rem 2rem', textAlign: 'center' }}>
+              <div
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  background: 'var(--surface-hover)',
+                  margin: '0 auto 1rem auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-secondary)',
+                }}
+              >
+                <Users size={32} />
+              </div>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
+                Aucun patient pour le moment
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', maxWidth: '420px', margin: '0 auto 1.25rem' }}>
+                Créez votre premier dossier patient pour commencer à prescrire des bilans validés
+                et suivre leur évolution dans le temps.
+              </p>
+              <div style={{ display: 'inline-block' }}>
+                <NewPatientModal />
+              </div>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
