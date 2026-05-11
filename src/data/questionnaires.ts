@@ -162,27 +162,51 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'methodology'
       }
     ],
+    // STarT Back Tool: 9 items.
+    // Items 1-8: échelle "Pas d'accord" (0) / "D'accord" (1).
+    // Item 9: échelle Likert 0-4, recodée: 0-3 → 0 ; 4 → 1.
+    // Sous-score psycho-social = items 5-9 (max 5). Cut-off : ≥ 4 = haut risque.
+    // Score total = items 1-9 (max 9). Cut-off : < 4 = bas risque, ≥ 4 = moyen/haut risque selon sous-score psy.
     questions: [
-      { id: 'sb1', text: "Mon mal de dos s'est propagé dans la jambe(s) au cours des 2 dernières semaines.", options: [
+      { id: 'sb1', text: '1. Mon mal de dos s\'est propagé dans la jambe(s) au cours des 2 dernières semaines.', options: [
         { id: '0', label: 'Pas d\'accord', value: 0 },
         { id: '1', label: 'D\'accord', value: 1 },
       ]},
-      { id: 'sb2', text: "J'ai eu des douleurs à l'épaule ou à la nuque en même temps que mon mal de dos.", options: [
+      { id: 'sb2', text: '2. J\'ai eu des douleurs à l\'épaule ou à la nuque en même temps que mon mal de dos.', options: [
         { id: '0', label: 'Pas d\'accord', value: 0 },
         { id: '1', label: 'D\'accord', value: 1 },
       ]},
-      { id: 'sb3', text: "Je n'ai parcouru que de courtes distances à cause de mon mal de dos.", options: [
+      { id: 'sb3', text: '3. Je n\'ai parcouru que de courtes distances à cause de mon mal de dos.', options: [
         { id: '0', label: 'Pas d\'accord', value: 0 },
         { id: '1', label: 'D\'accord', value: 1 },
       ]},
-      { id: 'sb4', text: "Au cours des 2 dernières semaines, je me suis habillé(e) plus lentement que d'habitude.", options: [
+      { id: 'sb4', text: '4. Au cours des 2 dernières semaines, je me suis habillé(e) plus lentement que d\'habitude à cause de mon mal de dos.', options: [
         { id: '0', label: 'Pas d\'accord', value: 0 },
         { id: '1', label: 'D\'accord', value: 1 },
       ]},
-      { id: 'sb5', text: "Les activités physiques ne sont vraiment pas sûres pour une personne avec mon problème de dos.", options: [
+      { id: 'sb5', text: '5. (Psy) Les activités physiques ne sont vraiment pas sûres pour une personne avec mon problème de dos.', options: [
         { id: '0', label: 'Pas d\'accord', value: 0 },
         { id: '1', label: 'D\'accord', value: 1 },
-      ]}
+      ]},
+      { id: 'sb6', text: '6. (Psy) Je m\'inquiète beaucoup à propos de mon mal de dos.', options: [
+        { id: '0', label: 'Pas d\'accord', value: 0 },
+        { id: '1', label: 'D\'accord', value: 1 },
+      ]},
+      { id: 'sb7', text: '7. (Psy) Je pense que mon mal de dos est terrible et qu\'il ne s\'améliorera jamais.', options: [
+        { id: '0', label: 'Pas d\'accord', value: 0 },
+        { id: '1', label: 'D\'accord', value: 1 },
+      ]},
+      { id: 'sb8', text: '8. (Psy) En général, je ne prends pas plaisir aux choses comme avant.', options: [
+        { id: '0', label: 'Pas d\'accord', value: 0 },
+        { id: '1', label: 'D\'accord', value: 1 },
+      ]},
+      { id: 'sb9', text: '9. (Psy) Globalement, à quel point votre mal de dos vous a-t-il dérangé au cours des 2 dernières semaines ?', options: [
+        { id: '0', label: 'Pas du tout', value: 0 },
+        { id: '1', label: 'Légèrement', value: 0 },
+        { id: '2', label: 'Modérément', value: 0 },
+        { id: '3', label: 'Beaucoup', value: 1 },
+        { id: '4', label: 'Extrêmement', value: 1 },
+      ]},
     ]
   },
 
@@ -2668,20 +2692,98 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Déculpabilisation du patient face à son ressenti'
       ]
     },
-    references: [{ title: 'The Hospital Anxiety and Depression Scale', type: 'scientific_article' }],
+    references: [{
+      title: 'The Hospital Anxiety and Depression Scale (Zigmond & Snaith, 1983)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/6880820/',
+      type: 'scientific_article' as const
+    }],
+    // HADS-14: 7 items anxiété (impairs A) + 7 items dépression (pairs D). Score 0-21 par sous-échelle.
+    // Les valeurs des options sont déjà calibrées item par item (pas de reverseScore flag nécessaire).
     questions: [
-      { id: 'had1', text: "Je me sens tendu ou énervé :", options: [
-        { id: '3', label: 'La plupart du temps', value: 3 },
-        { id: '2', label: 'Souvent', value: 2 },
-        { id: '1', label: 'De temps en temps', value: 1 },
-        { id: '0', label: 'Jamais', value: 0 },
+      { id: 'had1', text: '1. (A) Je me sens tendu(e) ou énervé(e) :', options: [
+        { id: 'a', label: 'La plupart du temps', value: 3 },
+        { id: 'b', label: 'Souvent', value: 2 },
+        { id: 'c', label: 'De temps en temps', value: 1 },
+        { id: 'd', label: 'Jamais', value: 0 },
       ]},
-      { id: 'had2', text: "Je prends plaisir aux mêmes choses qu'autrefois :", options: [
-        { id: '0', label: 'Oui, tout autant', value: 0 },
-        { id: '1', label: 'Pas autant', value: 1 },
-        { id: '2', label: 'Un peu seulement', value: 2 },
-        { id: '3', label: 'Presque plus', value: 3 },
-      ]}
+      { id: 'had2', text: '2. (D) Je prends plaisir aux mêmes choses qu\'autrefois :', options: [
+        { id: 'a', label: 'Oui, tout autant', value: 0 },
+        { id: 'b', label: 'Pas autant', value: 1 },
+        { id: 'c', label: 'Un peu seulement', value: 2 },
+        { id: 'd', label: 'Presque plus', value: 3 },
+      ]},
+      { id: 'had3', text: '3. (A) J\'ai une sensation de peur comme si quelque chose d\'horrible allait m\'arriver :', options: [
+        { id: 'a', label: 'Oui, très nettement', value: 3 },
+        { id: 'b', label: 'Oui, mais ce n\'est pas très grave', value: 2 },
+        { id: 'c', label: 'Un peu, mais cela ne m\'inquiète pas', value: 1 },
+        { id: 'd', label: 'Pas du tout', value: 0 },
+      ]},
+      { id: 'had4', text: '4. (D) Je ris facilement et vois le bon côté des choses :', options: [
+        { id: 'a', label: 'Autant que par le passé', value: 0 },
+        { id: 'b', label: 'Plus autant qu\'avant', value: 1 },
+        { id: 'c', label: 'Vraiment moins qu\'avant', value: 2 },
+        { id: 'd', label: 'Plus du tout', value: 3 },
+      ]},
+      { id: 'had5', text: '5. (A) Je me fais du souci :', options: [
+        { id: 'a', label: 'Très souvent', value: 3 },
+        { id: 'b', label: 'Assez souvent', value: 2 },
+        { id: 'c', label: 'Occasionnellement', value: 1 },
+        { id: 'd', label: 'Très occasionnellement', value: 0 },
+      ]},
+      { id: 'had6', text: '6. (D) Je suis de bonne humeur :', options: [
+        { id: 'a', label: 'Jamais', value: 3 },
+        { id: 'b', label: 'Rarement', value: 2 },
+        { id: 'c', label: 'Assez souvent', value: 1 },
+        { id: 'd', label: 'La plupart du temps', value: 0 },
+      ]},
+      { id: 'had7', text: '7. (A) Je peux rester tranquillement assis(e) à ne rien faire et me sentir décontracté(e) :', options: [
+        { id: 'a', label: 'Oui, quoi qu\'il arrive', value: 0 },
+        { id: 'b', label: 'Oui, en général', value: 1 },
+        { id: 'c', label: 'Rarement', value: 2 },
+        { id: 'd', label: 'Jamais', value: 3 },
+      ]},
+      { id: 'had8', text: '8. (D) J\'ai l\'impression de fonctionner au ralenti :', options: [
+        { id: 'a', label: 'Presque toujours', value: 3 },
+        { id: 'b', label: 'Très souvent', value: 2 },
+        { id: 'c', label: 'Parfois', value: 1 },
+        { id: 'd', label: 'Jamais', value: 0 },
+      ]},
+      { id: 'had9', text: '9. (A) J\'éprouve des sensations de peur et j\'ai l\'estomac noué :', options: [
+        { id: 'a', label: 'Jamais', value: 0 },
+        { id: 'b', label: 'Parfois', value: 1 },
+        { id: 'c', label: 'Assez souvent', value: 2 },
+        { id: 'd', label: 'Très souvent', value: 3 },
+      ]},
+      { id: 'had10', text: '10. (D) Je ne m\'intéresse plus à mon apparence :', options: [
+        { id: 'a', label: 'Plus du tout', value: 3 },
+        { id: 'b', label: 'Je n\'y accorde pas autant d\'attention que je devrais', value: 2 },
+        { id: 'c', label: 'Il se peut que je n\'y fasse plus autant attention', value: 1 },
+        { id: 'd', label: 'J\'y prête autant d\'attention que par le passé', value: 0 },
+      ]},
+      { id: 'had11', text: '11. (A) J\'ai la bougeotte et n\'arrive pas à tenir en place :', options: [
+        { id: 'a', label: 'Oui, c\'est tout à fait le cas', value: 3 },
+        { id: 'b', label: 'Un peu', value: 2 },
+        { id: 'c', label: 'Pas tellement', value: 1 },
+        { id: 'd', label: 'Pas du tout', value: 0 },
+      ]},
+      { id: 'had12', text: '12. (D) Je me réjouis d\'avance à l\'idée de faire certaines choses :', options: [
+        { id: 'a', label: 'Autant qu\'avant', value: 0 },
+        { id: 'b', label: 'Un peu moins qu\'avant', value: 1 },
+        { id: 'c', label: 'Bien moins qu\'avant', value: 2 },
+        { id: 'd', label: 'Presque jamais', value: 3 },
+      ]},
+      { id: 'had13', text: '13. (A) J\'éprouve des sensations soudaines de panique :', options: [
+        { id: 'a', label: 'Vraiment très souvent', value: 3 },
+        { id: 'b', label: 'Assez souvent', value: 2 },
+        { id: 'c', label: 'Pas très souvent', value: 1 },
+        { id: 'd', label: 'Jamais', value: 0 },
+      ]},
+      { id: 'had14', text: '14. (D) Je peux prendre plaisir à un bon livre ou à une bonne émission radio ou de télévision :', options: [
+        { id: 'a', label: 'Souvent', value: 0 },
+        { id: 'b', label: 'Parfois', value: 1 },
+        { id: 'c', label: 'Rarement', value: 2 },
+        { id: 'd', label: 'Très rarement', value: 3 },
+      ]},
     ]
   },
 
@@ -2708,29 +2810,65 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Gestion de la charge d\'entraînement pour les sportifs (tennis, escalade)'
       ]
     },
-    references: [{ title: 'Development of the QuickDASH', type: 'scientific_article' }],
+    references: [{
+      title: 'Development of the QuickDASH: comparison of three item-reduction approaches (Beaton et al., 2005)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/15866967/',
+      type: 'scientific_article' as const
+    }],
+    // QuickDASH-11: 11 items (6 fonction + 1 social + 2 douleur + 2 autres). Score 1-5 par item.
+    // Formule: ((sum/n) - 1) × 25 → 0-100. Min 10 réponses sur 11 requises.
     questions: [
-      { id: 'qd1', text: "Ouvrir un bocal neuf ou très serré", options: [
-        { id: '1', label: 'Aucune difficulté', value: 1 },
-        { id: '2', label: 'Difficulté légère', value: 2 },
-        { id: '3', label: 'Difficulté moyenne', value: 3 },
-        { id: '4', label: 'Difficulté extrême', value: 4 },
-        { id: '5', label: 'Incapable de le faire', value: 5 },
-      ]},
-      { id: 'qd2', text: "Faire des travaux ménagers lourds (ex: laver les murs, les planchers)", options: [
-        { id: '1', label: 'Aucune difficulté', value: 1 },
-        { id: '2', label: 'Difficulté légère', value: 2 },
-        { id: '3', label: 'Difficulté moyenne', value: 3 },
-        { id: '4', label: 'Difficulté extrême', value: 4 },
-        { id: '5', label: 'Incapable de le faire', value: 5 },
-      ]},
-      { id: 'qd3', text: "Au cours de la dernière semaine, à quel point la douleur a-t-elle interféré avec vos activités sociales ?", options: [
-        { id: '1', label: 'Pas du tout', value: 1 },
-        { id: '2', label: 'Légèrement', value: 2 },
-        { id: '3', label: 'Modérément', value: 3 },
-        { id: '4', label: 'Beaucoup', value: 4 },
-        { id: '5', label: 'Extrêmement', value: 5 },
-      ]}
+      ...[
+        // Fonction (6 items)
+        { text: 'Ouvrir un bocal neuf ou très serré.', scale: 'difficulty' },
+        { text: 'Faire des travaux ménagers lourds (laver les murs, les planchers).', scale: 'difficulty' },
+        { text: 'Porter un sac de courses ou un porte-documents.', scale: 'difficulty' },
+        { text: 'Vous laver le dos.', scale: 'difficulty' },
+        { text: 'Utiliser un couteau pour couper de la nourriture.', scale: 'difficulty' },
+        { text: 'Pratiquer des activités de loisirs nécessitant force et impact (golf, marteau, tennis…).', scale: 'difficulty' },
+        // Limitation sociale / sommeil (3 items)
+        { text: 'Au cours de la dernière semaine, à quel point votre épaule, bras ou main a-t-il/elle limité vos activités sociales avec votre famille, vos amis ou des groupes ?', scale: 'limit' },
+        { text: 'Au cours de la dernière semaine, votre travail ou vos activités quotidiennes ont-ils été limités à cause de votre bras, épaule ou main ?', scale: 'limit-work' },
+        { text: 'Évaluez la sévérité des symptômes suivants au cours de la dernière semaine : douleur du bras, de l\'épaule ou de la main.', scale: 'severity' },
+        { text: 'Évaluez la sévérité des picotements (fourmillements douloureux) du bras, de l\'épaule ou de la main.', scale: 'severity' },
+        { text: 'Au cours de la dernière semaine, à quel point votre douleur au bras, à l\'épaule ou à la main a-t-elle perturbé votre sommeil ?', scale: 'severity' },
+      ].map((q, i) => {
+        const scales: Record<string, { id: string; label: string; value: number }[]> = {
+          difficulty: [
+            { id: '1', label: '1 — Aucune difficulté', value: 1 },
+            { id: '2', label: '2 — Difficulté légère', value: 2 },
+            { id: '3', label: '3 — Difficulté moyenne', value: 3 },
+            { id: '4', label: '4 — Difficulté importante', value: 4 },
+            { id: '5', label: '5 — Incapable', value: 5 },
+          ],
+          limit: [
+            { id: '1', label: '1 — Pas du tout', value: 1 },
+            { id: '2', label: '2 — Légèrement', value: 2 },
+            { id: '3', label: '3 — Modérément', value: 3 },
+            { id: '4', label: '4 — Beaucoup', value: 4 },
+            { id: '5', label: '5 — Extrêmement', value: 5 },
+          ],
+          'limit-work': [
+            { id: '1', label: '1 — Pas limité du tout', value: 1 },
+            { id: '2', label: '2 — Légèrement limité', value: 2 },
+            { id: '3', label: '3 — Modérément limité', value: 3 },
+            { id: '4', label: '4 — Très limité', value: 4 },
+            { id: '5', label: '5 — Incapable', value: 5 },
+          ],
+          severity: [
+            { id: '1', label: '1 — Aucun', value: 1 },
+            { id: '2', label: '2 — Léger', value: 2 },
+            { id: '3', label: '3 — Modéré', value: 3 },
+            { id: '4', label: '4 — Sévère', value: 4 },
+            { id: '5', label: '5 — Extrême', value: 5 },
+          ],
+        };
+        return {
+          id: `qd${i + 1}`,
+          text: `${i + 1}. ${q.text}`,
+          options: scales[q.scale],
+        };
+      })
     ]
   },
 
@@ -2757,30 +2895,44 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Prévention des récidives par un programme d\'échauffement'
       ]
     },
-    references: [{ title: 'The Lower Extremity Functional Scale', type: 'scientific_article' }],
+    references: [{
+      title: 'The Lower Extremity Functional Scale (LEFS): scale development, measurement properties, and clinical application (Binkley et al., 1999)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/10201543/',
+      type: 'scientific_article' as const
+    }],
+    // LEFS-20: 20 items, échelle 0-4. Score 0-80. Plus haut = meilleure fonction.
     questions: [
-      { id: 'lefs1', text: "Votre travail habituel ou vos tâches ménagères", options: [
-        { id: '0', label: 'Difficulté extrême ou incapable', value: 0 },
-        { id: '1', label: 'Assez de difficulté', value: 1 },
-        { id: '2', label: 'Difficulté modérée', value: 2 },
-        { id: '3', label: 'Peu de difficulté', value: 3 },
-        { id: '4', label: 'Aucune difficulté', value: 4 },
-      ]},
-      { id: 'lefs2', text: "S'accroupir", options: [
-        { id: '0', label: 'Difficulté extrême ou incapable', value: 0 },
-        { id: '1', label: 'Assez de difficulté', value: 1 },
-        { id: '2', label: 'Difficulté modérée', value: 2 },
-        { id: '3', label: 'Peu de difficulté', value: 3 },
-        { id: '4', label: 'Aucune difficulté', value: 4 },
-      ]},
-      { id: 'lefs3', text: "Marcher entre les pièces de la maison", options: [
-        { id: '0', label: 'Difficulté extrême ou incapable', value: 0 },
-        { id: '1', label: 'Assez de difficulté', value: 1 },
-        { id: '2', label: 'Difficulté modérée', value: 2 },
-        { id: '3', label: 'Peu de difficulté', value: 3 },
-        { id: '4', label: 'Aucune difficulté', value: 4 },
-      ]}
-    ]
+      'Votre travail habituel, vos tâches ménagères ou vos activités scolaires.',
+      'Vos loisirs, activités récréatives ou sportives habituels.',
+      'Entrer ou sortir de la baignoire.',
+      'Marcher entre les pièces de la maison.',
+      'Mettre vos chaussures ou vos chaussettes.',
+      'Vous accroupir.',
+      'Soulever un objet (par ex. un sac de courses) du sol.',
+      'Effectuer des activités légères à la maison.',
+      'Effectuer des activités lourdes à la maison.',
+      'Entrer ou sortir d\'une voiture.',
+      'Marcher 200 mètres environ.',
+      'Marcher 1,5 km environ.',
+      'Monter ou descendre 10 marches (environ 1 étage).',
+      'Rester debout pendant 1 heure.',
+      'Rester assis pendant 1 heure.',
+      'Courir sur terrain plat.',
+      'Courir sur terrain irrégulier.',
+      'Faire des changements de direction rapides en courant.',
+      'Sauter.',
+      'Vous retourner dans le lit.'
+    ].map((text, i) => ({
+      id: `lefs${i + 1}`,
+      text: `${i + 1}. ${text}`,
+      options: [
+        { id: '0', label: '0 — Difficulté extrême ou incapable', value: 0 },
+        { id: '1', label: '1 — Beaucoup de difficulté', value: 1 },
+        { id: '2', label: '2 — Difficulté modérée', value: 2 },
+        { id: '3', label: '3 — Un peu de difficulté', value: 3 },
+        { id: '4', label: '4 — Aucune difficulté', value: 4 },
+      ]
+    }))
   },
 
   'mrs': {
@@ -2845,36 +2997,112 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Apprentissage de la manœuvre de relevé du sol en cas de chute'
       ]
     },
-    references: [{ title: 'Measuring balance in the elderly: validation of an instrument', type: 'scientific_article' }],
+    references: [{
+      title: 'Measuring balance in the elderly: validation of an instrument (Berg et al., 1989)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/2486138/',
+      type: 'scientific_article' as const
+    }],
+    // BBS-14: 14 items, échelle 0-4 chacun. Score 0-56. Plus haut = meilleur équilibre.
+    // Cut-offs: <45 = risque chute avéré, <40 = risque élevé.
     questions: [
-      { id: 'bbs1', text: "1. De la position assise à debout", options: [
-        { id: '4', label: '4 - Se lève sans utiliser ses mains et se stabilise seul', value: 4 },
-        { id: '3', label: '3 - Se lève en utilisant ses mains pour s\'aider', value: 3 },
-        { id: '2', label: '2 - Se lève en utilisant ses mains après plusieurs essais', value: 2 },
-        { id: '1', label: '1 - Nécessite une assistance minimale', value: 1 },
-        { id: '0', label: '0 - Nécessite une assistance modérée ou majeure', value: 0 },
+      { id: 'bbs1', text: '1. De la position assise à debout', options: [
+        { id: '4', label: '4 — Se lève sans utiliser ses mains et se stabilise seul', value: 4 },
+        { id: '3', label: '3 — Se lève en utilisant ses mains pour s\'aider', value: 3 },
+        { id: '2', label: '2 — Se lève en utilisant ses mains après plusieurs essais', value: 2 },
+        { id: '1', label: '1 — Nécessite une assistance minimale', value: 1 },
+        { id: '0', label: '0 — Nécessite une assistance modérée ou majeure', value: 0 },
       ]},
-      { id: 'bbs2', text: "2. Tenir debout sans appui (2 minutes)", options: [
-        { id: '4', label: '4 - Tient en sécurité pendant 2 min', value: 4 },
-        { id: '3', label: '3 - Tient en sécurité pendant 2 min avec supervision', value: 3 },
-        { id: '2', label: '2 - Tient 30 secondes', value: 2 },
-        { id: '1', label: '1 - Nécessite plusieurs essais pour tenir 30s', value: 1 },
-        { id: '0', label: '0 - Incapable de se tenir debout 30s sans assistance', value: 0 },
+      { id: 'bbs2', text: '2. Tenir debout sans appui (2 minutes)', options: [
+        { id: '4', label: '4 — Tient en sécurité pendant 2 min', value: 4 },
+        { id: '3', label: '3 — Tient en sécurité pendant 2 min avec supervision', value: 3 },
+        { id: '2', label: '2 — Tient 30 secondes sans appui', value: 2 },
+        { id: '1', label: '1 — Plusieurs essais pour tenir 30 s', value: 1 },
+        { id: '0', label: '0 — Incapable sans assistance', value: 0 },
       ]},
-      { id: 'bbs3', text: "3. Assis sans appui dos ni bras (2 minutes)", options: [
-        { id: '4', label: '4 - Tient en sécurité et fermement pendant 2 min', value: 4 },
-        { id: '3', label: '3 - Tient 2 min sous supervision', value: 3 },
-        { id: '2', label: '2 - Tient 30 secondes', value: 2 },
-        { id: '1', label: '1 - Tient 10 secondes', value: 1 },
-        { id: '0', label: '0 - Incapable de tenir sans assistance', value: 0 },
+      { id: 'bbs3', text: '3. Assis sans appui dos ni bras (2 minutes)', options: [
+        { id: '4', label: '4 — Tient en sécurité et fermement pendant 2 min', value: 4 },
+        { id: '3', label: '3 — Tient 2 min sous supervision', value: 3 },
+        { id: '2', label: '2 — Tient 30 secondes', value: 2 },
+        { id: '1', label: '1 — Tient 10 secondes', value: 1 },
+        { id: '0', label: '0 — Incapable sans assistance', value: 0 },
       ]},
-      { id: 'bbs4', text: "4. De debout à assis", options: [
-        { id: '4', label: '4 - S\'assied en sécurité avec un minimum d\'utilisation des mains', value: 4 },
-        { id: '3', label: '3 - Contrôle la descente à l\'aide des mains', value: 3 },
-        { id: '2', label: '2 - Utilise l\'arrière des jambes contre la chaise', value: 2 },
-        { id: '1', label: '1 - S\'assied de façon indépendante mais sans contrôle', value: 1 },
-        { id: '0', label: '0 - A besoin d\'aide pour s\'asseoir', value: 0 },
-      ]}
+      { id: 'bbs4', text: '4. De debout à assis', options: [
+        { id: '4', label: '4 — S\'assied en sécurité, peu d\'utilisation des mains', value: 4 },
+        { id: '3', label: '3 — Contrôle la descente à l\'aide des mains', value: 3 },
+        { id: '2', label: '2 — Utilise l\'arrière des jambes contre la chaise', value: 2 },
+        { id: '1', label: '1 — S\'assied seul mais sans contrôle de la descente', value: 1 },
+        { id: '0', label: '0 — A besoin d\'aide pour s\'asseoir', value: 0 },
+      ]},
+      { id: 'bbs5', text: '5. Transferts (chaise → fauteuil avec accoudoirs et retour)', options: [
+        { id: '4', label: '4 — Capable de transférer en sécurité, peu d\'utilisation des mains', value: 4 },
+        { id: '3', label: '3 — Avec utilisation des mains', value: 3 },
+        { id: '2', label: '2 — Avec assistance verbale ou supervision', value: 2 },
+        { id: '1', label: '1 — Nécessite l\'aide d\'une personne', value: 1 },
+        { id: '0', label: '0 — Nécessite l\'aide de deux personnes', value: 0 },
+      ]},
+      { id: 'bbs6', text: '6. Debout sans appui les yeux fermés (10 s)', options: [
+        { id: '4', label: '4 — Tient 10 s en sécurité', value: 4 },
+        { id: '3', label: '3 — Tient 10 s avec supervision', value: 3 },
+        { id: '2', label: '2 — Tient 3 s', value: 2 },
+        { id: '1', label: '1 — Incapable de fermer les yeux 3 s mais reste stable', value: 1 },
+        { id: '0', label: '0 — Nécessite une aide pour ne pas tomber', value: 0 },
+      ]},
+      { id: 'bbs7', text: '7. Debout, pieds joints, sans appui', options: [
+        { id: '4', label: '4 — Place les pieds joints seul, tient 1 min en sécurité', value: 4 },
+        { id: '3', label: '3 — Place les pieds joints seul, tient 1 min avec supervision', value: 3 },
+        { id: '2', label: '2 — Place les pieds joints, incapable de tenir 30 s', value: 2 },
+        { id: '1', label: '1 — A besoin d\'aide pour positionner mais tient 15 s', value: 1 },
+        { id: '0', label: '0 — A besoin d\'aide pour positionner, incapable de tenir 15 s', value: 0 },
+      ]},
+      { id: 'bbs8', text: '8. Atteindre vers l\'avant bras tendu (debout)', options: [
+        { id: '4', label: '4 — Peut s\'avancer en sécurité > 25 cm', value: 4 },
+        { id: '3', label: '3 — Peut s\'avancer > 12 cm en sécurité', value: 3 },
+        { id: '2', label: '2 — Peut s\'avancer > 5 cm en sécurité', value: 2 },
+        { id: '1', label: '1 — S\'avance mais a besoin de supervision', value: 1 },
+        { id: '0', label: '0 — Perd l\'équilibre lors de la tentative ou nécessite un soutien externe', value: 0 },
+      ]},
+      { id: 'bbs9', text: '9. Ramasser un objet au sol depuis la position debout', options: [
+        { id: '4', label: '4 — Peut ramasser l\'objet facilement et en sécurité', value: 4 },
+        { id: '3', label: '3 — Peut ramasser mais nécessite supervision', value: 3 },
+        { id: '2', label: '2 — Incapable de ramasser, s\'approche à 2-5 cm de l\'objet, garde l\'équilibre seul', value: 2 },
+        { id: '1', label: '1 — Incapable de ramasser, a besoin de supervision en essayant', value: 1 },
+        { id: '0', label: '0 — Incapable d\'essayer / nécessite assistance', value: 0 },
+      ]},
+      { id: 'bbs10', text: '10. Tourner pour regarder par-dessus les épaules droite et gauche (debout)', options: [
+        { id: '4', label: '4 — Regarde des deux côtés, bon report de poids', value: 4 },
+        { id: '3', label: '3 — Regarde d\'un côté seulement, bon report de poids', value: 3 },
+        { id: '2', label: '2 — Tourne sur le côté seulement, garde l\'équilibre', value: 2 },
+        { id: '1', label: '1 — Nécessite supervision pour se tourner', value: 1 },
+        { id: '0', label: '0 — Nécessite assistance pour ne pas perdre l\'équilibre', value: 0 },
+      ]},
+      { id: 'bbs11', text: '11. Tourner sur 360°', options: [
+        { id: '4', label: '4 — Tourne dans les deux sens en ≤ 4 s', value: 4 },
+        { id: '3', label: '3 — Tourne dans un sens en ≤ 4 s', value: 3 },
+        { id: '2', label: '2 — Tourne mais lentement', value: 2 },
+        { id: '1', label: '1 — Nécessite supervision ou consignes verbales', value: 1 },
+        { id: '0', label: '0 — Nécessite assistance', value: 0 },
+      ]},
+      { id: 'bbs12', text: '12. Placer alternativement les pieds sur un tabouret (4 fois chaque pied)', options: [
+        { id: '4', label: '4 — Complète 8 marches en ≤ 20 s sans appui', value: 4 },
+        { id: '3', label: '3 — Complète 8 marches > 20 s sans appui', value: 3 },
+        { id: '2', label: '2 — Complète 4 marches sans aide avec supervision', value: 2 },
+        { id: '1', label: '1 — Complète > 2 marches avec assistance minimale', value: 1 },
+        { id: '0', label: '0 — Incapable / nécessite assistance pour ne pas tomber', value: 0 },
+      ]},
+      { id: 'bbs13', text: '13. Debout, un pied devant l\'autre (en tandem)', options: [
+        { id: '4', label: '4 — Tient en tandem complet 30 s', value: 4 },
+        { id: '3', label: '3 — Place le pied en avant mais pas en tandem complet, tient 30 s', value: 3 },
+        { id: '2', label: '2 — Petit pas en avant, tient 30 s', value: 2 },
+        { id: '1', label: '1 — A besoin d\'aide pour la position mais tient 15 s', value: 1 },
+        { id: '0', label: '0 — Perd l\'équilibre en avançant le pied ou à l\'arrêt', value: 0 },
+      ]},
+      { id: 'bbs14', text: '14. Tenir debout sur un seul pied', options: [
+        { id: '4', label: '4 — Tient sur un pied indépendamment > 10 s', value: 4 },
+        { id: '3', label: '3 — Tient sur un pied 5–10 s', value: 3 },
+        { id: '2', label: '2 — Tient sur un pied ≥ 3 s', value: 2 },
+        { id: '1', label: '1 — Essaie de soulever un pied, incapable de tenir 3 s mais reste debout', value: 1 },
+        { id: '0', label: '0 — Incapable d\'essayer ou nécessite assistance', value: 0 },
+      ]},
     ]
   },
 
@@ -2896,26 +3124,50 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       exercises: ['Rééducation vestibulaire (habituation, manœuvres)', 'Adaptation oculomotrice'],
       education: ['Gestion de l\'anxiété liée aux vertiges', 'Mouvements cervicaux contrôlés']
     },
-    references: [{ title: 'The development of the Dizziness Handicap Inventory', type: 'scientific_article' }],
+    references: [{
+      title: 'The development of the Dizziness Handicap Inventory (Jacobson & Newman, 1990)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/2317323/',
+      type: 'scientific_article' as const
+    }],
+    // DHI-25: 25 items, 3 sous-échelles (P)hysique 7×4=28, (F)onctionnel 9×4=36, (E)motionnel 9×4=36.
+    // Score total 0-100. Échelle de réponse: Oui (4) / Parfois (2) / Non (0).
     questions: [
-      { id: 'dhi1', text: "Le fait de regarder en l'air augmente-t-il votre problème ?", options: [
+      // P = Physical, E = Emotional, F = Functional
+      { text: '1. (P) Le fait de regarder en l\'air augmente-t-il votre problème ?' },
+      { text: '2. (E) À cause de votre problème, vous sentez-vous frustré(e) ?' },
+      { text: '3. (F) À cause de votre problème, limitez-vous vos déplacements pour des raisons professionnelles ou personnelles ?' },
+      { text: '4. (P) Marcher dans le rayon d\'une grande surface aggrave-t-il votre problème ?' },
+      { text: '5. (F) À cause de votre problème, avez-vous des difficultés à vous coucher ou à vous lever du lit ?' },
+      { text: '6. (F) Votre problème limite-t-il de façon importante votre participation à des activités sociales (sortir dîner, aller au cinéma, danser, fêtes) ?' },
+      { text: '7. (F) À cause de votre problème, avez-vous des difficultés à lire ?' },
+      { text: '8. (P) Les performances d\'activités comme le sport, la danse, les travaux ménagers tels que balayer ou ranger la vaisselle, aggravent-elles votre problème ?' },
+      { text: '9. (E) À cause de votre problème, avez-vous peur de quitter votre domicile sans être accompagné(e) ?' },
+      { text: '10. (E) À cause de votre problème, avez-vous été embarrassé(e) devant les autres ?' },
+      { text: '11. (P) Les mouvements rapides de votre tête aggravent-ils votre problème ?' },
+      { text: '12. (F) À cause de votre problème, évitez-vous les hauteurs ?' },
+      { text: '13. (P) Le fait de vous retourner dans le lit aggrave-t-il votre problème ?' },
+      { text: '14. (F) À cause de votre problème, vous est-il difficile de faire des travaux ménagers physiques ou du jardinage ?' },
+      { text: '15. (E) À cause de votre problème, craignez-vous que les gens pensent que vous êtes ivre ?' },
+      { text: '16. (F) À cause de votre problème, vous est-il difficile de vous promener seul(e) ?' },
+      { text: '17. (P) Le fait de marcher sur un trottoir aggrave-t-il votre problème ?' },
+      { text: '18. (E) À cause de votre problème, vous est-il difficile de vous concentrer ?' },
+      { text: '19. (F) À cause de votre problème, vous est-il difficile de marcher dans votre maison dans l\'obscurité ?' },
+      { text: '20. (E) À cause de votre problème, avez-vous peur de rester seul(e) à votre domicile ?' },
+      { text: '21. (E) À cause de votre problème, vous sentez-vous handicapé(e) ?' },
+      { text: '22. (E) Votre problème a-t-il créé des tensions dans vos relations avec un ou plusieurs membres de votre famille ou avec vos amis ?' },
+      { text: '23. (E) À cause de votre problème, êtes-vous déprimé(e) ?' },
+      { text: '24. (F) Votre problème interfère-t-il avec votre travail ou vos responsabilités domestiques ?' },
+      { text: '25. (P) Le fait de vous pencher aggrave-t-il votre problème ?' },
+    ].map((q, i) => ({
+      id: `dhi${i + 1}`,
+      text: q.text,
+      options: [
         { id: '0', label: 'Non', value: 0 },
         { id: '2', label: 'Parfois', value: 2 },
         { id: '4', label: 'Oui', value: 4 },
-      ]},
-      { id: 'dhi2', text: "A cause de votre problème, vous sentez-vous frustré(e) ?", options: [
-        { id: '0', label: 'Non', value: 0 },
-        { id: '2', label: 'Parfois', value: 2 },
-        { id: '4', label: 'Oui', value: 4 },
-      ]},
-      { id: 'dhi3', text: "A cause de votre problème, limitez-vous vos déplacements pour des raisons professionnelles ou personnelles ?", options: [
-        { id: '0', label: 'Non', value: 0 },
-        { id: '2', label: 'Parfois', value: 2 },
-        { id: '4', label: 'Oui', value: 4 },
-      ]}
-    ]
-  }
-,
+      ]
+    }))
+  },
 
   'visa-a': {
     id: 'visa-a',
@@ -2945,25 +3197,78 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
+    // VISA-A: 8 items, scores variables. Total 0-100, plus haut = mieux. MCID 6,5 à 17 pts.
     questions: [
       {
-        id: 'q1',
-        text: 'Combien de minutes êtes-vous raide au réveil ?',
+        id: 'visa-a1',
+        text: '1. Pendant combien de minutes êtes-vous raide au réveil ?',
         options: [
-          { id: '0', label: '0 min', value: 10 },
-          { id: '1', label: '0-10 min', value: 7 },
-          { id: '2', label: '10-30 min', value: 4 },
-          { id: '3', label: '> 100 min', value: 0 }
+          { id: 'a', label: '0 min', value: 10 },
+          { id: 'b', label: '1 à 10 min', value: 7 },
+          { id: 'c', label: '11 à 30 min', value: 4 },
+          { id: 'd', label: '31 à 60 min', value: 2 },
+          { id: 'e', label: '61 à 100 min', value: 1 },
+          { id: 'f', label: '> 100 min', value: 0 },
         ]
       },
       {
-        id: 'q2',
-        text: 'Avez-vous mal en vous étirant fort le tendon d\'Achille au bord d\'une marche ?',
+        id: 'visa-a2',
+        text: '2. Avez-vous mal en vous étirant le tendon d\'Achille au maximum (étirement sur le bord d\'une marche) ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-a3',
+        text: '3. Après avoir marché à plat pendant 30 minutes, avez-vous mal (douleur la plus intense dans les heures suivantes) ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-a4',
+        text: '4. Avez-vous mal en descendant les escaliers de manière fluide (1 marche à la fois) ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-a5',
+        text: '5. Avez-vous mal pendant ou immédiatement après 10 sauts unipodaux ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-a6',
+        text: '6. Pratiquez-vous actuellement une activité sportive ou physique ?',
         options: [
-          { id: '0', label: 'Douleur forte', value: 0 },
-          { id: '1', label: 'Douleur modérée', value: 3 },
-          { id: '2', label: 'Douleur légère', value: 7 },
-          { id: '3', label: 'Aucune douleur', value: 10 }
+          { id: 'a', label: 'Pas du tout', value: 0 },
+          { id: 'b', label: 'Activité modifiée à cause de la douleur', value: 4 },
+          { id: 'c', label: 'Activité complète mais douloureuse', value: 7 },
+          { id: 'd', label: 'Activité complète sans douleur', value: 10 },
+        ]
+      },
+      {
+        id: 'visa-a7',
+        text: '7. Pendant combien de temps pouvez-vous pratiquer votre sport avant d\'être limité par la douleur ?',
+        options: [
+          { id: 'a', label: 'Aucune activité possible', value: 0 },
+          { id: 'b', label: '1 à 10 minutes', value: 7 },
+          { id: 'c', label: '11 à 20 minutes', value: 14 },
+          { id: 'd', label: '21 à 30 minutes', value: 21 },
+          { id: 'e', label: 'Plus de 30 minutes / sans limitation', value: 30 },
+        ]
+      },
+      {
+        id: 'visa-a8',
+        text: '8. Au cours du mois écoulé, combien de jours avez-vous eu une douleur du tendon d\'Achille ?',
+        options: [
+          { id: 'a', label: '0 jour', value: 10 },
+          { id: 'b', label: '1 à 7 jours', value: 7 },
+          { id: 'c', label: '8 à 14 jours', value: 4 },
+          { id: 'd', label: '15 à 21 jours', value: 2 },
+          { id: 'e', label: '22 à 30 jours / quotidien', value: 0 },
         ]
       }
     ]
@@ -2996,15 +3301,76 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
+    // VISA-P: 8 items, total 0-100. MCID ~13 pts (sports de saut).
     questions: [
       {
-        id: 'q1',
-        text: 'Avez-vous mal au tendon en descendant les escaliers ?',
+        id: 'visa-p1',
+        text: '1. Pendant combien de minutes votre genou est-il raide ou douloureux après être resté assis ?',
         options: [
-          { id: '0', label: 'Douleur intense', value: 0 },
-          { id: '1', label: 'Douleur modérée', value: 3 },
-          { id: '2', label: 'Douleur légère', value: 7 },
-          { id: '3', label: 'Aucune douleur', value: 10 }
+          { id: 'a', label: '0 min', value: 10 },
+          { id: 'b', label: '1 à 10 min', value: 7 },
+          { id: 'c', label: '11 à 30 min', value: 4 },
+          { id: 'd', label: '31 à 60 min', value: 2 },
+          { id: 'e', label: '> 60 min', value: 0 },
+        ]
+      },
+      {
+        id: 'visa-p2',
+        text: '2. Avez-vous mal au tendon rotulien en descendant les escaliers ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-p3',
+        text: '3. Avez-vous mal en effectuant un squat complet (au moins 90°) ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-p4',
+        text: '4. Avez-vous mal après être resté assis plus de 30 minutes ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-p5',
+        text: '5. Avez-vous mal en effectuant 10 sauts unipodaux consécutifs ?',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i), label: `${i}${i === 0 ? ' — Douleur intense' : i === 10 ? ' — Aucune douleur' : ''}`, value: i
+        }))
+      },
+      {
+        id: 'visa-p6',
+        text: '6. Pratiquez-vous actuellement votre sport (ou autre activité physique) ?',
+        options: [
+          { id: 'a', label: 'Pas du tout', value: 0 },
+          { id: 'b', label: 'Activité modifiée à cause de la douleur', value: 4 },
+          { id: 'c', label: 'Activité complète mais douloureuse', value: 7 },
+          { id: 'd', label: 'Activité complète sans douleur', value: 10 },
+        ]
+      },
+      {
+        id: 'visa-p7',
+        text: '7. Pratiquez-vous actuellement votre sport au niveau habituel ?',
+        options: [
+          { id: 'a', label: 'Pas du tout', value: 0 },
+          { id: 'b', label: 'Niveau modifié à cause de la douleur', value: 4 },
+          { id: 'c', label: 'Niveau habituel mais douloureux', value: 7 },
+          { id: 'd', label: 'Niveau habituel sans douleur', value: 10 },
+        ]
+      },
+      {
+        id: 'visa-p8',
+        text: '8. Pendant combien de temps pouvez-vous vous entraîner ou jouer ? (cocher l\'option qui correspond)',
+        options: [
+          { id: 'a', label: 'Aucune activité possible', value: 0 },
+          { id: 'b', label: '1 à 5 minutes', value: 4 },
+          { id: 'c', label: '6 à 10 minutes', value: 7 },
+          { id: 'd', label: '11 à 15 minutes', value: 14 },
+          { id: 'e', label: '> 15 minutes / sans limite', value: 30 },
         ]
       }
     ]
@@ -3077,19 +3443,40 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article' as const
       }
     ],
+    // FABQ-16: 16 items, échelle 0-6.
+    // Sous-échelle Physique (FABQ-PA): items 2, 3, 4, 5 (max 24). Cut-off > 14.
+    // Sous-échelle Travail (FABQ-W): items 6, 7, 9, 10, 11, 12, 15 (max 42). Cut-off > 34.
+    // Items 1, 8, 13, 14, 16: non comptabilisés dans les sous-scores cliniques.
     questions: [
-      {
-        id: 'q1',
-        text: 'Je ne devrais pas faire d\'activités physiques qui pourraient aggraver ma douleur.',
-        options: [
-          { id: '0', label: 'Pas du tout d\'accord', value: 0 },
-          { id: '1', label: 'Plutôt pas d\'accord', value: 2 },
-          { id: '2', label: 'Indécis', value: 3 },
-          { id: '3', label: 'Plutôt d\'accord', value: 4 },
-          { id: '4', label: 'Tout à fait d\'accord', value: 6 }
-        ]
-      }
-    ]
+      'Ma douleur a été causée par une activité physique.',
+      '(PA) L\'activité physique aggrave ma douleur.',
+      '(PA) L\'activité physique pourrait nuire à mon dos.',
+      '(PA) Je ne devrais pas faire d\'activités physiques qui pourraient aggraver ma douleur.',
+      '(PA) Je ne peux pas faire d\'activités physiques qui pourraient aggraver ma douleur.',
+      '(W) Ma douleur a été causée par mon travail ou par un accident au travail.',
+      '(W) Mon travail a aggravé ma douleur.',
+      'J\'ai une demande d\'indemnisation pour ma douleur.',
+      '(W) Mon travail est trop dur pour moi.',
+      '(W) Mon travail aggrave ou aggraverait ma douleur.',
+      '(W) Mon travail pourrait nuire à mon dos.',
+      '(W) Je ne devrais pas faire mon travail habituel avec ma douleur actuelle.',
+      'Je ne peux pas faire mon travail habituel avec ma douleur actuelle.',
+      'Je ne peux pas faire mon travail habituel tant que ma douleur n\'est pas traitée.',
+      '(W) Je ne pense pas que je puisse reprendre mon travail habituel dans les 3 prochains mois.',
+      'Je ne pense pas que je puisse jamais reprendre ce travail.',
+    ].map((text, i) => ({
+      id: `fabq${i + 1}`,
+      text: `${i + 1}. ${text}`,
+      options: [
+        { id: '0', label: '0 — Pas du tout d\'accord', value: 0 },
+        { id: '1', label: '1', value: 1 },
+        { id: '2', label: '2', value: 2 },
+        { id: '3', label: '3 — Indécis', value: 3 },
+        { id: '4', label: '4', value: 4 },
+        { id: '5', label: '5', value: 5 },
+        { id: '6', label: '6 — Tout à fait d\'accord', value: 6 },
+      ]
+    }))
   },
   'psfs': {
     id: 'psfs',
@@ -3723,7 +4110,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       },
       {
         id: 'ikdc10',
-        text: 'Difficulté à pivoter / faire des changements de direction',
+        text: '10. Difficulté à pivoter / faire des changements de direction',
         options: [
           { id: '0', label: 'Aucune difficulté', value: 4 },
           { id: '1', label: 'Légère difficulté', value: 3 },
@@ -3731,6 +4118,86 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
           { id: '3', label: 'Grande difficulté', value: 1 },
           { id: '4', label: 'Incapable', value: 0 }
         ]
+      },
+      // Items 11-18 ajoutés pour atteindre les 18 items canoniques
+      {
+        id: 'ikdc11',
+        text: '11. Plus haut niveau d\'activité sans gonflement significatif du genou',
+        options: [
+          { id: '0', label: 'Activités très exigeantes (basket, foot, ski)', value: 4 },
+          { id: '1', label: 'Activités exigeantes (course, tennis)', value: 3 },
+          { id: '2', label: 'Activités modérées (marche soutenue, vélo)', value: 2 },
+          { id: '3', label: 'Activités légères (marche ménagère)', value: 1 },
+          { id: '4', label: 'Incapable, gonflement même au repos', value: 0 },
+        ]
+      },
+      {
+        id: 'ikdc12',
+        text: '12. Avez-vous eu un blocage du genou (impossibilité d\'étendre ou plier) ces 4 dernières semaines ?',
+        options: [
+          { id: '0', label: 'Non, aucun blocage', value: 1 },
+          { id: '1', label: 'Oui, blocage(s)', value: 0 },
+        ]
+      },
+      {
+        id: 'ikdc13',
+        text: '13. Plus haut niveau d\'activité sans sensation de dérobement (instabilité)',
+        options: [
+          { id: '0', label: 'Activités très exigeantes (basket, foot, ski)', value: 4 },
+          { id: '1', label: 'Activités exigeantes (course, tennis)', value: 3 },
+          { id: '2', label: 'Activités modérées (marche soutenue, vélo)', value: 2 },
+          { id: '3', label: 'Activités légères (marche ménagère)', value: 1 },
+          { id: '4', label: 'Incapable, dérobement même au repos', value: 0 },
+        ]
+      },
+      {
+        id: 'ikdc14',
+        text: '14. Plus haut niveau de sport pratiqué régulièrement',
+        options: [
+          { id: '0', label: 'Activités très exigeantes (basket, foot, ski)', value: 4 },
+          { id: '1', label: 'Activités exigeantes (course, tennis)', value: 3 },
+          { id: '2', label: 'Activités modérées (marche soutenue, vélo)', value: 2 },
+          { id: '3', label: 'Activités légères (marche ménagère)', value: 1 },
+          { id: '4', label: 'Aucun sport pratiqué', value: 0 },
+        ]
+      },
+      {
+        id: 'ikdc15',
+        text: '15. Difficulté à s\'agenouiller (sur le devant du genou)',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc16',
+        text: '16. Difficulté à rester assis genou plié',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc17',
+        text: '17. Difficulté à se lever d\'une chaise',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc18',
+        text: '18. Comment évaluez-vous globalement la fonction de votre genou aujourd\'hui ? (0 = ne peut plus rien faire, 10 = aucune limitation)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i}${i === 0 ? ' — Aucune fonction' : i === 10 ? ' — Fonction normale' : ''}`, value: i }))
       }
     ]
   },
@@ -4060,7 +4527,318 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         ]
       }
     ]
+  },
+
+  // ============================================================
+  // KOOS-full — Version complète (42 items, 5 sous-échelles)
+  // ============================================================
+  'koos-full': {
+    id: 'koos-full',
+    title: 'KOOS — version complète (42 items)',
+    description: 'Évaluation complète du genou en 5 sous-échelles : Symptômes (7) · Douleur (9) · ADL (17) · Sport/Loisirs (5) · QoL (4).',
+    estimatedTime: '15 min',
+    maxScore: 100,
+    higherIsBetter: true,
+    tags: ['Genou', 'Membre Inférieur', 'Arthrose'],
+    validated: true,
+    bodyPart: 'Genou',
+    category: 'Orthopédique',
+    administrationType: 'auto',
+    clinicalValue: 'Version complète et de référence du KOOS. Préférée à la version PS pour le suivi détaillé d\'une gonarthrose, d\'une reconstruction LCA ou d\'une PTG, car elle distingue 5 dimensions cliniquement indépendantes (vs 1 score global pour KOOS-PS). Cible recommandée par OMERACT-OARSI.',
+    decisionAlgorithm: 'Chaque sous-échelle est normalisée 0–100 (100 = pas de problème). La version courte KOOS-PS suffit pour un dépistage rapide ; cette version complète est indispensable pour la recherche, le suivi détaillé et la communication multidisciplinaire. MCID : 8-10 points par sous-échelle.',
+    therapeuticInterventions: {
+      exercises: [
+        'Renforcement excentrique quadriceps + ischio-jambiers',
+        'Travail proprioceptif progressif (chaîne fermée puis ouverte)',
+        'Pliométrie en phase tardive si bon score Sport/QoL'
+      ],
+      education: [
+        'Adaptation activités selon sous-échelle dominante (douleur ≠ raideur)',
+        'Gestion de la peur du mouvement si QoL bas malgré ADL préservé'
+      ]
+    },
+    references: [{
+      title: 'Knee injury and Osteoarthritis Outcome Score (KOOS) - development of a self-administered outcome measure (Roos et al., 1998)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/9699158/',
+      type: 'scientific_article' as const
+    }],
+    questions: [
+      // SYMPTÔMES (7 items)
+      ...[
+        '(S1) Avez-vous un gonflement du genou ?',
+        '(S2) Ressentez-vous un grincement ou un cliquetis à la mobilisation ?',
+        '(S3) Votre genou s\'accroche-t-il ou se bloque-t-il ?',
+        '(S4) Pouvez-vous étendre complètement votre genou ?',
+        '(S5) Pouvez-vous fléchir complètement votre genou ?',
+        '(S6) Quelle est la sévérité de la raideur du genou au réveil ?',
+        '(S7) Quelle est la sévérité de la raideur du genou en fin de journée ?',
+      ].map((text, i) => ({
+        id: `koos-s${i + 1}`,
+        text,
+        options: koosStdOptions(),
+      })),
+      // DOULEUR (9 items)
+      ...[
+        '(P1) À quelle fréquence avez-vous mal au genou ?',
+        '(P2) Pivoter / tourner sur le genou en charge',
+        '(P3) Tendre le genou complètement',
+        '(P4) Plier le genou complètement',
+        '(P5) Marcher sur sol plat',
+        '(P6) Monter ou descendre les escaliers',
+        '(P7) La nuit, au lit',
+        '(P8) En position assise ou allongée',
+        '(P9) En position debout',
+      ].map((text, i) => ({
+        id: `koos-p${i + 1}`,
+        text,
+        options: koosStdOptions(),
+      })),
+      // ADL (17 items)
+      ...[
+        '(A1) Descendre les escaliers',
+        '(A2) Monter les escaliers',
+        '(A3) Se lever après une période assise',
+        '(A4) Rester debout',
+        '(A5) Se pencher pour ramasser un objet au sol',
+        '(A6) Marcher sur terrain plat',
+        '(A7) Entrer/sortir d\'une voiture',
+        '(A8) Faire les courses',
+        '(A9) Mettre les chaussettes/bas',
+        '(A10) Sortir du lit',
+        '(A11) Enlever les chaussettes/bas',
+        '(A12) Rester couché (se retourner dans le lit)',
+        '(A13) Entrer/sortir d\'un bain',
+        '(A14) S\'asseoir',
+        '(A15) S\'asseoir et se lever des toilettes',
+        '(A16) Tâches ménagères lourdes',
+        '(A17) Tâches ménagères légères',
+      ].map((text, i) => ({
+        id: `koos-a${i + 1}`,
+        text,
+        options: koosStdOptions(),
+      })),
+      // SPORT/LOISIRS (5 items)
+      ...[
+        '(SP1) S\'accroupir',
+        '(SP2) Courir',
+        '(SP3) Sauter',
+        '(SP4) Pivoter / tourner sur le genou',
+        '(SP5) S\'agenouiller',
+      ].map((text, i) => ({
+        id: `koos-sp${i + 1}`,
+        text,
+        options: koosStdOptions(),
+      })),
+      // QUALITÉ DE VIE (4 items)
+      ...[
+        '(Q1) À quelle fréquence pensez-vous à votre problème de genou ?',
+        '(Q2) Avez-vous modifié votre mode de vie pour éviter d\'aggraver votre genou ?',
+        '(Q3) Dans quelle mesure manquez-vous de confiance dans votre genou ?',
+        '(Q4) En général, à quel point votre genou est-il un problème ?',
+      ].map((text, i) => ({
+        id: `koos-q${i + 1}`,
+        text,
+        options: koosStdOptions(),
+      })),
+    ]
+  },
+
+  // ============================================================
+  // HOOS-full — Version complète (40 items, 5 sous-échelles)
+  // ============================================================
+  'hoos-full': {
+    id: 'hoos-full',
+    title: 'HOOS — version complète (40 items)',
+    description: 'Évaluation complète de la hanche en 5 sous-échelles : Symptômes (5) · Douleur (10) · ADL (17) · Sport/Loisirs (4) · QoL (4).',
+    estimatedTime: '15 min',
+    maxScore: 100,
+    higherIsBetter: true,
+    tags: ['Hanche', 'Membre Inférieur', 'Arthrose'],
+    validated: true,
+    bodyPart: 'Hanche',
+    category: 'Orthopédique',
+    administrationType: 'auto',
+    clinicalValue: 'Version complète et de référence du HOOS. Préférée à la version PS pour le suivi détaillé d\'une coxarthrose, d\'un conflit fémoro-acétabulaire ou d\'une PTH. Différencie 5 dimensions cliniquement indépendantes.',
+    decisionAlgorithm: 'Chaque sous-échelle normalisée 0–100 (100 = pas de problème). Pour les suivis post-PTH, comparer les sous-échelles Douleur (effet immédiat) et Sport/QoL (récupération à 6 mois). MCID : 8-10 points par sous-échelle.',
+    therapeuticInterventions: {
+      exercises: [
+        'Renforcement des abducteurs (moyen fessier) pour stabiliser le bassin',
+        'Mobilisation passive et étirements en rotation interne',
+        'Renforcement excentrique des extenseurs de hanche'
+      ],
+      education: [
+        'Économie articulaire (canne controlatérale, perte de poids)',
+        'Activités à privilégier : vélo, natation (faible charge)'
+      ]
+    },
+    references: [{
+      title: 'Hip disability and osteoarthritis outcome score (HOOS) - validity and responsiveness (Nilsdotter et al., 2003)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/12777184/',
+      type: 'scientific_article' as const
+    }],
+    questions: [
+      // SYMPTÔMES (5 items)
+      ...[
+        '(S1) Ressentez-vous un grincement ou un cliquetis à la mobilisation de la hanche ?',
+        '(S2) Votre hanche s\'accroche-t-elle ou se bloque-t-elle ?',
+        '(S3) À quel point pouvez-vous écarter les jambes ?',
+        '(S4) À quel point pouvez-vous étendre la jambe en avant ?',
+        '(S5) Quelle est la sévérité de la raideur de la hanche au réveil ?',
+      ].map((text, i) => ({ id: `hoos-s${i + 1}`, text, options: koosStdOptions() })),
+      // DOULEUR (10 items)
+      ...[
+        '(P1) À quelle fréquence avez-vous mal à la hanche ?',
+        '(P2) Étendre complètement la hanche',
+        '(P3) Plier complètement la hanche',
+        '(P4) Marcher sur sol plat',
+        '(P5) Monter ou descendre les escaliers',
+        '(P6) La nuit, au lit',
+        '(P7) Assis ou allongé',
+        '(P8) Debout',
+        '(P9) Marcher sur sol irrégulier',
+        '(P10) Tourner / pivoter sur la jambe en charge',
+      ].map((text, i) => ({ id: `hoos-p${i + 1}`, text, options: koosStdOptions() })),
+      // ADL (17 items)
+      ...[
+        '(A1) Descendre les escaliers',
+        '(A2) Monter les escaliers',
+        '(A3) Se lever après une période assise',
+        '(A4) Rester debout',
+        '(A5) Se pencher pour ramasser un objet',
+        '(A6) Marcher sur sol plat',
+        '(A7) Entrer/sortir d\'une voiture',
+        '(A8) Faire les courses',
+        '(A9) Mettre les chaussettes/bas',
+        '(A10) Sortir du lit',
+        '(A11) Enlever les chaussettes/bas',
+        '(A12) Se retourner dans le lit',
+        '(A13) Entrer/sortir d\'un bain',
+        '(A14) S\'asseoir',
+        '(A15) S\'asseoir et se lever des toilettes',
+        '(A16) Tâches ménagères lourdes',
+        '(A17) Tâches ménagères légères',
+      ].map((text, i) => ({ id: `hoos-a${i + 1}`, text, options: koosStdOptions() })),
+      // SPORT/LOISIRS (4 items)
+      ...[
+        '(SP1) S\'accroupir',
+        '(SP2) Courir',
+        '(SP3) Pivoter / tourner sur la jambe en charge',
+        '(SP4) Marcher sur sol irrégulier',
+      ].map((text, i) => ({ id: `hoos-sp${i + 1}`, text, options: koosStdOptions() })),
+      // QUALITÉ DE VIE (4 items)
+      ...[
+        '(Q1) À quelle fréquence pensez-vous à votre problème de hanche ?',
+        '(Q2) Avez-vous modifié votre mode de vie pour éviter d\'aggraver votre hanche ?',
+        '(Q3) Dans quelle mesure manquez-vous de confiance dans votre hanche ?',
+        '(Q4) En général, à quel point votre hanche est-elle un problème ?',
+      ].map((text, i) => ({ id: `hoos-q${i + 1}`, text, options: koosStdOptions() })),
+    ]
+  },
+
+  // ============================================================
+  // FAOS-full — Version complète (42 items, 5 sous-échelles)
+  // ============================================================
+  'faos-full': {
+    id: 'faos-full',
+    title: 'FAOS — version complète (42 items)',
+    description: 'Évaluation complète de la cheville/pied en 5 sous-échelles : Symptômes (7) · Douleur (9) · ADL (17) · Sport/Loisirs (5) · QoL (4).',
+    estimatedTime: '15 min',
+    maxScore: 100,
+    higherIsBetter: true,
+    tags: ['Cheville', 'Pied', 'Membre Inférieur'],
+    validated: true,
+    bodyPart: 'Cheville',
+    category: 'Orthopédique',
+    administrationType: 'auto',
+    clinicalValue: 'Version complète et de référence du FAOS. Plus détaillée que la version PS, indispensable pour le suivi d\'une instabilité chronique de cheville, d\'une tendinopathie du tibialis postérieur ou d\'un post-opératoire de cheville/pied.',
+    decisionAlgorithm: 'Chaque sous-échelle normalisée 0–100. Comparer l\'évolution des sous-échelles Douleur et Sport pour évaluer la trajectoire de récupération sportive après entorse / chirurgie. MCID : 9 points.',
+    therapeuticInterventions: {
+      exercises: [
+        'Travail proprioceptif unipodal progressif',
+        'Renforcement excentrique tibialis postérieur',
+        'Pliométrie sur sol stable puis instable en phase tardive'
+      ],
+      education: [
+        'Choix du chaussage selon sous-échelle Douleur dominante',
+        'Auto-rééducation à domicile : protocole 3×/jour'
+      ]
+    },
+    references: [{
+      title: 'Validation of the Foot and Ankle Outcome Score for ankle ligament reconstruction (Roos et al., 2001)',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/11722069/',
+      type: 'scientific_article' as const
+    }],
+    questions: [
+      // SYMPTÔMES (7 items)
+      ...[
+        '(S1) Avez-vous un gonflement de la cheville/du pied ?',
+        '(S2) Ressentez-vous un grincement ou un cliquetis à la mobilisation ?',
+        '(S3) Votre cheville/pied s\'accroche-t-elle ou se bloque-t-elle ?',
+        '(S4) Pouvez-vous tendre complètement votre cheville (flexion plantaire) ?',
+        '(S5) Pouvez-vous fléchir complètement votre cheville (flexion dorsale) ?',
+        '(S6) Quelle est la sévérité de la raideur au réveil ?',
+        '(S7) Quelle est la sévérité de la raideur en fin de journée ?',
+      ].map((text, i) => ({ id: `faos-s${i + 1}`, text, options: koosStdOptions() })),
+      // DOULEUR (9 items)
+      ...[
+        '(P1) À quelle fréquence avez-vous mal à la cheville/au pied ?',
+        '(P2) Pivoter / tourner sur le pied en charge',
+        '(P3) Tendre complètement la cheville',
+        '(P4) Fléchir complètement la cheville',
+        '(P5) Marcher sur sol plat',
+        '(P6) Monter ou descendre les escaliers',
+        '(P7) La nuit, au lit',
+        '(P8) Assis ou allongé',
+        '(P9) Debout',
+      ].map((text, i) => ({ id: `faos-p${i + 1}`, text, options: koosStdOptions() })),
+      // ADL (17 items)
+      ...[
+        '(A1) Descendre les escaliers',
+        '(A2) Monter les escaliers',
+        '(A3) Se lever après une période assise',
+        '(A4) Rester debout',
+        '(A5) Se pencher pour ramasser un objet',
+        '(A6) Marcher sur sol plat',
+        '(A7) Entrer/sortir d\'une voiture',
+        '(A8) Faire les courses',
+        '(A9) Mettre les chaussettes/bas',
+        '(A10) Sortir du lit',
+        '(A11) Enlever les chaussettes/bas',
+        '(A12) Se retourner dans le lit',
+        '(A13) Entrer/sortir d\'un bain',
+        '(A14) S\'asseoir',
+        '(A15) S\'asseoir et se lever des toilettes',
+        '(A16) Tâches ménagères lourdes',
+        '(A17) Tâches ménagères légères',
+      ].map((text, i) => ({ id: `faos-a${i + 1}`, text, options: koosStdOptions() })),
+      // SPORT/LOISIRS (5 items)
+      ...[
+        '(SP1) S\'accroupir',
+        '(SP2) Courir',
+        '(SP3) Sauter',
+        '(SP4) Pivoter / tourner sur le pied',
+        '(SP5) S\'agenouiller',
+      ].map((text, i) => ({ id: `faos-sp${i + 1}`, text, options: koosStdOptions() })),
+      // QUALITÉ DE VIE (4 items)
+      ...[
+        '(Q1) À quelle fréquence pensez-vous à votre problème de pied/cheville ?',
+        '(Q2) Avez-vous modifié votre mode de vie ?',
+        '(Q3) Dans quelle mesure manquez-vous de confiance dans votre pied/cheville ?',
+        '(Q4) En général, à quel point ce problème est-il gênant ?',
+      ].map((text, i) => ({ id: `faos-q${i + 1}`, text, options: koosStdOptions() })),
+    ]
   }
 };
+
+// Options standardisées 0-4 (Aucun → Extrême) pour KOOS/HOOS/FAOS complets
+function koosStdOptions() {
+  return [
+    { id: '0', label: '0 — Aucun(e)', value: 0 },
+    { id: '1', label: '1 — Léger(ère)', value: 1 },
+    { id: '2', label: '2 — Modéré(e)', value: 2 },
+    { id: '3', label: '3 — Sévère', value: 3 },
+    { id: '4', label: '4 — Extrême', value: 4 },
+  ];
+}
 
 export const questionnaires = Object.values(QUESTIONNAIRES);

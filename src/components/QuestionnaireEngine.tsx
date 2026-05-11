@@ -56,8 +56,15 @@ export default function QuestionnaireEngine({ questionnaire, submissionToken, is
             const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
             const n = Object.keys(newAnswers).length;
             totalScore = Math.round((sum / (n * 10)) * 100);
-          } else if (questionnaire.id === 'koos' || questionnaire.id === 'hoos') {
-            // KOOS & HOOS: 100 - (Sum / (n * 4)) * 100 (100 = sain, 0 = sévère)
+          } else if (
+            questionnaire.id === 'koos' ||
+            questionnaire.id === 'hoos' ||
+            questionnaire.id === 'koos-full' ||
+            questionnaire.id === 'hoos-full' ||
+            questionnaire.id === 'faos-full'
+          ) {
+            // KOOS / HOOS / FAOS (short & full): 100 - (Sum / (n * 4)) * 100
+            // (100 = sain, 0 = sévère). Chaque item est sur 0-4.
             const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
             const n = Object.keys(newAnswers).length;
             totalScore = 100 - Math.round((sum / (n * 4)) * 100);
@@ -71,9 +78,10 @@ export default function QuestionnaireEngine({ questionnaire, submissionToken, is
             }
             totalScore = Math.round(painSum + functionSum / 2);
           } else if (questionnaire.id === 'ikdc') {
-            // IKDC: (sum_raw / 52) * 100 → 0-100, où sum_raw vient des items pondérés
+            // IKDC subjective (18 items): (sum_raw / 87) * 100 → 0-100
+            // 87 = somme des max canoniques sur les 18 items.
             const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
-            totalScore = Math.round((sum / 52) * 100);
+            totalScore = Math.round((sum / 87) * 100);
           } else {
             // Somme classique (ex: RMDQ, NPRS, PCS, DN4, OREBRO)
             totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);

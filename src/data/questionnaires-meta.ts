@@ -581,6 +581,60 @@ export const QUESTIONNAIRE_META: Record<string, QuestionnaireMeta> = {
       "Une aide à la marche est-elle indiquée ?",
     ],
   },
+
+  'koos-full': {
+    bodyParts: ['knee'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'AR', 'JA', 'ZH'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,77 – 0,95 (selon sous-échelle)',
+      testRetest: 'ICC 0,75 – 0,93',
+      mcid: '8 à 10 points par sous-échelle',
+      validity: 'Référence (gold standard) du genou. Validation OMERACT-OARSI.',
+      sensitivity: 'Effect size > 1,5 après reconstruction LCA et arthroplastie',
+      populations: 'Gonarthrose, post-LCA, ménisque, post-PTG',
+    },
+    clinicalQuestions: [
+      "Quelle sous-échelle est dominante ? (Symptômes / Douleur / ADL / Sport / QoL)",
+      "Le KOOS-PS suffit-il, ou faut-il le KOOS complet pour ce patient ?",
+      "L'évolution est-elle homogène entre les 5 sous-échelles ?",
+    ],
+  },
+
+  'hoos-full': {
+    bodyParts: ['hip'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'JA'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,82 – 0,98',
+      testRetest: 'ICC 0,75 – 0,93',
+      mcid: '8 à 10 points par sous-échelle',
+      validity: 'Référence du conflit fémoro-acétabulaire et de la coxarthrose',
+      sensitivity: 'Effect size élevé après arthroplastie de hanche',
+      populations: 'Coxarthrose, conflit fémoro-acétabulaire, post-PTH, jeunes adultes',
+    },
+    clinicalQuestions: [
+      "Sur quelle sous-échelle l'amélioration est-elle plus rapide ?",
+      "Le HOOS complet apporte-t-il un détail utile pour ce patient (vs HOOS-PS) ?",
+      "La QoL s'aligne-t-elle avec la fonction ADL ?",
+    ],
+  },
+
+  'faos-full': {
+    bodyParts: ['ankle-foot'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'TR'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,85 – 0,90',
+      testRetest: 'ICC 0,89 – 0,94',
+      mcid: '9 points par sous-échelle',
+      validity: 'Référence cheville/pied — version complète',
+      sensitivity: 'Bonne réactivité aux stabilisations chirurgicales ou conservatrices',
+      populations: 'Entorse cheville, instabilité chronique, fasciite plantaire, post-op cheville',
+    },
+    clinicalQuestions: [
+      "Le Sport/Loisirs reflète-t-il un retour aux activités antérieures ?",
+      "La QoL s'aligne-t-elle avec les sous-scores physiques ?",
+      "FAOS complet ou FAOS-PS pour ce patient ?",
+    ],
+  },
 };
 
 export function getMeta(id: string): QuestionnaireMeta | undefined {
