@@ -95,11 +95,18 @@ Pré-requis avant **toute** utilisation avec de vrais patients.
 #### A. Cadres théoriques à digitaliser
 
 - **CIF (OMS 2001)** : Problèmes de santé → Fonctions/structures (déficiences) ↔ Activités (limitations) ↔ Participation (restrictions) + facteurs contextuels (environnementaux/personnels)
-- **Modèle planétaire (Danneels 2011)** :
-  - **Centre** = Dysfonction de mouvement : Myofascial · Sensorimotor control · Articular · Neurogenic
-  - **Haut** = Impairment of structure : Red flags · Tissue mechanisms
-  - **Bas** = Restriction in activity/participation
-  - **Orbites** = Pain mechanisms · Psychological factors
+- **Modèle planétaire (Danneels 2011)** modélisé comme un **flux Input → Processing → Output** :
+  - **Input** (composante périphérique) : nociception / signal neuropathique. Interrogation sur stimuli mécaniques, inflammatoires, ischémiques précis qui déclenchent la douleur
+  - **Processing** (modulation centrale) : croyances, peurs liées au mouvement (kinésiophobie), anxiété, sensibilisation centrale, neuroplasticité inadaptée
+  - **Output** (réponses biologiques et comportementales) : stratégies d'évitement, altération du contrôle moteur, systèmes autonome / neuroendocrinien / neuro-immunitaire
+  - Centre = Dysfonction de mouvement (Myofascial · Sensorimotor control · Articular · Neurogenic)
+  - Haut = Impairment of structure (Red flags · Tissue mechanisms)
+  - Bas = Restriction in activity/participation
+  - Orbites = Pain mechanisms · Psychological factors
+- **Concept du Mur de Briques (Maitland)** — **règle algorithmique absolue pour le LLM** :
+  - **Domaine clinique** (un côté du mur) : présentation subjective, signes, symptômes, histoire relatée par le patient
+  - **Domaine théorique** (autre côté) : anatomie, biomécanique, physiopathologie, diagnostics médicaux formels
+  - **Règle** : le système ne doit **pas prématurément** forcer un groupe de symptômes dans une case diagnostique théorique. Il amasse d'abord les "briques cliniques" basées sur le comportement de la douleur et les facteurs aggravants, **puis** propose au clinicien des hypothèses étiologiques.
 - **Processus CIPIE** : Collecte → Interprétation → Planification → Intervention → Évaluation
 - **HSOAPIER** (Québec) : Histoire, Subjectif relaté, Objectif observé/mesuré, Analyse, Plan, Intervention, Évaluation, Recommandations
 - **Mark Jones** : Wall of Bricks · Make Features Fit · Confirmation of Hypotheses
@@ -196,24 +203,71 @@ Outils app : **TAMPA**, **PCS**, **HADS**, **FABQ**, **START Back**, **OREBRO** 
 - **Attentes** : par rapport au traitement
 - **Prêt au changement** : motivation, observance prévue (échelle 1-10)
 
-#### F. Mécanismes de la douleur (théorie Input/Processing/Output)
+#### F. Mécanismes de la douleur — classification IASP (3 catégories majeures)
 
-| Catégorie               | Sous-type        | Signes |
-| ----------------------- | ---------------- | ------ |
-| **NOCICEPTIVE** (Input dominant) | Mécanique  | Fin de course, On/Off, seuil P haut, P physiologique = pas de dommage tissulaire |
-|                         | Ischémique       | Position statique (manque O2/glucose), réversible par mvt, seuil P haut |
-|                         | Inflammatoire    | P spontanée + évoquée, zone P diffuse, seuil P bas (allodynie), **P pathologique = dommage tissulaire** |
-| **NEUROGÈNE**           | Neuropathie périph. | Territoire cutané nerf périph, P typique (aigu, brûlure, électrique) |
-|                         | Radiculopathie   | Territoire dermatome, P typique + fourmillements |
-|                         | Central (anat.)  | Dommage SNC, symptômes persistants après régénération cellulaire |
-| **CENTRAL** (Processing dominant) | Neuroplastique | ONSET disproportionné aux symptômes, variable, beaucoup de facteurs psychosociaux, P diffus/étendu |
-| **OUTPUT dominant**     | Moteur, autonome | Élément important des performances motrices musculo-squelettiques, type de mouvements explique symptômes |
+##### F.1 Douleur NOCICEPTIVE (stimulation des nocicepteurs périphériques)
 
-Adaptive vs Maladaptive :
+| Sous-type        | Signes |
+| ---------------- | ------ |
+| **Mécanique**    | Intermittente "On/Off", fin de course, mise en charge, seuil P haut, P physiologique = pas de dommage tissulaire majeur |
+| **Ischémique**   | Sourde, posture statique prolongée (hypoxie locale), réversible par mvt, seuil P haut |
+| **Inflammatoire**| Spontanée + évoquée, pulsatile, zone diffuse, seuil P bas (allodynie / hyperalgésie primaire), ne cède pas au repos, **P pathologique = dommage tissulaire** |
+
+##### F.2 Douleur NEUROPATHIQUE (lésion du système somatosensoriel)
+
+- **Neuropathie périphérique** : territoire cutané du nerf, P typique (brûlure, électrique, décharges)
+- **Radiculopathie** : territoire dermatome, fourmillements
+- **Central (anatomique)** : dommage SNC
+
+**Outil de dépistage : DN4-interview (7 items auto-administrés)** — les items 8-10 de la version originale nécessitent l'examen clinique, **non utilisables en pré-consultation**. Cut-off ≥ 3/7 = alerte forte pour neuropathique probable :
+1. Sensation de brûlure
+2. Sensation de froid douloureux
+3. Décharges électriques
+4. Fourmillements
+5. Picotements
+6. Engourdissements
+7. Démangeaisons
+
+##### F.3 Douleur NOCIPLASTIQUE (IASP — 3ème catégorie reconnue)
+
+**Définition** : altération du traitement de la nociception par le SNC (sensibilisation centrale, hyper-excitabilité neuronale, perte des contrôles inhibiteurs descendants, amplification du signal douloureux) **en l'absence** de preuves claires de dommage tissulaire réel ou de lésion du système somatosensoriel.
+
+**Profil clinique à détecter par l'IA** :
+- Douleur disproportionnée à la pathologie / fonction
+- Répartition topographique aberrante ou changeante (douleurs diffuses ne respectant pas les dermatomes)
+- Multiples comorbidités systémiques
+
+**Outil de dépistage : Central Sensitization Inventory (CSI)** — items clés à intégrer :
+- Troubles du sommeil non réparateur + fatigue chronique
+- Troubles cognitifs ("brouillard cérébral")
+- Hypersensibilité sensorielle globale (lumières, bruits, odeurs/parfums)
+- Comorbidités associées : syndrome de l'intestin irritable, migraines chroniques, jambes sans repos, ATM, fibromyalgie
+
+**Implication thérapeutique** : interventions structurelles mécaniques locales **potentiellement inefficaces voire aggravantes**. Le rapport doit orienter vers :
+- Rééducation progressive (no quick fix)
+- Thérapie cognitivo-comportementale
+- Gestion du stress, hygiène du sommeil
+- Éducation neurophysiologique à la douleur (PNE)
+
+##### F.4 OUTPUT dominant
+
+- Performances motrices musculo-squelettiques altérées · type de mouvements explique les symptômes
+- Réponses systèmes autonome / endocrinien / neuro-immunitaire / contrôle moteur
+
+##### F.5 Adaptive vs Maladaptive
+
 - **Adaptive** : sans kiné = OK, plus sensoriel
 - **Maladaptive** : sans kiné = NON OK, plus émotionnel
 
-Outils app : **DN4** (≥ 4/10 = neuropathique probable), **OREBRO**, **PCS**, **TAMPA**.
+##### F.6 Mapping outils app → mécanismes
+
+| Mécanisme dominant     | Outils AssesMe existants               |
+| ---------------------- | -------------------------------------- |
+| Nociceptive mécanique  | NPRS, ODI, NDI, SPADI, RMDQ            |
+| Nociceptive inflamm.   | NPRS + 24h (réveil matinal prolongé)   |
+| Neuropathique          | **DN4** (≥ 3/7 = probable)             |
+| Nociplastique          | **CSI** (à intégrer), PCS, TAMPA, HADS |
+| Output / Psychosocial  | TAMPA, FABQ, START Back, OREBRO        |
 
 #### G. Phases de réparation tissulaire (timing important pour pronostic)
 
@@ -310,7 +364,123 @@ Paramètres techniques :
 - Aspect cognitif
 - Expérience clinique du OMT
 
-#### N. Modules à construire (architecture cible)
+#### N. Architecture LLM pour l'Anamnèse IA (Claude Opus 4.7)
+
+**Source** : *Architecture Sémantique et Algorithmique de l'Anamnèse en Kinésithérapie — Guide Fondamental pour le Développement d'IA par Vibe Coding* (Phil, mai 2026).
+
+##### N.1 Principes fondateurs
+
+- **Le LLM agit comme moteur NLP** : analyse le verbatim brut du patient pour en extraire des marqueurs de gravité, indicateurs de pronostic, classifications pathobiologiques
+- **Arbre de décision dynamique** : les réponses initiales conditionnent l'apparition de questions d'approfondissement spécifiques (mimer l'adaptabilité d'un clinicien expert)
+- **Développement assisté par IA responsable** : ancrage strict dans l'EBP, **pas** de vibe coding aveugle pour du médical. Contrôler le "momentum de contexte" par prompts systémiques robustes
+- **Rôle stricte de l'IA** : catégoriser l'information, **jamais** divulguer un diagnostic au patient (exercice illégal de la médecine + risque iatrogène). Exemple : traduire "*je travaille assis toute la journée*" → `Biomécanique : Flexion statique prolongée = Facteur Ischémique/Postural prédominant`
+
+##### N.2 Les 5 USES — classification automatique du rapport patient/effort
+
+| Catégorie       | Interprétation tissulaire | Question IA |
+| --------------- | ------------------------- | ----------- |
+| **NEW USE**     | Charge inédite → réaction inflammatoire adaptative, DOMS | "Avez-vous entrepris une nouvelle activité physique, professionnelle ou un bricolage inhabituel dans les jours précédant la douleur ?" |
+| **MISUSE**      | Cinématique sous-optimale → pics de stress focalisés | Recherche descriptions de postures inconfortables, gestes techniques mal maîtrisés |
+| **OVERUSE**     | Dépassement capacité de récupération → tendinopathies, fractures fatigue | Ratio charge/repos, volume entraînement, absence jours de récup |
+| **ABUSE**       | Force macro-traumatique → lésion structurelle aiguë (déchirure, entorse, fracture) | Événement déclencheur soudain, choc, chute, accident haute vélocité |
+| **DISUSE**      | Absence prolongée de charge → atrophie, raideur capsulaire | Sédentarité globale, immobilisation récente, évitement par peur |
+
+##### N.3 Régime de charge biomécanique — analyse lexicale automatique
+
+L'IA doit analyser le métier/hobbies/sport pour inférer les contraintes dominantes :
+- *Bureau / écran prolongé* → flexion rachidienne + charge statique → ischémie tissulaire, fluage ligamentaire (creep)
+- *Travailleur manuel + ports de charges au-dessus des épaules* → contraintes dynamiques en extension, conflit sous-acromial
+- Quantifier volume, fréquence, poids manipulé quotidiennement
+
+##### N.4 Topographie → hypothèses cliniques (règles déductives)
+
+- Douleur **strictement axiale/centrale** (lombaire/cervical) → hypothèse discale, ligaments longitudinaux
+- Douleur **unilatérale para-vertébrale** → zygapophyses (facettes) ou myofascial ipsilatéral
+- Douleur lombaire **latérale → fesse / cuisse sans dépasser le genou** → sacro-iliaque ou somatique référée
+- **Critère pathognomonique radiculopathie** : douleur distale MI **> douleur axiale dorsale**
+
+##### N.5 Arborescence conditionnelle (logique IF/THEN pour le LLM)
+
+```
+SI traumatisme récent OU symptômes nocturnes spontanés
+  → DÉCLENCHER bloc questions Red Flags approfondies
+
+SI douleur évoque "électricité" OU "brûlure" (NLP descripteurs)
+  → DÉCLENCHER DN4-interview (7 items)
+  → SI score ≥ 3/7 : alerte forte douleur neuropathique probable
+
+SI affection chronique (> 3 mois) ET douleur diffuse
+  → DÉCLENCHER items clés CSI
+
+SI zone anatomique = cervical
+  → DÉCLENCHER NDI + (TAMPA si chronicité)
+
+SI zone anatomique = lombaire
+  → DÉCLENCHER ODI/RMDQ + STarT Back
+
+SI âge > 50 ans + antécédent cancer + perte poids inexpliquée + P constante nocturne
+  → ALERTE CRITIQUE : suspicion néoplasie → avis médical immédiat
+
+SI anesthésie en selle + dysfonction vésicale/intestinale + faiblesse MI bilatérale
+  → ALERTE CRITIQUE : syndrome queue de cheval → urgence hospitalière
+
+SI patient demande thérapies exclusivement passives pour pathologie nécessitant reconditionnement actif
+  → ALERTE PRATICIEN : déconstruire croyances par éducation thérapeutique ciblée
+```
+
+##### N.6 PROMs déclenchés automatiquement par région anatomique
+
+| Région body chart       | PROM(s) auto-déclenchés                 |
+| ----------------------- | --------------------------------------- |
+| Rachis cervical         | NDI                                     |
+| Épaule                  | SPADI · Constant-Murley                 |
+| Membre supérieur global | QuickDASH                               |
+| Coude / poignet         | QuickDASH + PRWE                        |
+| Rachis lombaire         | ODI · RMDQ · START Back · OREBRO       |
+| Hanche                  | HOOS-PS ou HOOS-full                    |
+| Genou                   | KOOS-PS · IKDC (jeune sportif) · VISA-P |
+| Cheville / pied         | FAOS-PS · VISA-A · LEFS                 |
+| Général / chronique     | TAMPA · PCS · FABQ · HADS · NPRS · PSFS |
+
+##### N.7 STarT Back Tool — algorithme de cotation et stratification (référence)
+
+- 9 items, version FR validée
+- **Score Global** (sur 9) : 1 point par réponse affirmative items 1-8 + 1 si item 9 = "beaucoup" / "énormément"
+- **Sous-échelle Psychosociale** (sur 5) : somme exclusive items 1, 4, 7, 8, 9
+- Stratification :
+  - **Haut risque** (sous-échelle psy ≥ 4) → CBT + rééducation intensive
+  - **Risque moyen** (Score Global ≥ 4, sous-échelle psy < 4) → kiné standard (mécanique + contrôle moteur)
+  - **Faible risque** (Score Global < 4) → éducation, réassurance, auto-gestion, maintien mouvement
+
+##### N.8 Format de sortie au praticien — structure SOAP modernisée
+
+Le rapport généré par l'IA destiné **exclusivement au praticien** doit comporter :
+
+1. **Alerte visuelle immédiate** (tête de page) — Red Flags détectés nécessitant examen médical urgent
+2. **Profil biopsychosocial** — classification risque STarT Back avec code couleur 🟢🟠🔴 + énumération yellow flags extraits du verbatim
+3. **Mécanisme dominant présumé** — classification (nociceptif mécanique / inflammatoire / ischémique · neuropathique · nociplastique) appuyée par scores DN4, CSI
+4. **Analyse SIN** avec recommandation explicite de dosage : *"Patient hautement irritable (8/10, persistance post-effort prolongée). Examen orienté vers réduction des symptômes, éviter surpression articulaire en fin d'amplitude."*
+5. **Pistes de diagnostic différentiel** + concept planétaire : suggérer structures à évaluer en priorité (myofascial / articulaire / neural / contrôle moteur) lors des tests physiques
+
+##### N.9 Logique IF/THEN précise pour Red Flags par pathologie
+
+| Pathologie suspectée | Critères combinés (toutes conditions) | Recommandation IA |
+| -------------------- | ------------------------------------- | ----------------- |
+| Néoplasie            | > 50 ans + ATCD cancer + perte poids inexpliquée (>5 kg/qq mois) + P constante progressive non mécanique (nocturne ++) | Alerte critique, exclusion physiothérapie primaire, avis médical immédiat |
+| Infection vertébrale | Fièvre + frissons + sueurs nocturnes + fatigue intense + infection bactérienne récente + immunodépression/cortico/drogue IV | Alerte critique, imagerie + analyse sanguine (CRP, VS) avant manip |
+| Queue de cheval      | Anesthésie en selle + dysfonction vésicale/intestinale + faiblesse motrice bilatérale MI + troubles marche/ataxie | **Urgence absolue** : redirection urgences hospitalières |
+| Fracture vertébrale  | Trauma récent OU trauma mineur + ostéoporose sévère/cortico prolongés + déformation structurelle | Alerte : radio/scanner pour écarter instabilité avant tout manuel |
+| Pathologie vasculaire| P fulgurante non méca + changements coloration cutanée + froideur soudaine extrémités + œdème unilatéral massif | Urgence circulatoire — **interdiction absolue de massage/mobilisation profonde** dans la zone |
+
+##### N.10 Directives méta-cognitives pour le system prompt LLM
+
+1. **Empathie + accessibilité** : conversationnel, pas de jargon médical anxiogène, questions ouvertes pour le verbatim, QCM/échelles pour les questionnaires standardisés
+2. **Arborescence conditionnelle** (cf. N.5) — portes logiques strictes
+3. **Traitement analytique silencieux backend** — l'IA ne dit JAMAIS au patient un diagnostic. Elle catégorise pour le rapport praticien
+4. **Synthèse orientée praticien** — format SOAP structuré actionnable (cf. N.8)
+5. **Pondération prudente de l'imagerie** : enregistrer mais transmettre au praticien que "image = photographie statique, altérations structurelles fréquentes chez asymptomatiques" — recadrer le patient vers ses limitations fonctionnelles
+
+#### O. Modules à construire (architecture cible)
 
 - [ ] **Module anamnèse pré-séance** : workflow patient guidé, body chart cliquable, graphique évolution interactif, dérouillage matinal, screening red flags automatique
 - [ ] **Module examen clinique P/E** : 14 étapes navigables, saisie structurée par étape, paramètres de réévaluation marqués d'astérisques pour réutilisation
@@ -512,3 +682,4 @@ Pistes complémentaires :
 
 - **2026-05-09 → 2026-05-10** : MVP fonctionnel, sécurisation API, suppression Capacitor, PWA câblée, library + body chart, 32 questionnaires validés et conformes au standard, onboarding checklist, empty states. Backlog créé.
 - **2026-05-11** : Enrichissement majeur du backlog avec le détail complet de l'anamnèse OMT et de l'examen clinique selon le modèle planétaire (6 PDFs analysés). Cadres théoriques CIF + planétaire + Mark Jones + Chamberland + Montréal + HSOAPIER + CIPIE intégrés. Drapeaux rouges/jaunes ABCDEFW, mécanismes de douleur Input/Processing/Output, phases de réparation tissulaire, SIN, P/E 14 étapes, paramètres Rx, algorithme LBP Spine Physio capturés.
+- **2026-05-12** : Intégration du document *Architecture Sémantique et Algorithmique de l'Anamnèse en Kinésithérapie* (Phil) — cahier des charges méta-cognitif du module Anamnèse IA. Concepts ajoutés : Mur de Briques (Maitland), douleur **nociplastique** (3ème catégorie IASP) + CSI, DN4-interview 7 items, STarT Back cotation détaillée, 5 USES avec questions IA, régime de charge biomécanique, arborescence conditionnelle IF/THEN pour le LLM, PROMs déclenchés par région, format de sortie SOAP modernisé, logique Red Flags par pathologie (5 entrées), directives méta-cognitives pour system prompt.
