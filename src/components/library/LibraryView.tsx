@@ -145,49 +145,50 @@ export default function LibraryView({ patientContext = null }: { patientContext?
             {filteredTests.length === 0 ? (
               <Empty>Aucun test associé à cette zone pour le moment.</Empty>
             ) : (
-              <div style={{ display: 'grid', gap: '0.75rem' }}>
-                {filteredTests.map((t) => (
+              <div className="grid gap-3">
+                {filteredTests.map((t) => {
+                  const tMeta = getMeta(t.id);
+                  const firstQuestion = tMeta?.clinicalQuestions?.[0];
+                  const isSelected = selectedTestId === t.id;
+                  return (
                   <button
                     key={t.id}
                     onClick={() => handleSelectTest(t.id)}
-                    style={{
-                      textAlign: 'left',
-                      padding: '1rem 1.25rem',
-                      background: 'var(--surface)',
-                      border: `1px solid ${selectedTestId === t.id ? 'var(--primary)' : 'var(--border)'}`,
-                      borderRadius: 'var(--radius-md)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '1rem',
-                    }}
+                    className={`group text-left p-5 rounded-2xl bg-white transition-all hover:-translate-y-0.5 ${
+                      isSelected
+                        ? 'border-2 border-indigo-500 shadow-lg shadow-indigo-100'
+                        : 'border border-gray-100 hover:border-indigo-200 hover:shadow-md'
+                    }`}
                   >
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{t.title}</div>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{t.description}</div>
-                      <div style={{ marginTop: '0.4rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                        {(getMeta(t.id)?.bodyParts ?? []).map((bp) => (
-                          <span
-                            key={bp}
-                            style={{
-                              padding: '0.15rem 0.5rem',
-                              background: 'var(--surface-hover)',
-                              color: 'var(--text-secondary)',
-                              borderRadius: 'var(--radius-full)',
-                              fontSize: '0.7rem',
-                              fontWeight: 600,
-                            }}
-                          >
-                            {BODY_PART_LABELS[bp]}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="flex justify-between items-start gap-4 mb-2">
+                      <div className="font-bold text-gray-900 text-base">{t.title}</div>
+                      <ChevronRight className={`w-4 h-4 mt-1 flex-shrink-0 transition-transform ${isSelected ? 'text-indigo-600 translate-x-0.5' : 'text-gray-400 group-hover:translate-x-0.5 group-hover:text-indigo-500'}`} />
                     </div>
-                    <ChevronRight size={18} color="var(--text-secondary)" />
+                    {firstQuestion && (
+                      <div className="mb-3 p-3 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50/50 border border-indigo-100/50">
+                        <div className="text-[10px] font-bold text-indigo-700 uppercase tracking-widest mb-0.5">Pour savoir</div>
+                        <div className="text-sm text-gray-800 leading-snug">{firstQuestion}</div>
+                      </div>
+                    )}
+                    <div className="text-sm text-gray-500 leading-relaxed mb-2">{t.description}</div>
+                    <div className="flex gap-1.5 flex-wrap mt-2">
+                      {(tMeta?.bodyParts ?? []).map((bp) => (
+                        <span
+                          key={bp}
+                          className="px-2 py-0.5 rounded-full bg-gray-50 text-gray-600 text-[10px] font-semibold"
+                        >
+                          {BODY_PART_LABELS[bp]}
+                        </span>
+                      ))}
+                      {t.estimatedTime && (
+                        <span className="px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 text-[10px] font-medium">
+                          ⏱ {t.estimatedTime}
+                        </span>
+                      )}
+                    </div>
                   </button>
-                ))}
+                  );
+                })}
               </div>
             )}
           </TabPanel>
