@@ -400,6 +400,97 @@ export const QUESTIONNAIRE_META: Record<string, QuestionnaireMeta> = {
       'Le PSFS sert-il de support à l\'éducation thérapeutique ?',
     ],
   },
+
+  nprs: {
+    bodyParts: ['general'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'AR', 'ZH', 'JA'],
+    psychometrics: {
+      internalConsistency: 'Non applicable (item unique)',
+      testRetest: 'ICC 0,86 – 0,95',
+      mcid: '2 points sur 10 (douleur musculo-squelettique)',
+      validity: 'Corrélation forte avec EVA (r > 0,9). Recommandé par IMMPACT.',
+      sensitivity: 'Très réactif aux changements aigus comme chroniques',
+      populations: 'Toute douleur (aiguë, chronique, péri-opératoire)',
+    },
+    clinicalQuestions: [
+      "Quel est le niveau actuel de la douleur ?",
+      "L'intensité a-t-elle changé depuis la dernière séance ?",
+      "Le dosage de l'exercice doit-il être adapté à la douleur du jour ?",
+    ],
+  },
+
+  pcs: {
+    bodyParts: ['general'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'FI', 'TR', 'JA'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,87 – 0,95',
+      testRetest: 'ICC 0,75 – 0,84',
+      mcid: '9 points (douleur chronique)',
+      validity: 'Validité de construit : 3 dimensions (rumination, magnification, impuissance)',
+      sensitivity: 'Réactif aux interventions cognitivo-comportementales et PNE',
+      populations: 'Douleur chronique MSK, fibromyalgie, lombalgie, post-op',
+    },
+    clinicalQuestions: [
+      "Le patient amplifie-t-il sa douleur dans ses pensées (catastrophisme) ?",
+      "Doit-on intégrer une approche cognitivo-comportementale au plan de soin ?",
+      "Quelle dimension est dominante : rumination, amplification ou impuissance ?",
+    ],
+  },
+
+  dn4: {
+    bodyParts: ['general', 'neuro'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'AR', 'TR', 'ZH', 'JA'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,76',
+      testRetest: 'Kappa > 0,80 (inter-évaluateurs)',
+      mcid: 'Seuil clinique ≥ 4/10 (pas de MCID au sens strict)',
+      validity: 'Sensibilité 83 %, spécificité 90 % pour le diagnostic neuropathique',
+      sensitivity: 'Outil diagnostique catégorisant — pas de score de changement',
+      populations: 'Douleurs chroniques avec composante possiblement neuropathique',
+    },
+    clinicalQuestions: [
+      "La douleur a-t-elle une composante neuropathique ?",
+      "Une orientation médicale pour traitement spécifique est-elle requise ?",
+      "Faut-il adapter la rééducation (désensibilisation, GMI) ?",
+    ],
+    youtubeUrl: undefined,
+  },
+
+  orebro: {
+    bodyParts: ['lumbar', 'general'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'FI'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,71 – 0,84',
+      testRetest: 'ICC 0,82 – 0,89',
+      mcid: 'Cut-offs : 50 (modéré), 60 (haut risque)',
+      validity: 'AUC 0,74 – 0,80 pour pronostic d\'arrêt de travail prolongé à 6 mois',
+      sensitivity: 'Outil de stratification — non utilisé pour mesurer le changement',
+      populations: 'Douleur musculo-squelettique aiguë / sub-aiguë (en consultation primaire)',
+    },
+    clinicalQuestions: [
+      "Quel est le risque de chronicisation de cette douleur MSK ?",
+      "Une approche multidisciplinaire précoce est-elle indiquée ?",
+      "Quels facteurs psycho-sociaux dominent (peurs, humeur, retour au travail) ?",
+    ],
+  },
+
+  prwe: {
+    bodyParts: ['wrist-hand'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'TR', 'AR', 'JA'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,93 – 0,95',
+      testRetest: 'ICC 0,90 – 0,96',
+      mcid: '11,5 points (fracture radius distal, post-op)',
+      validity: 'Référence du poignet — meilleure réactivité que le DASH pour cette articulation',
+      sensitivity: 'Effect size > 1,2 après chirurgie ou rééducation post-traumatique',
+      populations: 'Fracture radius distal, De Quervain, tunnel carpien, post-arthrodèse',
+    },
+    clinicalQuestions: [
+      "La douleur ou la limitation fonctionnelle prédomine-t-elle ?",
+      "Les activités spécifiques de la main (préhensions fines) sont-elles touchées ?",
+      "L'évolution suit-elle le pronostic attendu (T0 → T1 → T2) ?",
+    ],
+  },
 };
 
 export function getMeta(id: string): QuestionnaireMeta | undefined {

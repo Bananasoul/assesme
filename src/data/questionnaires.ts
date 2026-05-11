@@ -3132,6 +3132,363 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         ]
       }
     ]
+  },
+
+  // ============================================================
+  // NPRS — Numeric Pain Rating Scale
+  // ============================================================
+  'nprs': {
+    id: 'nprs',
+    title: 'NPRS (Numeric Pain Rating Scale)',
+    description: 'Évaluation simple et rapide de l\'intensité douloureuse sur une échelle 0–10.',
+    estimatedTime: '30 sec',
+    maxScore: 10,
+    mcid: 2,
+    higherIsBetter: false,
+    tags: ['Général', 'Douleur'],
+    validated: true,
+    bodyPart: 'Général',
+    category: 'Général',
+    administrationType: 'auto',
+    clinicalValue: 'Outil universel d\'évaluation de l\'intensité douloureuse. Plus fiable et plus rapide que l\'EVA, recommandé par l\'IMMPACT pour le suivi de toute douleur chronique. Doit être complété systématiquement à chaque consultation comme indicateur principal de douleur.',
+    decisionAlgorithm: 'Score 0–3 : douleur légère, pas d\'antalgique requis, rééducation active possible. Score 4–6 : douleur modérée, adaptation du dosage, antalgiques au besoin. Score 7–10 : douleur sévère, prioriser le contrôle de la douleur avant la mise en charge. Un changement ≥ 2 points = cliniquement significatif.',
+    therapeuticInterventions: {
+      exercises: [
+        'Adaptation immédiate du dosage (nombre de répétitions, charge) selon le ressenti',
+        'TENS, thermothérapie ou techniques manuelles si NPRS ≥ 7 avant la séance'
+      ],
+      education: [
+        'Apprendre au patient à coter sa douleur avant / pendant / après l\'exercice',
+        'Différencier "douleur acceptable" (≤ 3) et "douleur stop" (≥ 5) pendant les auto-rééducations'
+      ]
+    },
+    references: [{
+      title: 'Studies comparing Numerical Rating Scales, Verbal Rating Scales, and Visual Analogue Scales for assessment of pain intensity',
+      url: 'https://pubmed.ncbi.nlm.nih.gov/21621130/',
+      type: 'scientific_article' as const
+    }],
+    questions: [
+      {
+        id: 'nprs1',
+        text: 'Comment évalueriez-vous votre douleur actuelle sur une échelle de 0 (aucune douleur) à 10 (douleur maximale imaginable) ?',
+        options: [
+          { id: '0', label: '0 — Aucune douleur', value: 0 },
+          { id: '1', label: '1', value: 1 },
+          { id: '2', label: '2', value: 2 },
+          { id: '3', label: '3 — Douleur légère', value: 3 },
+          { id: '4', label: '4', value: 4 },
+          { id: '5', label: '5 — Douleur modérée', value: 5 },
+          { id: '6', label: '6', value: 6 },
+          { id: '7', label: '7 — Douleur sévère', value: 7 },
+          { id: '8', label: '8', value: 8 },
+          { id: '9', label: '9', value: 9 },
+          { id: '10', label: '10 — Douleur maximale imaginable', value: 10 }
+        ]
+      }
+    ]
+  },
+
+  // ============================================================
+  // PCS — Pain Catastrophizing Scale
+  // ============================================================
+  'pcs': {
+    id: 'pcs',
+    title: 'PCS (Pain Catastrophizing Scale)',
+    description: 'Mesure de la tendance à dramatiser ou à ressasser la douleur (catastrophisme).',
+    estimatedTime: '5 min',
+    maxScore: 52,
+    mcid: 9,
+    higherIsBetter: false,
+    tags: ['Général', 'Psychologique', 'Douleur'],
+    validated: true,
+    bodyPart: 'Général',
+    category: 'Général',
+    administrationType: 'auto',
+    clinicalValue: 'Le catastrophisme est l\'un des plus puissants prédicteurs de chronicisation et de mauvais pronostic en douleur musculo-squelettique. Le PCS objective trois dimensions : la rumination, l\'amplification et le sentiment d\'impuissance. Indispensable en complément du TAMPA pour caractériser le profil psycho-comportemental du douloureux chronique.',
+    decisionAlgorithm: 'Score < 20 : catastrophisme faible, pas d\'intervention spécifique requise. Score 20–29 : catastrophisme modéré, intégrer l\'éducation à la douleur dès les premières séances. Score ≥ 30 : catastrophisme élevé, drapeau jaune majeur — orienter vers une approche cognitivo-comportementale et envisager une co-prise en charge psychologique.',
+    therapeuticInterventions: {
+      exercises: [
+        'Exposition graduelle au mouvement redouté (Graded Exposure / GMI)',
+        'Imagerie motrice progressive (Latéralisation → Mouvement imaginé → Miroir)'
+      ],
+      education: [
+        'Pain Neuroscience Education (PNE) : expliquer la neurophysiologie de la douleur chronique',
+        'Reformuler les croyances négatives ("je suis cassé") par des croyances adaptatives'
+      ]
+    },
+    references: [
+      {
+        title: 'The Pain Catastrophizing Scale: development and validation (Sullivan et al., 1995)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/7644250/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      'Je me dis que je ne pourrai jamais supporter cela.',
+      'Je sens que je ne peux pas continuer.',
+      'C\'est terrible et je sens que cela ne s\'améliorera jamais.',
+      'C\'est affreux et je sens que cela me submerge.',
+      'Je ne peux plus le supporter.',
+      'J\'ai peur que la douleur empire.',
+      'Je pense sans cesse à d\'autres événements douloureux.',
+      'Je veux désespérément que la douleur s\'arrête.',
+      'Je ne peux pas m\'empêcher d\'y penser.',
+      'Je n\'arrête pas de penser à quel point j\'ai mal.',
+      'Je n\'arrête pas de penser à quel point je veux que la douleur s\'arrête.',
+      'Il n\'y a rien que je puisse faire pour réduire l\'intensité de ma douleur.',
+      'Je me demande si quelque chose de grave va se produire.'
+    ].map((text, i) => ({
+      id: `pcs${i + 1}`,
+      text: `${i + 1}. ${text}`,
+      options: [
+        { id: '0', label: '0 — Pas du tout', value: 0 },
+        { id: '1', label: '1 — Un peu', value: 1 },
+        { id: '2', label: '2 — Modérément', value: 2 },
+        { id: '3', label: '3 — Beaucoup', value: 3 },
+        { id: '4', label: '4 — Tout le temps', value: 4 }
+      ]
+    }))
+  },
+
+  // ============================================================
+  // DN4 — Douleur Neuropathique 4
+  // ============================================================
+  'dn4': {
+    id: 'dn4',
+    title: 'DN4 (Douleur Neuropathique 4)',
+    description: 'Outil diagnostique pour identifier une composante neuropathique dans une douleur chronique.',
+    estimatedTime: '3 min',
+    maxScore: 10,
+    higherIsBetter: false,
+    tags: ['Général', 'Douleur', 'Neurologique'],
+    validated: true,
+    bodyPart: 'Général',
+    category: 'Général',
+    administrationType: 'therapist',
+    clinicalValue: 'Le DN4 est l\'outil de référence pour différencier une douleur nociceptive d\'une douleur neuropathique. Cette distinction conditionne la stratégie : la prise en charge mécanique seule échouera face à une composante neuropathique non identifiée. À utiliser systématiquement face à toute douleur chronique avec irradiation, brûlure ou paresthésies.',
+    decisionAlgorithm: 'Score ≥ 4/10 : composante neuropathique probable (sensibilité 83 %, spécificité 90 %). Orienter vers un médecin pour discussion d\'un traitement spécifique (anticonvulsivant, antidépresseur tricyclique). Adapter la rééducation : désensibilisation, imagerie motrice, éviter les techniques douloureuses. Score < 4 : douleur principalement nociceptive, approche mécanique classique.',
+    therapeuticInterventions: {
+      exercises: [
+        'Désensibilisation par stimulations graduées (texture, température)',
+        'Imagerie motrice graduée (GMI) sur la zone douloureuse',
+        'Mobilisation neurale douce (sliders > tensioners au début)'
+      ],
+      education: [
+        'Expliquer la sensibilisation nerveuse centrale et périphérique',
+        'Insister sur l\'évitement des stimulations agressives ("no pain no gain" est contre-indiqué)'
+      ]
+    },
+    references: [
+      {
+        title: 'Comparison of pain syndromes associated with nervous or somatic lesions and development of a new neuropathic pain diagnostic questionnaire (DN4)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/15733628/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      ...[
+        'La douleur présente-t-elle l\'une des caractéristiques suivantes : brûlure ?',
+        'Sensation de froid douloureux ?',
+        'Décharges électriques ?',
+        'La douleur est-elle associée à des fourmillements ?',
+        'Picotements ?',
+        'Engourdissements ?',
+        'Démangeaisons ?',
+      ].map((text, i) => ({
+        id: `dn4-q${i + 1}`,
+        text: `${i + 1}. ${text}`,
+        options: [
+          { id: '0', label: 'Non', value: 0 },
+          { id: '1', label: 'Oui', value: 1 }
+        ]
+      })),
+      ...[
+        'Examen clinique — Hypoesthésie au tact dans la zone douloureuse ?',
+        'Examen clinique — Hypoesthésie à la piqûre dans la zone douloureuse ?',
+        'Examen clinique — La douleur est-elle provoquée ou augmentée par le frottement ?',
+      ].map((text, i) => ({
+        id: `dn4-e${i + 1}`,
+        text: `${i + 8}. ${text}`,
+        options: [
+          { id: '0', label: 'Non', value: 0 },
+          { id: '1', label: 'Oui', value: 1 }
+        ]
+      }))
+    ]
+  },
+
+  // ============================================================
+  // OREBRO — Örebro Musculoskeletal Pain Screening (Short Form)
+  // ============================================================
+  'orebro': {
+    id: 'orebro',
+    title: 'Örebro Musculoskeletal Pain Screening (OMPSQ-SF)',
+    description: 'Prédicteur du risque de chronicisation d\'une douleur musculo-squelettique aiguë ou sub-aiguë.',
+    estimatedTime: '5 min',
+    maxScore: 100,
+    higherIsBetter: false,
+    tags: ['Lombaire', 'Général', 'Pronostic'],
+    validated: true,
+    bodyPart: 'Général',
+    category: 'Général',
+    administrationType: 'auto',
+    clinicalValue: 'Extension du START Back à toutes les douleurs musculo-squelettiques (pas uniquement lombaires). Cet outil de stratification identifie en 10 questions les patients à haut risque de chronicisation et d\'incapacité prolongée — particulièrement utile en pratique privée pour orienter précocement la prise en charge.',
+    decisionAlgorithm: 'Score < 50 : risque faible, prise en charge standard. Score 50–60 : risque modéré, intégrer une composante éducative et un suivi rapproché. Score > 60 : risque élevé de chronicisation et d\'arrêt prolongé — envisager une prise en charge multidisciplinaire dès le début (psychologue, médecin du travail).',
+    therapeuticInterventions: {
+      exercises: [
+        'Activité physique progressive privilégiant la fonction sur la douleur',
+        'Exposition graduelle aux mouvements évités'
+      ],
+      education: [
+        'Éducation à la douleur (PNE) dès la première séance pour les scores ≥ 50',
+        'Discussion ouverte sur les peurs liées au retour au travail / à l\'activité'
+      ]
+    },
+    references: [
+      {
+        title: 'Development of a short form of the Örebro Musculoskeletal Pain Screening Questionnaire (Linton et al., 2011)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/21588086/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      {
+        id: 'or1',
+        text: '1. Combien de jours par mois avez-vous été incapable d\'accomplir vos activités habituelles à cause de la douleur ?',
+        options: [
+          { id: '0', label: '0 jour', value: 0 },
+          { id: '1', label: '1 à 2 jours', value: 1 },
+          { id: '2', label: '3 à 7 jours', value: 2 },
+          { id: '3', label: '8 à 14 jours', value: 3 },
+          { id: '4', label: '15 à 21 jours', value: 4 },
+          { id: '5', label: '22 à 30 jours', value: 5 },
+          { id: '7', label: 'Plus de 30 jours', value: 7 },
+          { id: '10', label: 'Tous les jours', value: 10 }
+        ]
+      },
+      {
+        id: 'or2',
+        text: '2. Comment évaluez-vous votre douleur en moyenne au cours des 2 dernières semaines ?',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Aucune douleur' : i === 10 ? '— Douleur maximale' : ''}`, value: i }))
+      },
+      {
+        id: 'or3',
+        text: '3. Au cours des 3 derniers mois, à quel point la douleur a-t-elle interféré avec votre capacité à mener une vie normale ?',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Pas du tout' : i === 10 ? '— Totalement' : ''}`, value: i }))
+      },
+      {
+        id: 'or4',
+        text: '4. À quel point votre douleur est-elle anxiogène pour vous ?',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Pas du tout' : i === 10 ? '— Extrêmement' : ''}`, value: i }))
+      },
+      {
+        id: 'or5',
+        text: '5. À quel point pensez-vous qu\'il est risqué pour vous de pratiquer une activité physique ?',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Aucun risque' : i === 10 ? '— Risque très élevé' : ''}`, value: i }))
+      },
+      {
+        id: 'or6',
+        text: '6. À quel point êtes-vous d\'accord avec : "Mes activités physiques ne devraient PAS être limitées par ma douleur" ? (échelle inversée)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Tout à fait d\'accord' : i === 10 ? '— Pas du tout d\'accord' : ''}`, value: i }))
+      },
+      {
+        id: 'or7',
+        text: '7. À quel point êtes-vous confiant que vous pourrez accomplir votre travail malgré la douleur dans les 3 prochains mois ? (échelle inversée)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Très confiant' : i === 10 ? '— Pas confiant du tout' : ''}`, value: i }))
+      },
+      {
+        id: 'or8',
+        text: '8. Estimez votre humeur durant les 2 dernières semaines (0 = très bonne, 10 = très basse)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Très bonne humeur' : i === 10 ? '— Très basse humeur' : ''}`, value: i }))
+      },
+      {
+        id: 'or9',
+        text: '9. Pensez-vous que votre douleur durera très longtemps ?',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Pas du tout' : i === 10 ? '— Certainement' : ''}`, value: i }))
+      },
+      {
+        id: 'or10',
+        text: '10. À quel point la rééducation peut-elle vous aider à reprendre vos activités ? (échelle inversée)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i} ${i === 0 ? '— Beaucoup' : i === 10 ? '— Pas du tout' : ''}`, value: i }))
+      }
+    ]
+  },
+
+  // ============================================================
+  // PRWE — Patient-Rated Wrist Evaluation
+  // ============================================================
+  'prwe': {
+    id: 'prwe',
+    title: 'PRWE (Patient-Rated Wrist Evaluation)',
+    description: 'Évaluation du retentissement douloureux et fonctionnel d\'une pathologie du poignet.',
+    estimatedTime: '5 min',
+    maxScore: 100,
+    mcid: 11.5,
+    higherIsBetter: false,
+    tags: ['Membre Supérieur', 'Poignet'],
+    validated: true,
+    bodyPart: 'Membre Sup.',
+    category: 'Orthopédique',
+    administrationType: 'auto',
+    clinicalValue: 'Référence pour le poignet — plus spécifique que le QuickDASH qui couvre tout le membre supérieur. Particulièrement réactif après fracture du radius distal, tendinopathie de De Quervain, post-chirurgie du tunnel carpien. Distingue clairement la part douleur (50 %) et la part fonction (50 %).',
+    decisionAlgorithm: 'Score 0–20 : retentissement léger, rééducation orientée gains de mobilité fine. Score 20–50 : retentissement modéré, équilibre travail manuel + renforcement progressif. Score > 50 : retentissement sévère — prioriser le contrôle douloureux et la fonction de base avant le renforcement. Un changement ≥ 11,5 points = cliniquement significatif.',
+    therapeuticInterventions: {
+      exercises: [
+        'Mobilisation active assistée des amplitudes du poignet (flexion, extension, prono-supination)',
+        'Renforcement progressif des extenseurs / fléchisseurs (Theraband, putty)',
+        'Reprogrammation neuro-motrice fine (manipulation de petits objets)'
+      ],
+      education: [
+        'Économie articulaire au quotidien (ergonomie clavier, port de charges)',
+        'Auto-mobilisations à domicile 3×/jour pendant les premières semaines'
+      ]
+    },
+    references: [
+      {
+        title: 'Development of an upper extremity outcome measure: the DASH (and PRWE comparative validity)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/8773720/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      // --- Sous-échelle douleur (5 items, 0-10) ---
+      ...[
+        'au repos',
+        'lors d\'un mouvement répétitif',
+        'lorsque vous soulevez un objet lourd',
+        'lorsqu\'il est dans son pire moment',
+        'à quelle fréquence avez-vous mal ?'
+      ].map((text, i) => ({
+        id: `prwe-p${i + 1}`,
+        text: `Douleur — ${i + 1}. Évaluez votre douleur ${text}`,
+        options: Array.from({ length: 11 }, (_, n) => ({
+          id: String(n),
+          label: `${n} ${n === 0 ? '— Aucune douleur' : n === 10 ? '— Pire douleur imaginable' : ''}`,
+          value: n
+        }))
+      })),
+      // --- Sous-échelle fonction (10 items, 0-10) ---
+      ...[
+        'tourner une poignée de porte',
+        'couper de la viande avec un couteau',
+        'boutonner une chemise',
+        'soulever d\'une main une chope ou un verre plein',
+        'utiliser du papier toilette',
+        'faire les tâches ménagères habituelles',
+        'pratiquer vos loisirs habituels',
+        'effectuer votre travail habituel',
+        'porter un objet de 2 à 5 kg',
+        'effectuer des tâches personnelles (habillage, hygiène)'
+      ].map((text, i) => ({
+        id: `prwe-f${i + 1}`,
+        text: `Fonction — ${i + 1}. Difficulté à : ${text}`,
+        options: Array.from({ length: 11 }, (_, n) => ({
+          id: String(n),
+          label: `${n} ${n === 0 ? '— Aucune difficulté' : n === 10 ? '— Impossible à faire' : ''}`,
+          value: n
+        }))
+      }))
+    ]
   }
 };
 

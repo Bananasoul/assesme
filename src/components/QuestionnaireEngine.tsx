@@ -61,8 +61,17 @@ export default function QuestionnaireEngine({ questionnaire, submissionToken, is
             const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
             const n = Object.keys(newAnswers).length;
             totalScore = 100 - Math.round((sum / (n * 4)) * 100);
+          } else if (questionnaire.id === 'prwe') {
+            // PRWE: Score = sum_pain + sum_function / 2 → 0–100
+            // Items préfixés "prwe-p" (douleur, 5 items) et "prwe-f" (fonction, 10 items)
+            let painSum = 0, functionSum = 0;
+            for (const [qId, val] of Object.entries(newAnswers)) {
+              if (qId.startsWith('prwe-p')) painSum += val;
+              else if (qId.startsWith('prwe-f')) functionSum += val;
+            }
+            totalScore = Math.round(painSum + functionSum / 2);
           } else {
-            // Somme classique (ex: RMDQ)
+            // Somme classique (ex: RMDQ, NPRS, PCS, DN4, OREBRO)
             totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);
           }
 
