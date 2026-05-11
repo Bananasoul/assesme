@@ -77,33 +77,57 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         type: 'scientific_article'
       }
     ],
+    // TSK-17 : 17 items, échelle de Likert 1–4.
+    // Items inversés : 4, 8, 12, 16 (affirmations positives à recoder 5 − valeur).
+    // Score total : 17 (kinésiophobie nulle) à 68 (kinésiophobie sévère).
+    // Cut-off : > 37 = kinésiophobie élevée (drapeau jaune).
     questions: [
-      { id: 'q1', text: "J'ai peur de me blesser si je fais de l'exercice.", options: [
-        { id: '1', label: 'Pas du tout d\'accord', value: 1 },
-        { id: '2', label: 'Plutôt pas d\'accord', value: 2 },
-        { id: '3', label: 'Plutôt d\'accord', value: 3 },
-        { id: '4', label: 'Tout à fait d\'accord', value: 4 },
-      ]},
-      { id: 'q2', text: "Si je surmonte ma douleur, la blessure s'aggravera.", options: [
-        { id: '1', label: 'Pas du tout d\'accord', value: 1 },
-        { id: '2', label: 'Plutôt pas d\'accord', value: 2 },
-        { id: '3', label: 'Plutôt d\'accord', value: 3 },
-        { id: '4', label: 'Tout à fait d\'accord', value: 4 },
-      ]},
-      { id: 'q3', text: "Mon corps me dit que j'ai quelque chose de grave.", options: [
-        { id: '1', label: 'Pas du tout d\'accord', value: 1 },
-        { id: '2', label: 'Plutôt pas d\'accord', value: 2 },
-        { id: '3', label: 'Plutôt d\'accord', value: 3 },
-        { id: '4', label: 'Tout à fait d\'accord', value: 4 },
-      ]},
-      // Q4 is reverse scored in the standard TAMPA
-      { id: 'q4', text: "Ma douleur diminuerait si je faisais de l'exercice.", reverseScore: true, options: [
-        { id: '1', label: 'Pas du tout d\'accord', value: 1 },
-        { id: '2', label: 'Plutôt pas d\'accord', value: 2 },
-        { id: '3', label: 'Plutôt d\'accord', value: 3 },
-        { id: '4', label: 'Tout à fait d\'accord', value: 4 },
-      ]}
-      // Note: Truncated for prototype, standard has 17 questions
+      ...[
+        // 1
+        { text: "J'ai peur de me blesser si je fais de l'exercice.", reverseScore: false },
+        // 2
+        { text: 'Si je surmontais ma douleur, ma douleur s\'aggraverait.', reverseScore: false },
+        // 3
+        { text: "Mon corps me dit que quelque chose ne va vraiment pas.", reverseScore: false },
+        // 4 (R)
+        { text: "Ma douleur diminuerait probablement si je faisais de l'exercice.", reverseScore: true },
+        // 5
+        { text: "Les gens ne prennent pas mon état de santé suffisamment au sérieux.", reverseScore: false },
+        // 6
+        { text: "Mon accident a mis mon corps en danger pour le reste de mes jours.", reverseScore: false },
+        // 7
+        { text: "La douleur indique toujours que je me suis blessé.", reverseScore: false },
+        // 8 (R)
+        { text: "Ce n'est pas parce qu'une activité aggrave ma douleur qu'elle est dangereuse.", reverseScore: true },
+        // 9
+        { text: "J'ai peur de me blesser accidentellement.", reverseScore: false },
+        // 10
+        { text: "Le plus sûr pour empêcher ma douleur de s'aggraver est tout simplement de faire attention à ne pas faire des mouvements inutiles.", reverseScore: false },
+        // 11
+        { text: "Si je n'avais pas autant de douleur, j'irais bien mieux physiquement.", reverseScore: false },
+        // 12 (R)
+        { text: "Je pourrais faire des activités provoquant de la douleur, si elles ne portaient pas atteinte à mon corps.", reverseScore: true },
+        // 13
+        { text: "La douleur me dit quand arrêter mes exercices pour ne pas me blesser.", reverseScore: false },
+        // 14
+        { text: "Il n'est pas vraiment sûr pour une personne avec un état comme le mien de faire des activités physiques.", reverseScore: false },
+        // 15
+        { text: "Je ne peux pas faire ce que les autres font parce que je risque trop d'être blessé.", reverseScore: false },
+        // 16 (R)
+        { text: "Même si une chose me fait beaucoup de douleur, je suis sûr que ce n'est pas vraiment dangereux.", reverseScore: true },
+        // 17
+        { text: "Personne ne devrait avoir à faire des exercices quand il a mal.", reverseScore: false },
+      ].map((q, i) => ({
+        id: `tsk${i + 1}`,
+        text: `${i + 1}. ${q.text}`,
+        reverseScore: q.reverseScore,
+        options: [
+          { id: '1', label: '1 — Pas du tout d\'accord', value: 1 },
+          { id: '2', label: '2 — Plutôt pas d\'accord', value: 2 },
+          { id: '3', label: '3 — Plutôt d\'accord', value: 3 },
+          { id: '4', label: '4 — Tout à fait d\'accord', value: 4 },
+        ]
+      }))
     ]
   },
   
