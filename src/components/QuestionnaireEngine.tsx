@@ -70,6 +70,10 @@ export default function QuestionnaireEngine({ questionnaire, submissionToken, is
               else if (qId.startsWith('prwe-f')) functionSum += val;
             }
             totalScore = Math.round(painSum + functionSum / 2);
+          } else if (questionnaire.id === 'ikdc') {
+            // IKDC: (sum_raw / 52) * 100 → 0-100, où sum_raw vient des items pondérés
+            const sum = Object.values(newAnswers).reduce((a, b) => a + b, 0);
+            totalScore = Math.round((sum / 52) * 100);
           } else {
             // Somme classique (ex: RMDQ, NPRS, PCS, DN4, OREBRO)
             totalScore = Object.values(newAnswers).reduce((a, b) => a + b, 0);

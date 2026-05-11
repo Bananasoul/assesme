@@ -491,6 +491,96 @@ export const QUESTIONNAIRE_META: Record<string, QuestionnaireMeta> = {
       "L'évolution suit-elle le pronostic attendu (T0 → T1 → T2) ?",
     ],
   },
+
+  '6mwt': {
+    bodyParts: ['general', 'neuro'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'JA', 'AR'],
+    psychometrics: {
+      internalConsistency: 'Non applicable (test chronométré)',
+      testRetest: 'ICC 0,93 – 0,99',
+      mcid: '50 m (BPCO), 30 m (insuffisance cardiaque), 14–30,5 m (gériatrie)',
+      validity: 'Corrélation forte avec VO2max sous-maximal (r = 0,73)',
+      sensitivity: 'Très réactif aux programmes de réhabilitation cardio-pulmonaire',
+      populations: 'BPCO, insuffisance cardiaque, post-AVC, Parkinson, gériatrie',
+    },
+    clinicalQuestions: [
+      "Quelle est la capacité d'endurance actuelle ?",
+      "Le patient se déconditionne-t-il ou progresse-t-il (suivi T0 → T1) ?",
+      "Faut-il prescrire un réentraînement à l'effort supervisé ?",
+    ],
+  },
+
+  ikdc: {
+    bodyParts: ['knee'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'TR', 'ZH', 'JA'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,91 – 0,93',
+      testRetest: 'ICC 0,93 – 0,95',
+      mcid: '11,5 points (post-LCA, post-arthroplastie)',
+      validity: 'Référence du genou sportif. Bonne corrélation avec KOOS et Lysholm.',
+      sensitivity: 'Effect size > 1,5 après reconstruction LCA',
+      populations: 'LCA, ménisque, instabilité fémoro-patellaire, post-arthroscopie',
+    },
+    clinicalQuestions: [
+      "Le patient peut-il reprendre les pivots et changements de direction ?",
+      "La douleur ou l'instabilité prédomine-t-elle ?",
+      "Les critères objectifs de retour au sport sont-ils atteints ?",
+    ],
+  },
+
+  constant: {
+    bodyParts: ['shoulder'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'TR', 'AR'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,68 – 0,93',
+      testRetest: 'ICC 0,80 – 0,96',
+      mcid: '10,4 points (post-arthroplastie, coiffe)',
+      validity: 'Référence post-opératoire épaule. Bonne corrélation avec SPADI et DASH.',
+      sensitivity: 'Effect size > 1 après chirurgie de la coiffe',
+      populations: 'Pathologies de la coiffe, capsulite, post-arthroplastie',
+    },
+    clinicalQuestions: [
+      "La douleur ou la fonction prédomine-t-elle ?",
+      "À quelle hauteur le patient peut-il utiliser son bras sans douleur ?",
+      "L'évolution post-op suit-elle la courbe attendue ?",
+    ],
+  },
+
+  faos: {
+    bodyParts: ['ankle-foot'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'TR'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,85 – 0,90',
+      testRetest: 'ICC 0,89 – 0,94',
+      mcid: '9 points (instabilité chronique cheville, post-arthroscopie)',
+      validity: 'Version courte validée du FAOS. Plus spécifique que LEFS pour la cheville/pied.',
+      sensitivity: 'Bonne réactivité aux interventions de stabilisation',
+      populations: 'Entorse cheville, instabilité chronique, fasciite plantaire, post-op cheville',
+    },
+    clinicalQuestions: [
+      "La marche sur terrain inégal est-elle limitée ?",
+      "Le patient peut-il reprendre la course / les sauts ?",
+      "Quels facteurs prédominent : douleur, instabilité, raideur ?",
+    ],
+  },
+
+  tinetti: {
+    bodyParts: ['neuro', 'general'],
+    languages: ['FR', 'EN', 'NL', 'DE', 'ES', 'IT', 'PT', 'SV', 'NO', 'DA', 'TR', 'AR', 'JA'],
+    psychometrics: {
+      internalConsistency: 'α de Cronbach 0,85 – 0,90',
+      testRetest: 'ICC 0,93 – 0,97 (inter-évaluateurs)',
+      mcid: '4–5 points (gériatrie). Cut-off : < 19 = risque élevé, 19–24 = modéré, ≥ 25 = faible.',
+      validity: 'Sensibilité 0,68 / spécificité 0,86 pour prédire les chutes',
+      sensitivity: 'Effet plafond chez les patients très autonomes',
+      populations: 'Personnes âgées, Parkinson, post-AVC, sclérose en plaques',
+    },
+    clinicalQuestions: [
+      "Quel est le risque de chute ?",
+      "Le déficit est-il plutôt sur l'équilibre statique ou sur la marche ?",
+      "Une aide à la marche est-elle indiquée ?",
+    ],
+  },
 };
 
 export function getMeta(id: string): QuestionnaireMeta | undefined {

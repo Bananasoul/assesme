@@ -3489,6 +3489,553 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         }))
       }))
     ]
+  },
+
+  // ============================================================
+  // 6MWT — 6-Minute Walk Test
+  // ============================================================
+  '6mwt': {
+    id: '6mwt',
+    title: '6MWT (Test de marche de 6 minutes)',
+    description: 'Évaluation chronométrée de la capacité d\'endurance fonctionnelle.',
+    estimatedTime: '10 min',
+    maxScore: 700,
+    higherIsBetter: true,
+    tags: ['Général', 'Endurance', 'Neurologique', 'Cardio-respiratoire'],
+    validated: true,
+    bodyPart: 'Général',
+    category: 'Général',
+    administrationType: 'therapist',
+    clinicalValue: 'Test sous-maximal le plus utilisé pour évaluer la capacité fonctionnelle d\'endurance. Indispensable en pathologie cardio-respiratoire, neurologique (post-AVC, Parkinson, SEP) et gériatrique. Indicateur global de la "réserve" du patient pour les activités de la vie quotidienne.',
+    decisionAlgorithm: 'Distance < 300 m : déconditionnement sévère, prioriser la réhabilitation à l\'effort sub-maximal supervisé. 300–450 m : capacité limitée, objectifs d\'endurance à intégrer en complément. > 450 m : capacité conservée. Comparer à la valeur prédite par âge et taille (équations d\'Enright). Un gain ≥ 50 m est cliniquement significatif.',
+    therapeuticInterventions: {
+      exercises: [
+        'Réentraînement à l\'effort sur tapis ou cycloergomètre (50–70 % FCmax)',
+        'Marche fractionnée progressive (intervalles 2 min / 1 min repos)'
+      ],
+      education: [
+        'Auto-mesure de la FC et de la dyspnée (Borg) à l\'effort',
+        'Encouragement au "step counting" quotidien (objectif ≥ 5000 pas)'
+      ]
+    },
+    references: [
+      {
+        title: 'ATS Statement: Guidelines for the Six-Minute Walk Test',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/12091180/',
+        type: 'methodology' as const
+      }
+    ],
+    questions: [
+      {
+        id: '6mwt-dist',
+        text: 'Distance totale parcourue en 6 minutes (mètres)',
+        options: [
+          { id: '100', label: '< 150 m', value: 100 },
+          { id: '200', label: '150–250 m', value: 200 },
+          { id: '300', label: '250–350 m', value: 300 },
+          { id: '400', label: '350–450 m', value: 400 },
+          { id: '500', label: '450–550 m', value: 500 },
+          { id: '600', label: '550–650 m', value: 600 },
+          { id: '700', label: '> 650 m', value: 700 }
+        ]
+      },
+      {
+        id: '6mwt-borg-pre',
+        text: 'Borg dyspnée AVANT le test (0–10)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i}`, value: 0 }))
+      },
+      {
+        id: '6mwt-borg-post',
+        text: 'Borg dyspnée APRÈS le test (0–10)',
+        options: Array.from({ length: 11 }, (_, i) => ({ id: String(i), label: `${i}`, value: 0 }))
+      },
+      {
+        id: '6mwt-stops',
+        text: 'Nombre d\'arrêts pendant le test',
+        options: [
+          { id: '0', label: 'Aucun arrêt', value: 0 },
+          { id: '1', label: '1 arrêt', value: 0 },
+          { id: '2', label: '2 arrêts', value: 0 },
+          { id: '3', label: '≥ 3 arrêts', value: 0 }
+        ]
+      }
+    ]
+  },
+
+  // ============================================================
+  // IKDC subjective — International Knee Documentation Committee
+  // ============================================================
+  'ikdc': {
+    id: 'ikdc',
+    title: 'IKDC subjective (Genou)',
+    description: 'Évaluation subjective du genou — référence pour le genou sportif (LCA, ménisque).',
+    estimatedTime: '8 min',
+    maxScore: 100,
+    mcid: 11.5,
+    higherIsBetter: true,
+    tags: ['Genou', 'Membre Inférieur', 'Sport'],
+    validated: true,
+    bodyPart: 'Genou',
+    category: 'Orthopédique',
+    administrationType: 'auto',
+    clinicalValue: 'Référence pour le genou sportif (jeune adulte) — plus pertinent que KOOS qui est plutôt orienté arthrose. Particulièrement utilisé pour le suivi post-reconstruction LCA, lésion méniscale, instabilité fémoro-patellaire. Distingue clairement les symptômes (douleur, gonflement, blocage) et la fonction sportive (course, saut, pivot).',
+    decisionAlgorithm: 'Score < 50 : retentissement sévère, retour au sport très probablement compromis sans rééducation prolongée. 50–75 : récupération partielle, focaliser sur la stabilité dynamique et les sauts contrôlés. > 75 : bonne récupération, intégrer la pliométrie et le travail spécifique au sport pratiqué. Un gain ≥ 11,5 points = changement cliniquement significatif.',
+    therapeuticInterventions: {
+      exercises: [
+        'Renforcement excentrique quadriceps + ischio-jambiers (chaîne fermée puis ouverte)',
+        'Travail proprioceptif progressif (sol stable → instable → unipodal dynamique)',
+        'Pliométrie et "agility drills" en phase tardive (sauts, changements de direction)'
+      ],
+      education: [
+        'Critères objectifs de retour au sport (LSI > 90 %, hop tests symétriques)',
+        'Gestion de la peur de la récidive après LCA (intégrer au plan)'
+      ]
+    },
+    references: [
+      {
+        title: 'Development and validation of the International Knee Documentation Committee Subjective Knee Form',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11522305/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      {
+        id: 'ikdc1',
+        text: 'Quel est le plus haut niveau d\'activité que vous pouvez pratiquer sans douleur significative au genou ?',
+        options: [
+          { id: '0', label: 'Activités très exigeantes (basket, foot, ski)', value: 4 },
+          { id: '1', label: 'Activités exigeantes (tennis, course modérée)', value: 3 },
+          { id: '2', label: 'Activités modérées (marche soutenue, vélo)', value: 2 },
+          { id: '3', label: 'Activités légères (marche, travaux ménagers)', value: 1 },
+          { id: '4', label: 'Incapable d\'activité, douleur en tout temps', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc2',
+        text: 'À quelle fréquence avez-vous eu mal au genou ces 4 dernières semaines ?',
+        options: [
+          { id: '0', label: 'Jamais', value: 10 },
+          { id: '1', label: '1 fois / mois', value: 8 },
+          { id: '2', label: 'Plusieurs fois / mois', value: 6 },
+          { id: '3', label: 'Plusieurs fois / semaine', value: 4 },
+          { id: '4', label: 'Quotidiennement', value: 2 },
+          { id: '5', label: 'En permanence', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc3',
+        text: 'Si vous avez mal, à quel point la douleur est-elle intense ? (0=aucune, 10=pire imaginable — score inversé)',
+        options: Array.from({ length: 11 }, (_, i) => ({
+          id: String(i),
+          label: `${i}${i === 0 ? ' — Aucune' : i === 10 ? ' — Pire imaginable' : ''}`,
+          value: 10 - i
+        }))
+      },
+      {
+        id: 'ikdc4',
+        text: 'À quelle fréquence votre genou est-il raide ou gonflé ?',
+        options: [
+          { id: '0', label: 'Jamais', value: 4 },
+          { id: '1', label: 'Rarement', value: 3 },
+          { id: '2', label: 'Parfois', value: 2 },
+          { id: '3', label: 'Souvent', value: 1 },
+          { id: '4', label: 'En permanence', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc5',
+        text: 'Avez-vous une sensation d\'instabilité ou de dérobement du genou ?',
+        options: [
+          { id: '0', label: 'Jamais', value: 4 },
+          { id: '1', label: 'Rarement (sport intense uniquement)', value: 3 },
+          { id: '2', label: 'Parfois (sport modéré)', value: 2 },
+          { id: '3', label: 'Souvent (vie quotidienne)', value: 1 },
+          { id: '4', label: 'Constamment', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc6',
+        text: 'Difficulté à monter / descendre les escaliers',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc7',
+        text: 'Difficulté à s\'accroupir / s\'agenouiller',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc8',
+        text: 'Difficulté à courir en ligne droite',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc9',
+        text: 'Difficulté à sauter / atterrir sur le membre atteint',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      },
+      {
+        id: 'ikdc10',
+        text: 'Difficulté à pivoter / faire des changements de direction',
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 4 },
+          { id: '1', label: 'Légère difficulté', value: 3 },
+          { id: '2', label: 'Difficulté modérée', value: 2 },
+          { id: '3', label: 'Grande difficulté', value: 1 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      }
+    ]
+  },
+
+  // ============================================================
+  // Constant-Murley (version patient-rated)
+  // ============================================================
+  'constant': {
+    id: 'constant',
+    title: 'Constant-Murley Score (épaule, version auto)',
+    description: 'Évaluation fonctionnelle de l\'épaule — version auto-administrée (sans goniométrie). Score 0–35 (35 points patient-reported sur 100 totaux).',
+    estimatedTime: '5 min',
+    maxScore: 35,
+    higherIsBetter: true,
+    tags: ['Épaule', 'Membre Supérieur'],
+    validated: true,
+    bodyPart: 'Épaule',
+    category: 'Orthopédique',
+    administrationType: 'both',
+    clinicalValue: 'Référence post-opératoire pour l\'épaule. La version originale combine auto-évaluation (douleur + ADL : 35 points) ET examen clinique avec goniométrie (mobilités + force : 65 points). Cette version reproduit les 35 points patient-reported, à compléter par le score d\'examen clinique au cabinet pour le score total.',
+    decisionAlgorithm: 'Score patient < 15/35 : retentissement sévère sur la vie quotidienne. Score 15–25 : retentissement modéré. Score > 25 : retentissement faible. Le score total (avec examen) est interprété ainsi : < 55 = mauvais, 55–80 = moyen, 81–90 = bon, > 90 = excellent.',
+    therapeuticInterventions: {
+      exercises: [
+        'Mobilisations actives assistées en chaîne fermée (jusqu\'à 90° d\'élévation)',
+        'Renforcement progressif coiffe (rotateurs externes/internes, série excentrique)',
+        'Stabilisation scapulaire (sleeper stretch, wall slides, Y-T-W)'
+      ],
+      education: [
+        'Importance des auto-mobilisations quotidiennes pendant la phase immobile',
+        'Gestion du sommeil sur le côté atteint (oreiller de soutien)'
+      ]
+    },
+    references: [
+      {
+        title: 'A clinical method of functional assessment of the shoulder (Constant & Murley, 1987)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/3791738/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      {
+        id: 'constant-pain',
+        text: 'DOULEUR — À quel point votre épaule est-elle douloureuse ?',
+        options: [
+          { id: '0', label: 'Aucune', value: 15 },
+          { id: '1', label: 'Légère', value: 10 },
+          { id: '2', label: 'Modérée', value: 5 },
+          { id: '3', label: 'Sévère', value: 0 }
+        ]
+      },
+      {
+        id: 'constant-work',
+        text: 'TRAVAIL — Pouvez-vous accomplir votre travail habituel ?',
+        options: [
+          { id: '0', label: 'Sans aucune restriction', value: 4 },
+          { id: '1', label: 'Avec quelques restrictions', value: 3 },
+          { id: '2', label: 'Avec des restrictions importantes', value: 2 },
+          { id: '3', label: 'Difficilement', value: 1 },
+          { id: '4', label: 'Impossible', value: 0 }
+        ]
+      },
+      {
+        id: 'constant-recreation',
+        text: 'LOISIRS — Pouvez-vous pratiquer vos loisirs habituels ?',
+        options: [
+          { id: '0', label: 'Sans aucune restriction', value: 4 },
+          { id: '1', label: 'Avec quelques restrictions', value: 3 },
+          { id: '2', label: 'Avec des restrictions importantes', value: 2 },
+          { id: '3', label: 'Difficilement', value: 1 },
+          { id: '4', label: 'Impossible', value: 0 }
+        ]
+      },
+      {
+        id: 'constant-sleep',
+        text: 'SOMMEIL — Votre épaule perturbe-t-elle votre sommeil ?',
+        options: [
+          { id: '0', label: 'Pas du tout', value: 2 },
+          { id: '1', label: 'Occasionnellement', value: 1 },
+          { id: '2', label: 'Quotidiennement', value: 0 }
+        ]
+      },
+      {
+        id: 'constant-position',
+        text: 'POSITION — À quelle hauteur pouvez-vous utiliser votre main sans douleur ?',
+        options: [
+          { id: '0', label: 'Au-dessus de la tête', value: 10 },
+          { id: '1', label: 'Au niveau de la tête', value: 8 },
+          { id: '2', label: 'Au niveau du cou', value: 6 },
+          { id: '3', label: 'Au niveau de la poitrine', value: 4 },
+          { id: '4', label: 'Au niveau de la taille', value: 2 },
+          { id: '5', label: 'En dessous de la taille', value: 0 }
+        ]
+      }
+    ]
+  },
+
+  // ============================================================
+  // FAOS-PS — Foot and Ankle Outcome Score (Physical-function Short form)
+  // ============================================================
+  'faos': {
+    id: 'faos',
+    title: 'FAOS-PS (Cheville / Pied)',
+    description: 'Version courte du Foot and Ankle Outcome Score — fonction physique de la cheville et du pied.',
+    estimatedTime: '3 min',
+    maxScore: 100,
+    higherIsBetter: true,
+    tags: ['Cheville', 'Pied', 'Membre Inférieur'],
+    validated: true,
+    bodyPart: 'Cheville',
+    category: 'Orthopédique',
+    administrationType: 'auto',
+    clinicalValue: 'Version courte validée du FAOS, plus spécifique que le LEFS. Très réactif sur les instabilités chroniques de cheville, les tendinopathies du tibialis postérieur, les fasciites plantaires et le post-opératoire. Cible la fonction physique principalement.',
+    decisionAlgorithm: 'Score 0–30 : retentissement sévère, focaliser sur la stabilité de cheville et la reprise d\'appui progressive. 30–70 : retentissement modéré, intégrer le renforcement excentrique et la proprioception unipodale. > 70 : récupération avancée, intégrer la pliométrie et la reprise sportive.',
+    therapeuticInterventions: {
+      exercises: [
+        'Travail proprioceptif unipodal (yeux ouverts → fermés → sol instable)',
+        'Renforcement excentrique tibialis postérieur (heel raises avec relâchement contrôlé)',
+        'Étirements posterior tibial / triceps sural'
+      ],
+      education: [
+        'Choix du chaussage adapté (semelle souple en phase aiguë, soutien arche pour pied plat)',
+        'Auto-massage de la fascia plantaire (rouleau, balle de tennis)'
+      ]
+    },
+    references: [
+      {
+        title: 'A short version of the Foot and Ankle Outcome Score (FAOS-PS)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/19854671/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      ...[
+        'Marcher sur un terrain plat',
+        'Marcher sur un terrain inégal',
+        'Monter ou descendre des escaliers',
+        'Se mettre debout depuis la position assise',
+        'S\'accroupir ou se mettre sur la pointe des pieds',
+        'Courir ou pratiquer un sport'
+      ].map((text, i) => ({
+        id: `faos${i + 1}`,
+        text: `Difficulté à : ${text}`,
+        options: [
+          { id: '0', label: 'Aucune difficulté', value: 100 / 6 },
+          { id: '1', label: 'Légère difficulté', value: 75 / 6 },
+          { id: '2', label: 'Difficulté modérée', value: 50 / 6 },
+          { id: '3', label: 'Grande difficulté', value: 25 / 6 },
+          { id: '4', label: 'Incapable', value: 0 }
+        ]
+      }))
+    ]
+  },
+
+  // ============================================================
+  // Tinetti — Performance-Oriented Mobility Assessment (POMA)
+  // ============================================================
+  'tinetti': {
+    id: 'tinetti',
+    title: 'Tinetti (POMA) — Équilibre & Marche',
+    description: 'Évaluation hétéro-administrée du risque de chute (équilibre + marche).',
+    estimatedTime: '10 min',
+    maxScore: 28,
+    higherIsBetter: true,
+    tags: ['Neurologique', 'Gériatrique', 'Équilibre', 'Chute'],
+    validated: true,
+    bodyPart: 'Général',
+    category: 'Neurologique',
+    administrationType: 'therapist',
+    clinicalValue: 'Référence en gériatrie pour quantifier le risque de chute. Plus rapide que la Berg Balance Scale et plus discriminant pour la marche. Compose un score équilibre (16/28) et un score marche (12/28). Particulièrement utile chez les personnes âgées et les patients neurologiques.',
+    decisionAlgorithm: 'Score ≥ 25 : risque de chute faible. 19–24 : risque modéré, prescrire une aide à la marche et adapter le domicile. ≤ 18 : risque ÉLEVÉ de chute, l\'aide technique est indispensable et la rééducation à l\'équilibre devient prioritaire.',
+    therapeuticInterventions: {
+      exercises: [
+        'Tâches doubles (marche + cognitif) pour la prévention des chutes',
+        'Réduction progressive de la base de sustentation (tandem, unipodal)',
+        'Travail de relevé du sol et apprentissage des transitions'
+      ],
+      education: [
+        'Audit du domicile (tapis, éclairage, salle de bain) systématique',
+        'Apprentissage de la stratégie "appel à l\'aide" en cas de chute'
+      ]
+    },
+    references: [
+      {
+        title: 'Performance-Oriented Assessment of Mobility Problems in Elderly Patients (Tinetti, 1986)',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/3944402/',
+        type: 'scientific_article' as const
+      }
+    ],
+    questions: [
+      // === Équilibre (16 points) ===
+      {
+        id: 'tin-b1',
+        text: 'Équilibre — Position assise (le patient se tient-il droit sur la chaise sans accoudoir ?)',
+        options: [
+          { id: '0', label: 'Penche ou glisse sur la chaise', value: 0 },
+          { id: '1', label: 'Stable, sécurisé', value: 1 }
+        ]
+      },
+      {
+        id: 'tin-b2',
+        text: 'Équilibre — Se lever d\'une chaise',
+        options: [
+          { id: '0', label: 'Incapable sans aide', value: 0 },
+          { id: '1', label: 'Capable avec utilisation des bras', value: 1 },
+          { id: '2', label: 'Capable sans utiliser les bras', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-b3',
+        text: 'Équilibre — Tentative pour se lever',
+        options: [
+          { id: '0', label: 'Incapable sans aide', value: 0 },
+          { id: '1', label: 'Capable, nécessite > 1 essai', value: 1 },
+          { id: '2', label: 'Capable au 1er essai', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-b4',
+        text: 'Équilibre — Debout immédiat (5 premières secondes)',
+        options: [
+          { id: '0', label: 'Instable (oscillation, bouge les pieds)', value: 0 },
+          { id: '1', label: 'Stable avec aide (cane, déambulateur)', value: 1 },
+          { id: '2', label: 'Stable sans aide', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-b5',
+        text: 'Équilibre — Debout (pieds joints)',
+        options: [
+          { id: '0', label: 'Instable', value: 0 },
+          { id: '1', label: 'Stable avec aide', value: 1 },
+          { id: '2', label: 'Stable, pieds joints, sans aide', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-b6',
+        text: 'Équilibre — Poussée sternale (légère poussée vers l\'arrière, pieds joints)',
+        options: [
+          { id: '0', label: 'Tombe ou rattrape avec aide', value: 0 },
+          { id: '1', label: 'Vacille mais se rattrape', value: 1 },
+          { id: '2', label: 'Stable', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-b7',
+        text: 'Équilibre — Yeux fermés (pieds joints)',
+        options: [
+          { id: '0', label: 'Instable', value: 0 },
+          { id: '1', label: 'Stable', value: 1 }
+        ]
+      },
+      {
+        id: 'tin-b8',
+        text: 'Équilibre — Rotation 360°',
+        options: [
+          { id: '0', label: 'Pas discontinus, instable', value: 0 },
+          { id: '1', label: 'Pas continus mais instable', value: 1 },
+          { id: '2', label: 'Pas continus et stable', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-b9',
+        text: 'Équilibre — Se rasseoir',
+        options: [
+          { id: '0', label: 'Mal contrôlé (tombe sur la chaise)', value: 0 },
+          { id: '1', label: 'Utilise les bras', value: 1 },
+          { id: '2', label: 'Mouvement sûr et fluide', value: 2 }
+        ]
+      },
+      // === Marche (12 points) ===
+      {
+        id: 'tin-g1',
+        text: 'Marche — Initiation de la marche',
+        options: [
+          { id: '0', label: 'Hésitation ou plusieurs essais', value: 0 },
+          { id: '1', label: 'Aucune hésitation', value: 1 }
+        ]
+      },
+      {
+        id: 'tin-g2',
+        text: 'Marche — Hauteur et longueur du pas',
+        options: [
+          { id: '0', label: 'Pied droit ne dépasse pas le gauche / décollement insuffisant', value: 0 },
+          { id: '1', label: 'Pied droit dépasse le gauche / décollement complet', value: 1 }
+        ]
+      },
+      {
+        id: 'tin-g3',
+        text: 'Marche — Symétrie du pas',
+        options: [
+          { id: '0', label: 'Pas asymétriques (droit ≠ gauche)', value: 0 },
+          { id: '1', label: 'Symétriques', value: 1 }
+        ]
+      },
+      {
+        id: 'tin-g4',
+        text: 'Marche — Continuité du pas',
+        options: [
+          { id: '0', label: 'Pas saccadés ou pauses', value: 0 },
+          { id: '1', label: 'Continue, fluide', value: 1 }
+        ]
+      },
+      {
+        id: 'tin-g5',
+        text: 'Marche — Trajectoire (sur 3 m)',
+        options: [
+          { id: '0', label: 'Déviation marquée', value: 0 },
+          { id: '1', label: 'Déviation légère ou aide à la marche', value: 1 },
+          { id: '2', label: 'Trajectoire droite sans aide', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-g6',
+        text: 'Marche — Tronc',
+        options: [
+          { id: '0', label: 'Balancements ou flexion marquée', value: 0 },
+          { id: '1', label: 'Sans balancement mais utilise les bras', value: 1 },
+          { id: '2', label: 'Tronc stable, bras libres', value: 2 }
+        ]
+      },
+      {
+        id: 'tin-g7',
+        text: 'Marche — Base de sustentation',
+        options: [
+          { id: '0', label: 'Talons écartés en marchant', value: 0 },
+          { id: '1', label: 'Talons proches en marchant', value: 1 }
+        ]
+      }
+    ]
   }
 };
 
