@@ -316,6 +316,170 @@ export function interpretScore(type: string, score: number, maxScore: number): I
   }
 }
 
+// ============================================================
+// COMPARAISON T0 → Tn  (significance clinique via MCID)
+// ============================================================
+
+/**
+ * MCID (Minimal Clinically Important Difference) par type de test.
+ * Valeurs issues de la littérature standard (cf. BACKLOG.md F.).
+ * Une variation ≥ MCID dans le bon sens = changement cliniquement significatif.
+ */
+const MCID_BY_TEST: Record<string, number> = {
+  NPRS: 2,
+  ODI: 10,          // 10 points (10 %)
+  NDI: 7,
+  SPADI: 10,
+  RMDQ: 3,
+  KOOS: 9,
+  HOOS: 9,
+  'KOOS-FULL': 9,
+  'HOOS-FULL': 9,
+  'FAOS-FULL': 9,
+  FAOS: 9,
+  IKDC: 11.5,
+  LEFS: 9,
+  QUICKDASH: 10,
+  PRWE: 11.5,
+  TAMPA: 5.5,
+  PCS: 9,
+  HADS: 1.5,        // par sous-échelle
+  DN4: 1,           // critère catégoriel (cut-off 4)
+  FABQ: 4,
+  OREBRO: 10,
+  'VISA-A': 12,
+  'VISA-P': 13,
+  BBS: 7,
+  TINETTI: 4,
+  MRS: 1,
+  CONSTANT: 10,
+  '6MWT': 30,       // mètres
+  DHI: 14,
+};
+
+/** Tests où un score plus HAUT = meilleur. Le reste = plus haut = pire. */
+const HIGHER_IS_BETTER = new Set([
+  'KOOS', 'HOOS', 'KOOS-FULL', 'HOOS-FULL', 'FAOS', 'FAOS-FULL',
+  'LEFS', 'IKDC', 'CONSTANT',
+  'BBS', 'TINETTI',
+  'VISA-A', 'VISA-P',
+  '6MWT',
+]);
+
+export type EvolutionDirection = 'improvement' | 'deterioration' | 'stable';
+export type EvolutionSignificance = 'significant' | 'sub-mcid' | 'stable' | 'unknown';
+
+export type Evolution = {
+  delta: number;
+  baselineScore: number;
+  direction: EvolutionDirection;
+  significance: EvolutionSignificance;
+  mcid: number | null;
+  label: string;
+  short: string;
+  tone: Tone;
+};
+
+/**
+ * Compare le score actuel au score baseline (T0 ou premier bilan trouvé).
+ * Renvoie un Evolution avec direction / significance clinique.
+ */
+export function compareToBaseline(type: string, current: number, baseline: number): Evolution | null {
+  const upper = type.toUpperCase();
+  const mcid = MCID_BY_TEST[upper] ?? null;
+  const higherBetter = HIGHER_IS_BETTER.has(upper);
+
+  const delta = current - baseline;
+  const improvementMagnitude = higherBetter ? delta : -delta;
+
+  // Pas de MCID connu → on rend une évolution brute sans qualification
+  if (mcid === null) {
+    if (delta === 0) {
+      return ev(delta, baseline, 'stable', 'unknown', null, 'Score identique', '= 0', 'neutral');
+    }
+    return ev(
+      delta,
+      baseline,
+      improvementMagnitude > 0 ? 'improvement' : 'deterioration',
+      'unknown',
+      null,
+      improvementMagnitude > 0 ? `Évolution favorable (Δ ${formatDelta(delta)})` : `Évolution défavorable (Δ ${formatDelta(delta)})`,
+      `Δ ${formatDelta(delta)}`,
+      improvementMagnitude > 0 ? 'green' : 'amber',
+    );
+  }
+
+  // Seuil de stabilité : < MCID / 2 dans n'importe quel sens
+  if (Math.abs(improvementMagnitude) < mcid / 2) {
+    return ev(delta, baseline, 'stable', 'stable', mcid, `Stable (Δ ${formatDelta(delta)}, < ½ MCID)`, `Stable`, 'neutral');
+  }
+
+  if (improvementMagnitude >= mcid) {
+    return ev(
+      delta,
+      baseline,
+      'improvement',
+      'significant',
+      mcid,
+      `Amélioration cliniquement significative (Δ ${formatDelta(delta)}, MCID = ${mcid})`,
+      `↗ ${formatDelta(delta)} · MCID atteint`,
+      'green',
+    );
+  }
+  if (improvementMagnitude > 0) {
+    return ev(
+      delta,
+      baseline,
+      'improvement',
+      'sub-mcid',
+      mcid,
+      `Tendance favorable mais sous le MCID (Δ ${formatDelta(delta)}, MCID = ${mcid})`,
+      `↗ ${formatDelta(delta)} · sub-MCID`,
+      'amber',
+    );
+  }
+  if (-improvementMagnitude >= mcid) {
+    return ev(
+      delta,
+      baseline,
+      'deterioration',
+      'significant',
+      mcid,
+      `Dégradation cliniquement significative (Δ ${formatDelta(delta)}, MCID = ${mcid})`,
+      `↘ ${formatDelta(delta)} · MCID atteint`,
+      'red',
+    );
+  }
+  return ev(
+    delta,
+    baseline,
+    'deterioration',
+    'sub-mcid',
+    mcid,
+    `Légère dégradation sous le MCID (Δ ${formatDelta(delta)}, MCID = ${mcid})`,
+    `↘ ${formatDelta(delta)} · sub-MCID`,
+    'amber',
+  );
+}
+
+function ev(
+  delta: number,
+  baselineScore: number,
+  direction: EvolutionDirection,
+  significance: EvolutionSignificance,
+  mcid: number | null,
+  label: string,
+  short: string,
+  tone: Tone,
+): Evolution {
+  return { delta, baselineScore, direction, significance, mcid, label, short, tone };
+}
+
+function formatDelta(delta: number): string {
+  if (delta > 0) return `+${delta}`;
+  return `${delta}`;
+}
+
 export function toneStyles(tone: Tone): { bg: string; border: string; text: string; accent: string } {
   switch (tone) {
     case 'green':

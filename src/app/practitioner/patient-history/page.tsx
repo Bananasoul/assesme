@@ -10,7 +10,7 @@ import AddExerciseModal from '@/components/AddExerciseModal';
 import PortalLinkButton from '@/components/PortalLinkButton';
 import AddNoteModal from '@/components/AddNoteModal';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
-import { interpretScore, toneStyles } from '@/lib/interpretation';
+import { interpretScore, compareToBaseline, toneStyles } from '@/lib/interpretation';
 import CopyLinkButton from '@/components/CopyLinkButton';
 
 export const dynamic = 'force-dynamic';
@@ -224,11 +224,25 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
             Historique détaillé des évaluations
           </h2>
 
+          {/* Baseline (T0) par type de test — score le plus ancien rencontré */}
+          {(() => null)()}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {assessments.length === 0 ? (
               <p style={{ color: 'var(--text-secondary)' }}>Aucun bilan n'a encore été complété par ce patient.</p>
             ) : (
-              assessments.map(assessment => (
+              (() => {
+                // Calcul baseline par type (score le plus ANCIEN)
+                const baselineByType = new Map<string, { score: number; maxScore: number; timestamp: Date }>();
+                for (const a of assessments) {
+                  const ts = new Date(a.timestamp);
+                  for (const q of a.questionnaires) {
+                    const prev = baselineByType.get(q.type);
+                    if (!prev || ts < prev.timestamp) {
+                      baselineByType.set(q.type, { score: q.score, maxScore: q.maxScore, timestamp: ts });
+                    }
+                  }
+                }
+                return assessments.map(assessment => (
                 <div key={assessment.id} style={{ background: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '1rem', marginBottom: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: 'var(--text-primary)' }}>
@@ -244,6 +258,10 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                     {assessment.questionnaires.map(q => {
                       const interp = interpretScore(q.type, q.score, q.maxScore);
                       const tone = interp ? toneStyles(interp.tone) : null;
+                      const baseline = baselineByType.get(q.type);
+                      const isBaseline = baseline && +baseline.timestamp === +new Date(assessment.timestamp) && baseline.score === q.score;
+                      const evolution = !isBaseline && baseline ? compareToBaseline(q.type, q.score, baseline.score) : null;
+                      const evoTone = evolution ? toneStyles(evolution.tone) : null;
                       return (
                         <div key={q.id} style={{ background: 'var(--surface-hover)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
                           <h4 style={{ fontWeight: 600, color: 'var(--primary)', marginBottom: '0.5rem' }}>{q.type}</h4>
@@ -269,6 +287,52 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                               </span>
                             )}
                           </div>
+
+                          {/* ÉVOLUTION vs baseline (T0) */}
+                          {evolution && evoTone && (
+                            <div
+                              style={{
+                                marginTop: '0.85rem',
+                                padding: '0.65rem 0.85rem',
+                                background: evoTone.bg,
+                                border: `1px solid ${evoTone.border}`,
+                                borderRadius: 'var(--radius-sm)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '0.2rem',
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: evoTone.text, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                  vs Baseline ({baseline!.score}/{baseline!.maxScore})
+                                </span>
+                                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: evoTone.accent }}>
+                                  {evolution.short}
+                                </span>
+                              </div>
+                              <p style={{ fontSize: '0.78rem', color: evoTone.text, margin: 0, lineHeight: 1.4 }}>
+                                {evolution.label}
+                              </p>
+                            </div>
+                          )}
+                          {isBaseline && (
+                            <div
+                              style={{
+                                marginTop: '0.85rem',
+                                padding: '0.4rem 0.7rem',
+                                background: 'var(--surface)',
+                                border: '1px dashed var(--border)',
+                                borderRadius: 'var(--radius-sm)',
+                                fontSize: '0.7rem',
+                                color: 'var(--text-secondary)',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.04em',
+                                fontWeight: 600,
+                              }}
+                            >
+                              📍 Baseline (T0)
+                            </div>
+                          )}
 
                           {/* INTERPRÉTATION AUTOMATIQUE selon le score réel */}
                           {interp && (
@@ -366,7 +430,8 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                     })}
                   </div>
                 </div>
-              ))
+                ));
+              })()
             )}
           </div>
         </div>
