@@ -10,6 +10,7 @@ import AddExerciseModal from '@/components/AddExerciseModal';
 import PortalLinkButton from '@/components/PortalLinkButton';
 import AddNoteModal from '@/components/AddNoteModal';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
+import { interpretScore, toneStyles } from '@/lib/interpretation';
 import CopyLinkButton from '@/components/CopyLinkButton';
 
 export const dynamic = 'force-dynamic';
@@ -241,16 +242,61 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
                     {assessment.questionnaires.map(q => {
-                      const percentage = Math.round((q.score / q.maxScore) * 100);
+                      const interp = interpretScore(q.type, q.score, q.maxScore);
+                      const tone = interp ? toneStyles(interp.tone) : null;
                       return (
                         <div key={q.id} style={{ background: 'var(--surface-hover)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
                           <h4 style={{ fontWeight: 600, color: 'var(--primary)', marginBottom: '0.5rem' }}>{q.type}</h4>
                           <div style={{ display: 'flex', alignItems: 'end', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '2rem', fontWeight: 700, lineHeight: 1 }}>{q.score}</span>
+                            <span style={{ fontSize: '2rem', fontWeight: 700, lineHeight: 1, color: tone?.accent ?? 'inherit' }}>{q.score}</span>
                             <span style={{ color: 'var(--text-secondary)', paddingBottom: '4px' }}>/ {q.maxScore}</span>
+                            {interp && (
+                              <span
+                                style={{
+                                  marginLeft: 'auto',
+                                  padding: '0.2rem 0.6rem',
+                                  borderRadius: 'var(--radius-full)',
+                                  background: tone!.bg,
+                                  color: tone!.text,
+                                  border: `1px solid ${tone!.border}`,
+                                  fontSize: '0.7rem',
+                                  fontWeight: 700,
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.03em',
+                                }}
+                              >
+                                {interp.label}
+                              </span>
+                            )}
                           </div>
-                          
-                          {/* Raw Data Visualizer mock */}
+
+                          {/* INTERPRÉTATION AUTOMATIQUE selon le score réel */}
+                          {interp && (
+                            <div
+                              style={{
+                                marginTop: '0.85rem',
+                                padding: '0.85rem',
+                                background: tone!.bg,
+                                border: `1px solid ${tone!.border}`,
+                                borderRadius: 'var(--radius-sm)',
+                                borderLeft: `4px solid ${tone!.accent}`,
+                              }}
+                            >
+                              <p style={{ fontSize: '0.85rem', color: tone!.text, fontWeight: 600, margin: '0 0 0.5rem 0', lineHeight: 1.5 }}>
+                                {interp.summary}
+                              </p>
+                              <div>
+                                <strong style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: tone!.text, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.35rem' }}>
+                                  Implications thérapeutiques
+                                </strong>
+                                <ul style={{ margin: 0, paddingLeft: '1.15rem', fontSize: '0.8rem', color: tone!.text, lineHeight: 1.55 }}>
+                                  {interp.actions.map((a, i) => <li key={i}>{a}</li>)}
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Raw Data Visualizer */}
                           <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px dashed var(--border)', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <Database size={14} />
                             Données brutes enregistrées ({Object.keys(JSON.parse(q.rawResponses || '{}')).length} réponses)
