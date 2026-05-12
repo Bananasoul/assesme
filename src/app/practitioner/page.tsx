@@ -69,40 +69,39 @@ export default async function PractitionerPage() {
         <OnboardingChecklist {...onboarding} />
 
         {/* Stats Summary */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-          <div className="group p-5 bg-white rounded-2xl border border-gray-100 hover:border-indigo-200 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-md">
-              <Users size={22} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+          <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ padding: '1rem', background: 'var(--primary-light)', color: 'white', borderRadius: 'var(--radius-md)' }}>
+              <Users size={24} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Patients</p>
-              <h3 className="text-2xl font-extrabold text-gray-900">{patients.length}</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Total Patients</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{patients.length}</h3>
             </div>
           </div>
 
-          <div className="group p-5 bg-white rounded-2xl border border-gray-100 hover:border-amber-200 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-md">
-              <Activity size={22} />
+          <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ padding: '1rem', background: '#FEF08A', color: '#854D0E', borderRadius: 'var(--radius-md)' }}>
+              <Activity size={24} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">En attente</p>
-              <h3 className="text-2xl font-extrabold text-gray-900">{pendingRequests.length}</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Bilans en attente</p>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{pendingRequests.length}</h3>
             </div>
           </div>
-
-          {/* Lien rapide bibliothèque */}
-          <div className="sm:col-span-2 group relative p-5 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white rounded-2xl shadow-lg shadow-indigo-200/50 hover:shadow-xl hover:shadow-indigo-200/70 hover:-translate-y-0.5 transition-all flex items-center gap-4 overflow-hidden">
-            <div className="absolute -right-4 -bottom-4 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-            <div className="relative p-3 rounded-xl bg-white/20 backdrop-blur-sm">
-              <BookOpen size={22} />
+          
+          {/* Lien rapide bibliothèque (aide à la décision clinique) */}
+          <div style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', display: 'flex', alignItems: 'center', gap: '1rem', gridColumn: 'span 2' }}>
+            <div style={{ padding: '1rem', background: 'var(--primary-light)', color: 'white', borderRadius: 'var(--radius-md)' }}>
+              <BookOpen size={24} />
             </div>
-            <div className="relative flex-1">
-              <h3 className="text-base font-bold">Bibliothèque clinique</h3>
-              <p className="text-sm text-white/90">Body chart · 32 tests validés · psychométrie détaillée</p>
+            <div style={{ flex: 1 }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.25rem' }}>Bibliothèque clinique</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Body chart interactif, 29 questionnaires validés, propriétés psychométriques détaillées.</p>
             </div>
             <Link
               href="/practitioner/library"
-              className="relative inline-flex items-center gap-1 px-4 py-2 rounded-full bg-white text-indigo-700 font-bold text-sm hover:scale-105 transition-transform"
+              style={{ padding: '0.75rem 1.5rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius-full)', fontWeight: 500, color: 'var(--primary)', textDecoration: 'none' }}
             >
               Ouvrir
             </Link>
