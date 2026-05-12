@@ -74,11 +74,11 @@ export default function HomeManifesto() {
             </div>
           </FadeInOnScroll>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {frictions.map((f, i) => (
               <FadeInOnScroll key={i} delay={i * 0.1}>
-                <div className="h-full p-7 bg-white rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all">
-                  <div className="text-5xl font-extrabold text-gray-200 mb-3">{String(i + 1).padStart(2, '0')}</div>
+                <div className="h-full p-7 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-indigo-200 hover:-translate-y-1 transition-all duration-300">
+                  <div className="text-5xl font-extrabold bg-gradient-to-br from-indigo-200 to-purple-200 bg-clip-text text-transparent mb-3">{String(i + 1).padStart(2, '0')}</div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
                   <p className="text-gray-600 leading-relaxed text-sm">{f.text}</p>
                 </div>
@@ -104,12 +104,12 @@ export default function HomeManifesto() {
             </div>
           </FadeInOnScroll>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {pillars.map((p, i) => {
               const Icon = p.icon;
               return (
                 <FadeInOnScroll key={i} delay={i * 0.15}>
-                  <div className="group relative h-full p-8 bg-white rounded-2xl border border-gray-100 hover:border-transparent hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                  <div className="group relative h-full p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
                     {/* Gradient overlay on hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${p.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
 
@@ -143,7 +143,7 @@ export default function HomeManifesto() {
               const Icon = b.icon;
               return (
                 <FadeInOnScroll key={i} delay={i * 0.08}>
-                  <div className="h-full p-6 bg-white rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all duration-200">
+                  <div className="h-full p-6 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-indigo-300 hover:-translate-y-0.5 transition-all duration-200">
                     <div className="inline-flex p-2.5 mb-4 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-700">
                       <Icon className="w-5 h-5" />
                     </div>
