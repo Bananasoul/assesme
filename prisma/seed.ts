@@ -84,7 +84,7 @@ async function main() {
   let skipped = 0
 
   for (const p of demoPatients) {
-    const existing = await prisma.patientVault.findUnique({ where: { email: p.email } })
+    const existing = await prisma.patientVault.findFirst({ where: { email: p.email } })
     if (existing) {
       skipped++
       continue

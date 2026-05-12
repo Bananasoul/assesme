@@ -103,52 +103,47 @@ export async function getPendingRequests() {
 }
 
 export async function createPatient(formData: FormData) {
-  const firstName = formData.get('firstName') as string;
-  const lastName = formData.get('lastName') as string;
-  const email = formData.get('email') as string;
-  const dobString = formData.get('dateOfBirth') as string;
-  
-  if (!firstName || !lastName || !email || !dobString) {
-    return { error: 'Veuillez remplir tous les champs obligatoires, y compris la date de naissance.' };
+  const identifier = (formData.get('identifier') as string)?.trim();
+  const firstName = (formData.get('firstName') as string)?.trim() || null;
+  const lastName = (formData.get('lastName') as string)?.trim() || null;
+  const email = (formData.get('email') as string)?.trim() || null;
+  const dobString = (formData.get('dateOfBirth') as string)?.trim();
+  const notes = (formData.get('notes') as string)?.trim() || null;
+
+  if (!identifier) {
+    return { error: "L'identifiant du patient est obligatoire (ex: « MD78 », « Patient #42 »)." };
   }
 
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: 'Vous devez être connecté.' };
 
-    if (!user) {
-      return { error: 'Vous devez être connecté.' };
-    }
-
-    // Basic email check for THIS practitioner
-    const existingPatient = await prisma.patientVault.findFirst({
-      where: { 
-        email,
-        practitionerId: user.id
-      }
+    // Identifier doit être unique pour ce praticien
+    const existing = await prisma.patientVault.findFirst({
+      where: { practitionerId: user.id, identifier },
     });
-
-    if (existingPatient) {
-      return { error: 'Vous avez déjà un patient avec cet email.' };
+    if (existing) {
+      return { error: `Vous avez déjà un patient avec l'identifiant « ${identifier} ».` };
     }
 
     const patient = await prisma.patientVault.create({
       data: {
         practitionerId: user.id,
+        identifier,
         firstName,
         lastName,
         email,
         dateOfBirth: dobString ? new Date(dobString) : null,
-        clinicalRecord: {
-          create: {} // Create an empty clinical record
-        }
-      }
+        notes,
+        clinicalRecord: { create: {} },
+      },
     });
 
     revalidatePath('/practitioner');
     return { success: true, patientId: patient.id };
   } catch (error) {
-    console.error("Error creating patient:", error);
+    console.error('Error creating patient:', error);
     return { error: 'Une erreur est survenue lors de la création du patient.' };
   }
 }

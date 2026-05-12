@@ -60,7 +60,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <Link
-            href={`/practitioner/library?patientId=${patient.id}&recordId=${record.id}&patientName=${encodeURIComponent(patient.firstName)}`}
+            href={`/practitioner/library?patientId=${patient.id}&recordId=${record.id}&patientName=${encodeURIComponent(patient.firstName ?? patient.identifier ?? 'Patient')}`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -77,7 +77,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
           >
             <BookOpen size={16} /> Bibliothèque
           </Link>
-          <PortalLinkButton recordId={record.id} patientName={patient.firstName} />
+          <PortalLinkButton recordId={record.id} patientName={patient.firstName ?? patient.identifier ?? 'Patient'} />
           <AssignTestsModal recordId={record.id} />
           <PrintButton />
         </div>
