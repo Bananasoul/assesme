@@ -6,6 +6,11 @@
   --color-primary: #4F46E5;
   --color-primary-light: #818CF8;
   --color-primary-dark: #3730A3;
+  --color-primary-50: #EEF2FF;
+  --color-primary-100: #E0E7FF;
+  --color-primary-500: #6366F1;
+  --color-primary-600: #4F46E5;
+  --color-primary-700: #4338CA;
 
   --color-secondary: #10B981;
   --color-secondary-light: #34D399;
@@ -14,33 +19,38 @@
   --color-accent: #F43F5E;
   --color-accent-light: #FB7185;
 
-  /* Animations exposées via Tailwind (utilisables avec animate-*) */
+  /* Gradient tokens (utilisés via classes Tailwind) */
+  --color-gradient-from: #6366F1;
+  --color-gradient-via: #8B5CF6;
+  --color-gradient-to: #EC4899;
+
+  /* Animations */
   --animate-fade-in: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slide-up: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-float: float 6s ease-in-out infinite;
-}
+  --animate-pulse-soft: pulse-soft 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
 
-/* Keyframes au niveau racine (Tailwind 4 ne les accepte pas dans @theme) */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-/* Force le mode clair par défaut (évite force-dark mode du navigateur/OS) */
-html {
-  color-scheme: light;
-}
-body {
-  background: #ffffff;
-  color: #111827;
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
 
 :root {
@@ -81,8 +91,16 @@ body {
   display: none !important;
 }
 
-/* Dark mode auto désactivé: l'app vise un thème clair cohérent.
-   Dark mode geré explicitement via classe (à venir comme option utilisateur). */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111827;
+    --surface: #1F2937;
+    --surface-hover: #374151;
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --border: #374151;
+  }
+}
 
 html {
   height: 100%;
