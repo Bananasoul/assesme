@@ -1,321 +1,287 @@
 import Link from 'next/link';
-import {
-  Activity,
-  ArrowRight,
-  BookOpen,
-  Brain,
-  ClipboardCheck,
-  ShieldCheck,
-  Target,
-  TrendingUp,
-} from 'lucide-react';
+import { Activity, ArrowRight, ArrowUpRight, Menu } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
+const PROGRAMS = [
+  { title: 'Mesurer', text: 'Le bon questionnaire validé pour la bonne plainte. Réponses depuis un smartphone, scoring instantané.' },
+  { title: 'Décider', text: 'Chaque score déclenche une bifurcation thérapeutique explicite. La métrique devient guide d\'action.' },
+  { title: 'Éduquer', text: 'Valeur clinique, MCID, sources scientifiques. Votre pratique devient apprentissage continu.' },
+  { title: 'Suivre', text: 'Courbes d\'évolution T0 → T1 → T2 et interprétation cliniquement significative automatique.' },
+];
+
+const STATS_TOP = [
+  { num: '32', label: 'questionnaires validés' },
+  { num: '8/10', label: 'praticiens veulent objectiver leurs résultats' },
+  { num: '5 min', label: 'pour assigner un bilan à un patient' },
+];
+
+const STATS_STUDIO = [
+  { num: '32', label: 'Tests cliniques' },
+  { num: '11', label: 'Zones anatomiques' },
+  { num: '4', label: 'Modules cliniques' },
+  { num: '0 €', label: 'À l\'inscription' },
+];
+
 export default function Home() {
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--background)' }}>
-      {/* ============ HEADER ============ */}
+    <main style={{ background: 'white', color: '#0E1217', minHeight: '100vh' }}>
+      {/* ============================================================
+          HEADER MINIMAL
+      ============================================================ */}
       <header
         style={{
-          padding: '1.25rem 2rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid var(--border)',
-          background: 'var(--surface)',
           position: 'sticky',
           top: 0,
-          zIndex: 10,
+          zIndex: 50,
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'saturate(180%) blur(10px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(10px)',
+          borderBottom: '1px solid rgba(14,18,23,0.06)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ background: 'var(--primary)', padding: '0.5rem', borderRadius: '0.5rem', color: 'white', display: 'flex' }}>
-            <Activity size={22} />
-          </div>
-          <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.025em' }}>AssesMe</span>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
+            <Activity size={20} color="#0E1217" strokeWidth={2.4} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0E1217', letterSpacing: '-0.01em' }}>AssesMe</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#8B5CF6', letterSpacing: '0.18em', marginTop: '0.1rem' }}>CLINIQUE</span>
+            </div>
+          </Link>
+          <Menu size={22} color="#0E1217" strokeWidth={2} />
         </div>
-        <Link
-          href="/practitioner"
-          style={{
-            background: 'var(--primary)',
-            color: 'white',
-            padding: '0.625rem 1.25rem',
-            borderRadius: 'var(--radius-full)',
-            fontWeight: 600,
-            textDecoration: 'none',
-            fontSize: '0.9rem',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-          }}
-        >
-          Espace praticien <ArrowRight size={16} />
-        </Link>
       </header>
 
-      {/* ============ HERO ============ */}
-      <section style={{ padding: '5rem 1.5rem 3rem', textAlign: 'center', maxWidth: '900px', margin: '0 auto', width: '100%' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.4rem 0.9rem',
-            borderRadius: 'var(--radius-full)',
-            background: 'var(--primary-light)',
-            color: 'white',
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            marginBottom: '1.5rem',
-            letterSpacing: '0.02em',
-          }}
-        >
-          <ShieldCheck size={14} /> Pour les kinésithérapeutes
-        </div>
+      {/* ============================================================
+          HERO — titre énorme centré + stats en bas
+      ============================================================ */}
+      <section style={{ padding: '8rem 2rem 4rem', maxWidth: '1100px', margin: '0 auto' }}>
         <h1
+          className="elx-fade-up"
           style={{
-            fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+            fontSize: 'clamp(2.5rem, 6vw, 4.75rem)',
             fontWeight: 800,
-            color: 'var(--text-primary)',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.1,
-            marginBottom: '1.5rem',
+            letterSpacing: '-0.035em',
+            lineHeight: 1.05,
+            color: '#0E1217',
+            textAlign: 'center',
+            margin: '0 auto',
+            maxWidth: '900px',
           }}
         >
-          La métrologie clinique <span style={{ color: 'var(--primary)' }}>sans charge mentale</span>.
+          Et si chaque bilan parlait avant vous ?
         </h1>
+
         <p
+          className="elx-fade-up elx-delay-1"
           style={{
-            fontSize: 'clamp(1.05rem, 2vw, 1.25rem)',
-            color: 'var(--text-secondary)',
+            fontSize: 'clamp(1.05rem, 1.8vw, 1.25rem)',
+            color: '#6B7280',
+            textAlign: 'center',
+            maxWidth: '620px',
+            margin: '2rem auto 0',
             lineHeight: 1.6,
-            maxWidth: '680px',
-            margin: '0 auto 2.5rem',
           }}
         >
-          AssesMe rend les questionnaires validés faciles à intégrer dans votre pratique quotidienne.
-          Mesurez, décidez, éduquez — sur la base de preuves, pas d'intuitions.
+          La métrologie clinique au service de votre raisonnement. Évaluer, décider,
+          éduquer — sur la base de preuves, pas d'intuitions.
         </p>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link
-            href="/practitioner"
-            style={{
-              background: 'var(--primary)',
-              color: 'white',
-              padding: '0.95rem 1.75rem',
-              borderRadius: 'var(--radius-full)',
-              fontWeight: 600,
-              textDecoration: 'none',
-              fontSize: '1rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              boxShadow: 'var(--shadow-md)',
-            }}
-          >
-            Accéder à mon espace <ArrowRight size={18} />
+
+        <div
+          className="elx-fade-up elx-delay-2"
+          style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '3rem', flexWrap: 'wrap' }}
+        >
+          <Link href="/practitioner/login" className="elx-button">
+            Commencer maintenant <ArrowRight size={16} strokeWidth={2.4} />
           </Link>
-          <a
-            href="#approche"
-            style={{
-              background: 'var(--surface)',
-              color: 'var(--text-primary)',
-              padding: '0.95rem 1.75rem',
-              borderRadius: 'var(--radius-full)',
-              fontWeight: 600,
-              textDecoration: 'none',
-              fontSize: '1rem',
-              border: '1px solid var(--border)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-            }}
-          >
+          <a href="#approche" className="elx-button elx-button--outline">
             Découvrir l'approche
           </a>
         </div>
-      </section>
 
-      {/* ============ LE CONSTAT ============ */}
-      <section style={{ padding: '4rem 1.5rem', background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-              Le constat
-            </p>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)', maxWidth: '700px', margin: '0 auto', lineHeight: 1.2 }}>
-              Les outils existent. Leur usage quotidien, lui, reste un défi.
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
-            {[
-              { title: 'Trop de tests, trop peu de temps', text: "Des dizaines d'échelles validées existent, mais lesquelles utiliser face à un patient lombalgique chronique ce mardi à 14h ?" },
-              { title: 'Le score sans la décision', text: "Calculer un ODI ne sert à rien si l'on ne sait pas quelle bifurcation thérapeutique il déclenche." },
-              { title: "L'écart entre savoir et faire", text: "L'evidence-based practice est dans tous les cursus. Dans les cabinets, elle reste l'exception." },
-            ].map((item) => (
-              <div
-                key={item.title}
-                style={{
-                  background: 'var(--background)',
-                  padding: '1.75rem',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border)',
-                }}
-              >
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{item.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{item.text}</p>
-              </div>
-            ))}
-          </div>
+        {/* Stats en bas de hero */}
+        <div
+          className="elx-fade-up elx-delay-3"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '2.5rem',
+            marginTop: '7rem',
+          }}
+        >
+          {STATS_TOP.map((s) => (
+            <div key={s.label} style={{ textAlign: 'center' }}>
+              <div className="elx-stat-num">{s.num}</div>
+              <div className="elx-stat-label">{s.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ============ NOTRE APPROCHE ============ */}
-      <section id="approche" style={{ padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-              Notre approche
+      {/* ============================================================
+          SECTION 1 — TRAVAUX (mosaïque de visuels conceptuels)
+      ============================================================ */}
+      <section style={{ padding: '6rem 2rem 4rem', maxWidth: '1280px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h2 className="elx-h2">Une bibliothèque clinique vivante.</h2>
+            <p className="elx-lede" style={{ maxWidth: '480px' }}>
+              On transforme les questionnaires validés en outils que vous utilisez vraiment.
             </p>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)', maxWidth: '700px', margin: '0 auto', lineHeight: 1.2 }}>
-              Trois piliers pour transformer chaque consultation en décision éclairée.
-            </h2>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
-            <Pillar
-              icon={<ClipboardCheck size={24} />}
-              title="Standardiser"
-              text="14 questionnaires validés (TAMPA, ODI, NDI, KOOS, HOOS, SPADI, RMDQ, HADS, QuickDASH, LEFS, MRS, START Back, PSFS) prêts à l'emploi. Le patient répond depuis chez lui via un lien sécurisé. Pas d'impression, pas de saisie manuelle."
-            />
-            <Pillar
-              icon={<Brain size={24} />}
-              title="Décider"
-              text="Pour chaque test, l'arbre décisionnel thérapeutique est explicite : quel score déclenche quelle bifurcation, quels exercices, quelles éducations. La métrique devient un guide d'action, pas une donnée stockée."
-            />
-            <Pillar
-              icon={<BookOpen size={24} />}
-              title="Éduquer"
-              text="Chaque questionnaire est documenté avec sa valeur clinique, ses MCID, ses interventions thérapeutiques associées et ses sources. Vous progressez à chaque mesure — la pratique devient apprentissage."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ============ BÉNÉFICES ============ */}
-      <section style={{ padding: '5rem 1.5rem', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-              Pour vous, praticien
-            </p>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)', maxWidth: '700px', margin: '0 auto', lineHeight: 1.2 }}>
-              Tester plus souvent, sans alourdir votre journée.
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-            {[
-              { icon: <Target size={20} />, title: 'Pertinence clinique', text: 'Le bon test pour la bonne plainte, suggéré au moment du bilan.' },
-              { icon: <TrendingUp size={20} />, title: 'Suivi visuel', text: 'Courbes d\'évolution T0 → T1 → T2 sur tous les bilans réalisés.' },
-              { icon: <ShieldCheck size={20} />, title: 'Conforme et sécurisé', text: 'Pseudonymisation, liens patients à usage unique, données EU.' },
-              { icon: <Activity size={20} />, title: 'Mobile-first', text: 'PWA installable. Le patient répond depuis son smartphone, vous consultez depuis le vôtre.' },
-            ].map((item) => (
-              <div
-                key={item.title}
-                style={{
-                  background: 'var(--background)',
-                  padding: '1.5rem',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border)',
-                }}
-              >
-                <div style={{ display: 'inline-flex', padding: '0.5rem', borderRadius: 'var(--radius-md)', background: 'var(--primary-light)', color: 'white', marginBottom: '0.75rem' }}>
-                  {item.icon}
-                </div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>{item.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============ CTA FINAL ============ */}
-      <section style={{ padding: '5rem 1.5rem', textAlign: 'center' }}>
-        <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
-            Faites de chaque séance une décision éclairée.
-          </h2>
-          <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-            Créez votre espace praticien en moins d'une minute. Aucune carte bancaire requise.
-          </p>
-          <Link
-            href="/practitioner/login"
-            style={{
-              background: 'var(--primary)',
-              color: 'white',
-              padding: '1rem 2rem',
-              borderRadius: 'var(--radius-full)',
-              fontWeight: 600,
-              textDecoration: 'none',
-              fontSize: '1.05rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              boxShadow: 'var(--shadow-md)',
-            }}
-          >
-            Commencer maintenant <ArrowRight size={18} />
+          <Link href="/practitioner/library" className="elx-link">
+            Explorer <ArrowRight size={14} strokeWidth={2.5} />
           </Link>
         </div>
+
+        {/* Mosaïque 4 cards — visuels conceptuels noir/blanc avec gradient subtil */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '1rem',
+          }}
+        >
+          {[
+            { label: 'Lombaire', tests: 'ODI · RMDQ · START Back', bg: 'linear-gradient(135deg, #0E1217 0%, #1F2937 100%)' },
+            { label: 'Cervical', tests: 'NDI · Whiplash · TAMPA', bg: 'linear-gradient(135deg, #1F2937 0%, #374151 100%)' },
+            { label: 'Genou', tests: 'KOOS · IKDC · VISA-P', bg: 'linear-gradient(135deg, #0E1217 0%, #4B5563 100%)' },
+            { label: 'Psycho-social', tests: 'TAMPA · PCS · HADS', bg: 'linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%)' },
+          ].map((card, i) => (
+            <div
+              key={card.label}
+              className={`elx-fade-up elx-delay-${(i % 4) + 1}`}
+              style={{
+                aspectRatio: '3/4',
+                background: card.bg,
+                borderRadius: '1.5rem',
+                padding: '1.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                color: 'white',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              <div style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>
+                {card.tests}
+              </div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.02em', marginTop: '0.4rem' }}>
+                {card.label}
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* ============ FOOTER ============ */}
-      <footer
-        style={{
-          padding: '2rem',
-          textAlign: 'center',
-          color: 'var(--text-secondary)',
-          borderTop: '1px solid var(--border)',
-          fontSize: '0.875rem',
-          background: 'var(--surface)',
-        }}
-      >
-        <p>© {new Date().getFullYear()} AssesMe — Plateforme de métrologie clinique pour la kinésithérapie.</p>
+      {/* ============================================================
+          SECTION 2 — PROGRAMMES (liste avec dividers)
+      ============================================================ */}
+      <section id="approche" style={{ padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h2 className="elx-h2">Quatre modules. Une seule discipline : raisonner.</h2>
+            <p className="elx-lede" style={{ maxWidth: '480px' }}>
+              Du bilan initial à la fin du traitement, chaque étape est outillée.
+            </p>
+          </div>
+          <Link href="/practitioner/login" className="elx-link">
+            Démarrer <ArrowRight size={14} strokeWidth={2.5} />
+          </Link>
+        </div>
+
+        <div style={{ borderTop: '1px solid #E5E7EB' }}>
+          {PROGRAMS.map((p, i) => (
+            <div key={p.title} className="elx-row" style={{ animationDelay: `${0.1 * i}s` }}>
+              <h3 className="elx-row__title">{p.title}</h3>
+              <p className="elx-row__text">{p.text}</p>
+              <span className="elx-row__arrow"><ArrowUpRight size={20} strokeWidth={2} /></span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION 3 — CARTE NOIRE "STUDIO"
+      ============================================================ */}
+      <section style={{ padding: '4rem 2rem', maxWidth: '1280px', margin: '0 auto' }}>
+        <div className="elx-card-dark">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '3rem' }}>
+            <div>
+              <h2 className="elx-h2 elx-h2--inv">Studio clinique.</h2>
+              <p style={{ fontSize: '1rem', color: '#9CA3AF', margin: '0.5rem 0 0', maxWidth: '440px' }}>
+                Une plateforme, une discipline, une rigueur.
+              </p>
+            </div>
+            <Link href="/practitioner/login" className="elx-link" style={{ color: '#A78BFA' }}>
+              Découvrir <ArrowRight size={14} strokeWidth={2.5} />
+            </Link>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '2rem' }}>
+            {STATS_STUDIO.map((s) => (
+              <div key={s.label}>
+                <div className="elx-stat-num elx-stat-num--inv">{s.num}</div>
+                <div className="elx-stat-label">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          SECTION 4 — CTA FINAL
+      ============================================================ */}
+      <section style={{ padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+          <h2 className="elx-h2" style={{ maxWidth: '440px' }}>
+            Votre pratique a plus à dire qu'elle ne le montre. On s'en occupe ?
+          </h2>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Link href="/practitioner/login" className="elx-button">
+              Travailler avec nous <ArrowRight size={16} strokeWidth={2.4} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          FOOTER NOIR avec MEGA-NAV
+      ============================================================ */}
+      <footer style={{ background: '#0A0A0A', color: 'white', padding: '5rem 2rem 2rem', marginTop: '4rem' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <nav style={{ marginBottom: '5rem' }}>
+            <Link href="/practitioner/library" className="elx-mega">Bibliothèque</Link>
+            <Link href="/practitioner/login" className="elx-mega">Espace praticien</Link>
+            <Link href="#approche" className="elx-mega">L'approche</Link>
+            <Link href="mailto:contact@assesme.app" className="elx-mega">Contact</Link>
+          </nav>
+
+          <div
+            style={{
+              borderTop: '1px solid #1F2937',
+              paddingTop: '2rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              fontSize: '0.85rem',
+              color: '#6B7280',
+            }}
+          >
+            <div>
+              <div style={{ fontWeight: 600, color: '#9CA3AF', marginBottom: '0.25rem' }}>© {new Date().getFullYear()} AssesMe</div>
+              <div>Plateforme de métrologie clinique pour la kinésithérapie.</div>
+            </div>
+            <div style={{ display: 'flex', gap: '1.5rem' }}>
+              <Link href="#" style={{ color: '#9CA3AF', textDecoration: 'none' }}>Mentions légales</Link>
+              <Link href="#" style={{ color: '#9CA3AF', textDecoration: 'none' }}>Confidentialité</Link>
+            </div>
+          </div>
+        </div>
       </footer>
     </main>
-  );
-}
-
-function Pillar({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
-  return (
-    <div
-      style={{
-        background: 'var(--surface)',
-        padding: '2rem',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--border)',
-        boxShadow: 'var(--shadow-sm)',
-      }}
-    >
-      <div
-        style={{
-          display: 'inline-flex',
-          padding: '0.85rem',
-          borderRadius: 'var(--radius-md)',
-          background: 'var(--primary)',
-          color: 'white',
-          marginBottom: '1.25rem',
-        }}
-      >
-        {icon}
-      </div>
-      <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
-        {title}
-      </h3>
-      <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{text}</p>
-    </div>
   );
 }

@@ -104,6 +104,178 @@ button {
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ============================================================
+   STYLE LANDING ELIXIR-LIKE (luxe minimaliste noir/blanc)
+   ============================================================ */
+
+@keyframes elxFadeUp {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes elxFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.elx-fade-up {
+  opacity: 0;
+  animation: elxFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.elx-fade-in {
+  opacity: 0;
+  animation: elxFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.elx-delay-1 { animation-delay: 0.15s; }
+.elx-delay-2 { animation-delay: 0.3s; }
+.elx-delay-3 { animation-delay: 0.45s; }
+.elx-delay-4 { animation-delay: 0.6s; }
+
+/* Liens "DÉCOUVRIR →" avec sous-trait animé */
+.elx-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #8B5CF6;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.25s ease, gap 0.25s ease;
+}
+.elx-link:hover {
+  color: #6D28D9;
+  gap: 0.85rem;
+}
+
+/* Ligne de programme (hover = surlignage subtil) */
+.elx-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 2rem;
+  align-items: baseline;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid #E5E7EB;
+  transition: padding-left 0.3s ease, background 0.3s ease;
+}
+.elx-row:hover {
+  padding-left: 1rem;
+}
+.elx-row__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0E1217;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.elx-row__text {
+  font-size: 0.95rem;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.55;
+}
+.elx-row__arrow {
+  color: #0E1217;
+  transition: transform 0.3s ease;
+}
+.elx-row:hover .elx-row__arrow {
+  transform: translateX(0.4rem);
+}
+
+/* Bouton pill noir avec flèche */
+.elx-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.75rem;
+  background: #0E1217;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease, gap 0.25s ease;
+}
+.elx-button:hover {
+  background: #1F2937;
+  gap: 0.9rem;
+}
+.elx-button--outline {
+  background: transparent;
+  color: #0E1217;
+  border: 1.5px solid #0E1217;
+}
+.elx-button--outline:hover {
+  background: #0E1217;
+  color: white;
+}
+
+/* Card noire (style cartouche "Studio") */
+.elx-card-dark {
+  background: #0E1217;
+  color: white;
+  border-radius: 1.75rem;
+  padding: 3.5rem 3rem;
+}
+
+/* Stats inline */
+.elx-stat-num {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #0E1217;
+}
+.elx-stat-num--inv { color: white; }
+.elx-stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9CA3AF;
+  margin-top: 0.5rem;
+}
+
+/* Section heading (titre majeur de section) */
+.elx-h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: #0E1217;
+  margin: 0;
+}
+.elx-h2--inv { color: white; }
+.elx-lede {
+  font-size: 1.05rem;
+  color: #6B7280;
+  margin: 0.6rem 0 0;
+  line-height: 1.55;
+}
+
+/* Mega-nav typographique du footer */
+.elx-mega {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #4B5563;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  padding: 0.6rem 0;
+  transition: color 0.3s ease;
+}
+.elx-mega:hover {
+  color: white;
+}
+
 .patient-row:hover {
   background: var(--surface-hover);
 }
