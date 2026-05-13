@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useTransition } from 'react';
+import React, { useState, useRef, useTransition, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Plus, X, FileText } from 'lucide-react';
 import { addSessionNote } from '@/app/practitioner/patient-history/notes-actions';
 
@@ -13,6 +14,8 @@ export default function AddNoteModal({ recordId }: Props) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,30 +37,31 @@ export default function AddNoteModal({ recordId }: Props) {
 
   return (
     <>
-      <button 
+      <button
         onClick={() => setIsOpen(true)}
         className="no-print"
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '0.5rem', 
-          background: 'var(--primary-light)', 
-          color: 'var(--primary-dark)', 
-          padding: '0.5rem 1rem', 
-          borderRadius: 'var(--radius-full)', 
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.45rem',
+          background: 'white',
+          color: '#0E1217',
+          padding: '0.55rem 1rem',
+          borderRadius: '9999px',
           fontWeight: 600,
-          border: 'none',
+          border: '1px solid #E5E7EB',
           cursor: 'pointer',
-          fontSize: '0.875rem'
+          fontSize: '0.82rem',
+          fontFamily: 'inherit',
         }}
       >
-        <Plus size={16} />
+        <Plus size={15} strokeWidth={2} />
         Ajouter une note
       </button>
 
-      {isOpen && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="animate-slide-up" style={{ background: 'var(--surface)', width: '100%', maxWidth: '500px', borderRadius: 'var(--radius-lg)', padding: '2rem', position: 'relative' }}>
+      {isOpen && mounted && createPortal(
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(14, 18, 23, 0.72)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="animate-slide-up" style={{ background: 'white', width: '100%', maxWidth: '500px', borderRadius: '1.25rem', border: '1px solid #E5E7EB', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)', padding: '2rem', position: 'relative' }}>
             <button 
               onClick={() => setIsOpen(false)}
               style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: 'var(--text-secondary)', cursor: 'pointer' }}
@@ -71,7 +75,7 @@ export default function AddNoteModal({ recordId }: Props) {
             </h2>
 
             {error && (
-              <div style={{ background: '#FEE2E2', color: '#B91C1C', padding: '0.75rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', fontSize: '0.875rem' }}>
+              <div style={{ background: '#F3F4F6', color: '#0E1217', padding: '0.75rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', fontSize: '0.875rem' }}>
                 {error}
               </div>
             )}
@@ -131,7 +135,8 @@ export default function AddNoteModal({ recordId }: Props) {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

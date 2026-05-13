@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { Mail, CheckCircle, Activity, User, ChevronRight } from 'lucide-react';
+import { Mail, CheckCircle, Activity, User, ArrowRight } from 'lucide-react';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
 
 export const dynamic = 'force-dynamic';
@@ -15,119 +15,253 @@ export default async function PatientPortalPage({ searchParams }: { searchParams
       where: { id: requestId },
       include: {
         clinicalRecord: {
-          include: { patient: true }
-        }
-      }
+          include: { patient: true },
+        },
+      },
     });
   }
 
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--background)' }}>
-      {/* Header */}
-      <header style={{ padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', background: 'var(--surface)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ background: 'var(--primary)', padding: '0.5rem', borderRadius: '0.5rem', color: 'white' }}>
-            <Activity size={24} />
-          </div>
-          <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.025em' }}>AssesMe Portal</span>
+    <main style={{ background: 'white', color: '#0E1217', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Header cohérent avec la landing */}
+      <header style={{ borderBottom: '1px solid rgba(14,18,23,0.06)' }}>
+        <div
+          style={{
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '1.5rem 2rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
+            <Activity size={20} color="#0E1217" strokeWidth={2.4} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0E1217', letterSpacing: '-0.01em' }}>AssesMe</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.18em', marginTop: '0.1rem' }}>PORTAL</span>
+            </div>
+          </Link>
+          {request && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6B7280', fontSize: '0.9rem' }}>
+              <User size={16} strokeWidth={2} />
+              <span style={{ fontWeight: 600, color: '#0E1217' }}>{request.clinicalRecord.patient.firstName}</span>
+            </div>
+          )}
         </div>
-        {request && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
-            <User size={18} />
-            <span style={{ fontWeight: 600 }}>{request.clinicalRecord.patient.firstName}</span>
-          </div>
-        )}
       </header>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, padding: '3rem 1rem', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <Mail color="var(--primary)" />
-          Boîte de réception
+      <section
+        style={{
+          flex: 1,
+          maxWidth: '780px',
+          width: '100%',
+          margin: '0 auto',
+          padding: '5rem 1.5rem 4rem',
+        }}
+      >
+        <p
+          className="elx-fade-up"
+          style={{
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: '#9CA3AF',
+            marginBottom: '1rem',
+          }}
+        >
+          Espace patient
+        </p>
+        <h1
+          className="elx-fade-up elx-delay-1"
+          style={{
+            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            fontWeight: 800,
+            letterSpacing: '-0.025em',
+            lineHeight: 1.05,
+            color: '#0E1217',
+            margin: 0,
+          }}
+        >
+          Boîte de réception.
         </h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '3rem' }}>
+        <p
+          className="elx-fade-up elx-delay-2"
+          style={{
+            fontSize: '1.05rem',
+            color: '#6B7280',
+            margin: '0.85rem 0 3.5rem',
+            lineHeight: 1.55,
+            maxWidth: '560px',
+          }}
+        >
           Retrouvez ici les questionnaires prescrits par votre praticien.
         </p>
 
         {!requestId ? (
-          <div style={{ background: 'var(--surface)', padding: '3rem 2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', textAlign: 'center' }}>
-            <Mail size={48} color="var(--text-secondary)" style={{ opacity: 0.5, margin: '0 auto 1.5rem auto' }} />
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Aucune demande sélectionnée</h2>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: '400px', margin: '0 auto' }}>
-              Pour accéder à vos tests, veuillez cliquer sur le lien sécurisé que votre praticien vous a envoyé par email ou SMS.
+          <div
+            className="elx-fade-up elx-delay-3"
+            style={{
+              background: 'white',
+              padding: '4rem 2rem',
+              borderRadius: '1.5rem',
+              border: '1px solid #E5E7EB',
+              textAlign: 'center',
+            }}
+          >
+            <Mail size={36} color="#9CA3AF" strokeWidth={1.6} style={{ margin: '0 auto 1.5rem auto' }} />
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0E1217', margin: '0 0 0.75rem' }}>
+              Aucune demande sélectionnée
+            </h2>
+            <p style={{ color: '#6B7280', maxWidth: '440px', margin: '0 auto', lineHeight: 1.6 }}>
+              Pour accéder à vos tests, cliquez sur le lien sécurisé que votre praticien vous a envoyé par email ou SMS.
             </p>
           </div>
         ) : !request ? (
-           <div style={{ background: '#FEE2E2', color: '#B91C1C', padding: '1rem', borderRadius: 'var(--radius-md)', fontWeight: 500 }}>
-             Le lien que vous avez suivi est invalide ou a expiré. Veuillez demander un nouveau lien à votre praticien.
-           </div>
+          <div
+            className="elx-fade-up elx-delay-3"
+            style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '1.5rem',
+              border: '1px solid #FCA5A5',
+              color: '#B91C1C',
+              fontWeight: 500,
+              lineHeight: 1.6,
+            }}
+          >
+            Le lien que vous avez suivi est invalide ou a expiré. Veuillez demander un nouveau lien à votre praticien.
+          </div>
         ) : request.status === 'COMPLETED' ? (
-          <div style={{ background: 'var(--surface)', padding: '3rem 2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', textAlign: 'center' }}>
-            <CheckCircle size={64} color="#16a34a" style={{ margin: '0 auto 1.5rem auto' }} />
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Bilan terminé</h2>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: '400px', margin: '0 auto' }}>
-              Merci ! Vos réponses ont été transmises en toute sécurité à votre praticien. Vous pouvez fermer cette page.
+          <div
+            className="elx-fade-up elx-delay-3"
+            style={{
+              background: 'white',
+              padding: '4rem 2rem',
+              borderRadius: '1.5rem',
+              border: '1px solid #E5E7EB',
+              textAlign: 'center',
+            }}
+          >
+            <CheckCircle size={48} color="#0E1217" strokeWidth={1.5} style={{ margin: '0 auto 1.5rem auto' }} />
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#0E1217', margin: '0 0 0.75rem' }}>
+              Bilan terminé.
+            </h2>
+            <p style={{ color: '#6B7280', maxWidth: '440px', margin: '0 auto', lineHeight: 1.6 }}>
+              Merci. Vos réponses ont été transmises en toute sécurité à votre praticien. Vous pouvez fermer cette page.
             </p>
           </div>
         ) : (
-          <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem', marginBottom: '1.5rem' }}>
+          <div
+            className="elx-fade-up elx-delay-3"
+            style={{
+              background: 'white',
+              padding: '2.5rem',
+              borderRadius: '1.5rem',
+              border: '1px solid #E5E7EB',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                borderBottom: '1px solid #E5E7EB',
+                paddingBottom: '1.5rem',
+                marginBottom: '1.75rem',
+                gap: '1rem',
+                flexWrap: 'wrap',
+              }}
+            >
               <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>Nouveau Bilan Clinique</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                  Demandé le {new Date(request.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#0E1217', margin: 0 }}>
+                  Nouveau bilan clinique
+                </h2>
+                <p style={{ color: '#6B7280', fontSize: '0.9rem', marginTop: '0.35rem' }}>
+                  Demandé le{' '}
+                  {new Date(request.createdAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
                 </p>
               </div>
-              <span style={{ background: '#FEF08A', color: '#854D0E', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>
+              <span
+                style={{
+                  background: '#0E1217',
+                  color: 'white',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                }}
+              >
                 À faire
               </span>
             </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 500, marginBottom: '1rem' }}>
-                Bonjour {request.clinicalRecord.patient.firstName},<br/><br/>
-                Afin de préparer notre prochaine séance, merci de prendre quelques minutes pour remplir les questionnaires suivants :
-              </p>
-              <ul style={{ listStyleType: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {JSON.parse(request.questionnaireIds).map((id: string) => {
-                  const q = QUESTIONNAIRES[id];
-                  if (!q) return null;
-                  return (
-                    <li key={id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'var(--background)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
-                      <Activity size={20} color="var(--primary)" />
-                      <div>
-                        <strong style={{ display: 'block', color: 'var(--text-primary)', fontSize: '0.875rem' }}>{q.title}</strong>
-                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Temps estimé : {q.estimatedTime}</span>
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
+            <p style={{ color: '#0E1217', fontWeight: 500, marginBottom: '1.5rem', lineHeight: 1.6 }}>
+              Bonjour {request.clinicalRecord.patient.firstName},
+              <br />
+              <br />
+              Afin de préparer notre prochaine séance, merci de prendre quelques minutes pour remplir les questionnaires suivants :
+            </p>
 
-            <Link 
+            <ul style={{ listStyleType: 'none', padding: 0, margin: '0 0 2rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              {JSON.parse(request.questionnaireIds).map((id: string) => {
+                const q = QUESTIONNAIRES[id];
+                if (!q) return null;
+                return (
+                  <li
+                    key={id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      background: '#F9FAFB',
+                      padding: '1rem 1.25rem',
+                      borderRadius: '0.85rem',
+                      border: '1px solid #E5E7EB',
+                    }}
+                  >
+                    <Activity size={18} color="#0E1217" strokeWidth={2} />
+                    <div>
+                      <strong style={{ display: 'block', color: '#0E1217', fontSize: '0.95rem', fontWeight: 600 }}>{q.title}</strong>
+                      <span style={{ color: '#6B7280', fontSize: '0.8rem' }}>Temps estimé · {q.estimatedTime}</span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <Link
               href={`/fill?requestId=${request.id}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.5rem',
+                gap: '0.6rem',
                 width: '100%',
-                padding: '1rem',
-                background: 'var(--primary)',
+                padding: '1.1rem',
+                background: '#0E1217',
                 color: 'white',
                 textDecoration: 'none',
-                borderRadius: 'var(--radius-lg)',
-                fontWeight: 600,
-                fontSize: '1rem',
-                transition: 'opacity 0.2s',
+                borderRadius: '9999px',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                transition: 'background 0.25s ease, gap 0.25s ease',
               }}
             >
-              Commencer l'évaluation <ChevronRight size={20} />
+              Commencer l'évaluation <ArrowRight size={16} strokeWidth={2.4} />
             </Link>
           </div>
         )}
-      </div>
+      </section>
     </main>
   );
 }

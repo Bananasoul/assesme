@@ -483,11 +483,14 @@ function formatDelta(delta: number): string {
 export function toneStyles(tone: Tone): { bg: string; border: string; text: string; accent: string } {
   switch (tone) {
     case 'green':
-      return { bg: '#ECFDF5', border: '#A7F3D0', text: '#065F46', accent: '#10B981' };
+      // Favorable : carte claire, accent noir
+      return { bg: '#F9FAFB', border: '#E5E7EB', text: '#0E1217', accent: '#0E1217' };
     case 'amber':
-      return { bg: '#FFFBEB', border: '#FDE68A', text: '#92400E', accent: '#F59E0B' };
+      // Vigilance : carte gris clair, accent gris foncé
+      return { bg: '#F3F4F6', border: '#D1D5DB', text: '#0E1217', accent: '#4B5563' };
     case 'red':
-      return { bg: '#FEF2F2', border: '#FECACA', text: '#991B1B', accent: '#EF4444' };
+      // Sévère : carte noire pleine, texte blanc
+      return { bg: '#0E1217', border: '#0E1217', text: '#FFFFFF', accent: '#FFFFFF' };
     default:
       return { bg: '#F9FAFB', border: '#E5E7EB', text: '#374151', accent: '#6B7280' };
   }

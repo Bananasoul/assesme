@@ -45,13 +45,13 @@ export default function CopyLinkButton({ link }: Props) {
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
-          background: copied ? '#DCFCE7' : 'var(--surface-hover)',
-          color: copied ? '#166534' : 'var(--text-primary)',
+          background: copied ? '#0E1217' : 'var(--surface-hover)',
+          color: copied ? 'white' : 'var(--text-primary)',
           padding: '0.5rem 1rem',
           borderRadius: 'var(--radius-full)',
           fontWeight: 600,
           fontSize: '0.875rem',
-          border: copied ? '1px solid #86EFAC' : '1px solid var(--border)',
+          border: copied ? '1px solid #0E1217' : '1px solid var(--border)',
           cursor: 'pointer',
           transition: 'all 0.2s ease'
         }}
@@ -66,7 +66,7 @@ export default function CopyLinkButton({ link }: Props) {
           bottom: '110%',
           left: '50%',
           transform: 'translateX(-50%)',
-          background: '#166534',
+          background: '#0E1217',
           color: 'white',
           padding: '0.5rem 0.75rem',
           borderRadius: 'var(--radius-md)',
@@ -86,7 +86,7 @@ export default function CopyLinkButton({ link }: Props) {
             height: 0,
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
-            borderTop: '6px solid #166534'
+            borderTop: '6px solid #0E1217'
           }} />
         </div>
       )}

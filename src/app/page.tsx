@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Activity, ArrowRight, ArrowUpRight, Menu } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import LandingHeader from '@/components/LandingHeader';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,30 +28,9 @@ export default function Home() {
   return (
     <main style={{ background: 'white', color: '#0E1217', minHeight: '100vh' }}>
       {/* ============================================================
-          HEADER MINIMAL
+          HEADER MINIMAL + MENU FONCTIONNEL
       ============================================================ */}
-      <header
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'saturate(180%) blur(10px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(10px)',
-          borderBottom: '1px solid rgba(14,18,23,0.06)',
-        }}
-      >
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
-            <Activity size={20} color="#0E1217" strokeWidth={2.4} />
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-              <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0E1217', letterSpacing: '-0.01em' }}>AssesMe</span>
-              <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#8B5CF6', letterSpacing: '0.18em', marginTop: '0.1rem' }}>CLINIQUE</span>
-            </div>
-          </Link>
-          <Menu size={22} color="#0E1217" strokeWidth={2} />
-        </div>
-      </header>
+      <LandingHeader />
 
       {/* ============================================================
           HERO — titre énorme centré + stats en bas
@@ -119,6 +99,40 @@ export default function Home() {
       </section>
 
       {/* ============================================================
+          BANDEAU — QUESTIONS DÉFILANTES
+      ============================================================ */}
+      <section style={{ padding: '4rem 0 2rem', margin: '0 auto', textAlign: 'center' }}>
+        <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: '1.5rem' }}>
+          Ce qu'AssesMe vous aide à savoir
+        </p>
+        <div
+          style={{
+            fontSize: 'clamp(1.4rem, 3vw, 2.2rem)',
+            fontWeight: 600,
+            color: '#0E1217',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.3,
+          }}
+        >
+          <div className="elx-questions">
+            <div className="elx-questions__track">
+              {[...Array(2)].flatMap((_, copy) => [
+                '« Mon patient a-t-il peur de bouger ? »',
+                '« Cette épaule fonctionne-t-elle vraiment ? »',
+                '« Le lombalgique va-t-il passer en chronique ? »',
+                '« Ce genou est-il prêt à reprendre le sport ? »',
+                '« La douleur impacte-t-elle son sommeil ? »',
+                '« Mon traitement a-t-il vraiment fait progresser ? »',
+                '« Le patient se sent-il dépassé par sa douleur ? »',
+              ].map((q, i) => (
+                <span key={`${copy}-${i}`} className="elx-questions__item">{q}</span>
+              )))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
           SECTION 1 — TRAVAUX (mosaïque de visuels conceptuels)
       ============================================================ */}
       <section style={{ padding: '6rem 2rem 4rem', maxWidth: '1280px', margin: '0 auto' }}>
@@ -146,7 +160,7 @@ export default function Home() {
             { label: 'Lombaire', tests: 'ODI · RMDQ · START Back', bg: 'linear-gradient(135deg, #0E1217 0%, #1F2937 100%)' },
             { label: 'Cervical', tests: 'NDI · Whiplash · TAMPA', bg: 'linear-gradient(135deg, #1F2937 0%, #374151 100%)' },
             { label: 'Genou', tests: 'KOOS · IKDC · VISA-P', bg: 'linear-gradient(135deg, #0E1217 0%, #4B5563 100%)' },
-            { label: 'Psycho-social', tests: 'TAMPA · PCS · HADS', bg: 'linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%)' },
+            { label: 'Psycho-social', tests: 'TAMPA · PCS · HADS', bg: 'linear-gradient(135deg, #374151 0%, #0E1217 100%)' },
           ].map((card, i) => (
             <div
               key={card.label}
@@ -214,7 +228,7 @@ export default function Home() {
                 Une plateforme, une discipline, une rigueur.
               </p>
             </div>
-            <Link href="/practitioner/login" className="elx-link" style={{ color: '#A78BFA' }}>
+            <Link href="/practitioner/login" className="elx-link" style={{ color: 'white' }}>
               Découvrir <ArrowRight size={14} strokeWidth={2.5} />
             </Link>
           </div>

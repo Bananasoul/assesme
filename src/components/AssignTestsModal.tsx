@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ClipboardList, X, Check, Copy, MessageCircle } from 'lucide-react';
 import { createAnonymousSession } from '@/app/actions/anonymousSession';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
@@ -20,6 +21,8 @@ export default function AssignTestsModal({ recordId }: Props) {
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Categories for grouping
   const CATEGORIES = [
@@ -102,9 +105,9 @@ export default function AssignTestsModal({ recordId }: Props) {
         Prescrire un bilan
       </button>
 
-      {isOpen && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="animate-slide-up" style={{ background: 'var(--surface)', width: '100%', maxWidth: '800px', borderRadius: 'var(--radius-lg)', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
+      {isOpen && mounted && createPortal(
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(14, 18, 23, 0.72)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="animate-slide-up" style={{ background: 'white', width: '100%', maxWidth: '800px', borderRadius: '1.25rem', border: '1px solid #E5E7EB', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)', padding: '2rem', position: 'relative', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
             <button 
               onClick={() => { setIsOpen(false); setGeneratedLink(null); setGeneratedCode(null); setSelectedTests([]); }}
               style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', color: 'var(--text-secondary)', cursor: 'pointer', background: 'transparent', border: 'none' }}
@@ -118,14 +121,14 @@ export default function AssignTestsModal({ recordId }: Props) {
             </h2>
 
             {error && (
-              <div style={{ background: '#FEE2E2', color: '#B91C1C', padding: '0.75rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', fontSize: '0.875rem' }}>
+              <div style={{ background: '#F3F4F6', color: '#0E1217', padding: '0.75rem', borderRadius: 'var(--radius-md)', marginBottom: '1rem', fontSize: '0.875rem' }}>
                 {error}
               </div>
             )}
 
             {generatedLink ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center', padding: '1rem 0' }}>
-                <div style={{ background: 'rgba(34, 197, 94, 0.1)', color: '#16a34a', padding: '1rem', borderRadius: '50%' }}>
+                <div style={{ background: '#F3F4F6', color: '#0E1217', padding: '1rem', borderRadius: '50%' }}>
                   <Check size={48} />
                 </div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>Lien anonyme généré !</h3>
@@ -154,7 +157,7 @@ export default function AssignTestsModal({ recordId }: Props) {
                       </button>
                     </div>
 
-                    <a href={`https://wa.me/?text=${encodeURIComponent(`Bonjour,\n\nVotre praticien vous a prescrit un bilan fonctionnel à remplir.\n\n🔑 Votre code personnel : ${generatedCode}\n🔗 Lien : ${generatedLink}\n\nCe code est strictement confidentiel. Le remplissage est anonyme.\nTemps estimé : 5-10 minutes.`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#25D366', color: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontWeight: 600, textDecoration: 'none' }}>
+                    <a href={`https://wa.me/?text=${encodeURIComponent(`Bonjour,\n\nVotre praticien vous a prescrit un bilan fonctionnel à remplir.\n\n🔑 Votre code personnel : ${generatedCode}\n🔗 Lien : ${generatedLink}\n\nCe code est strictement confidentiel. Le remplissage est anonyme.\nTemps estimé : 5-10 minutes.`)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#374151', color: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontWeight: 600, textDecoration: 'none' }}>
                       <MessageCircle size={20} />
                       Envoyer par WhatsApp
                     </a>
@@ -197,41 +200,45 @@ export default function AssignTestsModal({ recordId }: Props) {
                           {group.tests.map(q => {
                             const isSelected = selectedTests.includes(q.id);
                             return (
-                              <div 
-                                key={q.id} 
+                              <div
+                                key={q.id}
                                 onClick={() => toggleTest(q.id)}
-                                style={{ 
-                                  padding: '1rem', 
-                                  border: `2px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}`, 
-                                  borderRadius: 'var(--radius-md)', 
+                                style={{
+                                  padding: '1rem',
+                                  border: `2px solid ${isSelected ? '#0E1217' : '#E5E7EB'}`,
+                                  borderRadius: 'var(--radius-md)',
                                   cursor: 'pointer',
-                                  background: isSelected ? 'var(--primary-light)' : 'var(--surface)',
+                                  background: isSelected ? '#0E1217' : 'white',
                                   transition: 'all 0.1s',
                                   display: 'flex',
-                                  flexDirection: 'column'
+                                  flexDirection: 'column',
+                                  color: isSelected ? 'white' : '#0E1217',
                                 }}
                               >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                                  <h4 style={{ fontWeight: 600, color: isSelected ? 'var(--primary-dark)' : 'var(--text-primary)', fontSize: '0.875rem' }}>{q.title}</h4>
-                                  {isSelected && <Check size={16} color="var(--primary-dark)" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />}
+                                  <h4 style={{ fontWeight: 600, color: 'inherit', fontSize: '0.875rem' }}>{q.title}</h4>
+                                  {isSelected && <Check size={16} color="white" style={{ flexShrink: 0, marginLeft: '0.5rem' }} />}
                                 </div>
-                                
+
                                 {q.clinicalValue && (
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '0 0 0.5rem 0', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
+                                  <p style={{ fontSize: '0.75rem', color: isSelected ? 'rgba(255,255,255,0.75)' : '#6B7280', margin: '0 0 0.5rem 0', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
                                     {q.clinicalValue}
                                   </p>
                                 )}
 
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>{q.estimatedTime}</p>
+                                  <p style={{ fontSize: '0.75rem', color: isSelected ? 'rgba(255,255,255,0.75)' : '#6B7280', margin: 0 }}>{q.estimatedTime}</p>
                                   {q.administrationType && (
-                                    <span style={{ 
-                                      fontSize: '0.65rem', 
-                                      padding: '0.15rem 0.4rem', 
-                                      borderRadius: 'var(--radius-full)', 
-                                      fontWeight: 600,
-                                      background: q.administrationType === 'auto' ? '#E0E7FF' : '#FEF3C7',
-                                      color: q.administrationType === 'auto' ? '#3730A3' : '#92400E'
+                                    <span style={{
+                                      fontSize: '0.62rem',
+                                      padding: '0.2rem 0.55rem',
+                                      borderRadius: '9999px',
+                                      fontWeight: 700,
+                                      letterSpacing: '0.08em',
+                                      textTransform: 'uppercase',
+                                      background: isSelected ? 'white' : (q.administrationType === 'auto' ? '#F3F4F6' : '#0E1217'),
+                                      color: isSelected ? '#0E1217' : (q.administrationType === 'auto' ? '#0E1217' : 'white'),
+                                      border: `1px solid ${isSelected ? 'white' : (q.administrationType === 'auto' ? '#E5E7EB' : '#0E1217')}`,
                                     }}>
                                       {q.administrationType === 'auto' ? 'Auto-administré' : q.administrationType === 'therapist' ? 'Thérapeute' : 'Mixte'}
                                     </span>
@@ -239,7 +246,7 @@ export default function AssignTestsModal({ recordId }: Props) {
                                 </div>
                                 
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', marginTop: 'auto', paddingTop: '0.5rem' }}>
-                                  {q.tags?.filter(t => !group.matchTags.includes(t)).map(t => <span key={t} style={{ fontSize: '0.65rem', background: 'var(--background)', padding: '0.1rem 0.3rem', borderRadius: '0.25rem' }}>{t}</span>)}
+                                  {q.tags?.filter(t => !group.matchTags.includes(t)).map(t => <span key={t} style={{ fontSize: '0.65rem', background: isSelected ? 'rgba(255,255,255,0.15)' : '#F3F4F6', color: isSelected ? 'white' : '#374151', padding: '0.15rem 0.4rem', borderRadius: '0.3rem' }}>{t}</span>)}
                                 </div>
                               </div>
                             );
@@ -285,7 +292,8 @@ export default function AssignTestsModal({ recordId }: Props) {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

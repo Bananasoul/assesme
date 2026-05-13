@@ -254,7 +254,7 @@ function Badge({
   color: 'success' | 'default' | 'primary';
 }) {
   const styles = {
-    success: { bg: '#DCFCE7', fg: '#166534' },
+    success: { bg: '#F3F4F6', fg: '#0E1217' },
     default: { bg: 'var(--surface-hover)', fg: 'var(--text-secondary)' },
     primary: { bg: 'var(--primary-light)', fg: 'white' },
   }[color];
@@ -329,14 +329,14 @@ function PrescribeBlock({ test, patientContext }: { test: QuestionnaireDef; pati
         style={{
           marginBottom: '1.75rem',
           padding: '1.25rem',
-          background: '#DCFCE7',
-          border: '1px solid #16a34a',
+          background: '#F3F4F6',
+          border: '1px solid #0E1217',
           borderRadius: 'var(--radius-md)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-          <CheckCircle2 size={20} color="#166534" />
-          <strong style={{ color: '#166534' }}>Lien anonyme créé pour {patientContext.patientName}</strong>
+          <CheckCircle2 size={20} color="#0E1217" />
+          <strong style={{ color: '#0E1217' }}>Lien anonyme créé pour {patientContext.patientName}</strong>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <div
@@ -348,7 +348,7 @@ function PrescribeBlock({ test, patientContext }: { test: QuestionnaireDef; pati
               fontSize: '1.1rem',
               letterSpacing: '0.08em',
               color: 'var(--primary)',
-              border: '1px solid #16a34a',
+              border: '1px solid #0E1217',
             }}
           >
             {code}
@@ -361,8 +361,8 @@ function PrescribeBlock({ test, patientContext }: { test: QuestionnaireDef; pati
               gap: '0.4rem',
               padding: '0.5rem 0.85rem',
               background: 'white',
-              border: '1px solid #16a34a',
-              color: '#166534',
+              border: '1px solid #0E1217',
+              color: '#0E1217',
               borderRadius: 'var(--radius-sm)',
               fontWeight: 600,
               fontSize: '0.85rem',
@@ -377,7 +377,7 @@ function PrescribeBlock({ test, patientContext }: { test: QuestionnaireDef; pati
             rel="noopener noreferrer"
             style={{
               fontSize: '0.85rem',
-              color: '#166534',
+              color: '#0E1217',
               textDecoration: 'underline',
               fontWeight: 600,
             }}

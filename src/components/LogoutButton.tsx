@@ -18,19 +18,21 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       style={{
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
-        gap: '0.5rem',
-        padding: '0.5rem 1rem',
-        color: 'var(--accent)',
-        background: 'var(--surface)',
-        borderRadius: 'var(--radius-full)',
-        border: '1px solid var(--border)',
-        fontWeight: 500,
-        cursor: 'pointer'
+        gap: '0.45rem',
+        padding: '0.55rem 1rem',
+        color: '#0E1217',
+        background: 'white',
+        borderRadius: '9999px',
+        border: '1px solid #E5E7EB',
+        fontWeight: 600,
+        fontSize: '0.82rem',
+        fontFamily: 'inherit',
+        cursor: 'pointer',
       }}
     >
-      <LogOut size={18} />
+      <LogOut size={15} strokeWidth={2} />
       Déconnexion
     </button>
   );

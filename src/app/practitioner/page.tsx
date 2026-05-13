@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Activity, Settings, BookOpen, ChevronRight, Clock, Send } from 'lucide-react';
+import { Activity, Settings, BookOpen, ArrowRight, Clock, Send } from 'lucide-react';
 import { getPatients, getPendingRequests, getOnboardingState } from './actions';
 import OnboardingChecklist from '@/components/OnboardingChecklist';
 import CopyLinkButton from '@/components/CopyLinkButton';
@@ -23,16 +23,32 @@ function patientInitials(p: { identifier: string | null; firstName: string | nul
   return p.identifier?.slice(0, 2).toUpperCase() || '?';
 }
 
+const navPill: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.45rem',
+  padding: '0.55rem 1rem',
+  color: '#0E1217',
+  background: 'white',
+  borderRadius: '9999px',
+  border: '1px solid #E5E7EB',
+  fontWeight: 600,
+  textDecoration: 'none',
+  fontSize: '0.82rem',
+  letterSpacing: '0.02em',
+};
+
 export default async function PractitionerPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const [patients, pendingRequests, onboarding] = await Promise.all([
     getPatients(),
     getPendingRequests(),
     getOnboardingState(),
   ]);
 
-  // Patient list passed to wizard (slim format)
   const wizardPatients = patients.map((p) => ({
     id: p.id,
     identifier: p.identifier,
@@ -42,119 +58,120 @@ export default async function PractitionerPage() {
   }));
 
   return (
-    <main style={{ padding: '1.5rem 1rem 4rem', background: 'var(--background)', minHeight: '100vh' }}>
-      {/* ============ TOP NAV ============ */}
-      <nav
+    <main style={{ background: 'white', color: '#0E1217', minHeight: '100vh' }}>
+      {/* Header sticky cohérent */}
+      <header
         style={{
-          maxWidth: '1100px',
-          margin: '0 auto 2rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '0.75rem',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'saturate(180%) blur(10px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(10px)',
+          borderBottom: '1px solid rgba(14,18,23,0.06)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div
-            style={{
-              background: 'var(--primary)',
-              padding: '0.45rem',
-              borderRadius: 'var(--radius-md)',
-              color: 'white',
-              display: 'flex',
-            }}
-          >
-            <Activity size={20} />
-          </div>
-          <span style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>AssesMe</span>
-        </div>
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <Link
-            href="/practitioner/library"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.5rem 1rem',
-              color: 'var(--text-secondary)',
-              background: 'var(--surface)',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--border)',
-              fontWeight: 500,
-              textDecoration: 'none',
-              fontSize: '0.875rem',
-            }}
-          >
-            <BookOpen size={16} />
-            Bibliothèque
-          </Link>
-          <Link
-            href="/practitioner/settings"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.5rem 1rem',
-              color: 'var(--text-secondary)',
-              background: 'var(--surface)',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--border)',
-              fontWeight: 500,
-              textDecoration: 'none',
-              fontSize: '0.875rem',
-            }}
-          >
-            <Settings size={16} />
-            Paramètres
-          </Link>
-          <LogoutButton />
-        </div>
-      </nav>
-
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        {/* ============ HÉROS ACTION ============ */}
         <div
           style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '1.25rem 2rem',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '2.5rem',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <Link href="/practitioner" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
+            <Activity size={20} color="#0E1217" strokeWidth={2.4} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0E1217', letterSpacing: '-0.01em' }}>AssesMe</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.18em', marginTop: '0.1rem' }}>PRATICIEN</span>
+            </div>
+          </Link>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Link href="/practitioner/library" style={navPill}>
+              <BookOpen size={15} strokeWidth={2} /> Bibliothèque
+            </Link>
+            <Link href="/practitioner/settings" style={navPill}>
+              <Settings size={15} strokeWidth={2} /> Paramètres
+            </Link>
+            <LogoutButton />
+          </div>
+        </div>
+      </header>
+
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 1.5rem 5rem' }}>
+        {/* Hero action */}
+        <div
+          className="elx-fade-up"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '3rem',
             flexWrap: 'wrap',
             gap: '1.5rem',
           }}
         >
           <div>
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-              Bonjour {user?.email?.split('@')[0]}
+            <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: '0.6rem' }}>
+              Tableau de bord
+            </p>
+            <h1
+              style={{
+                fontSize: 'clamp(2rem, 4vw, 2.8rem)',
+                fontWeight: 800,
+                color: '#0E1217',
+                letterSpacing: '-0.025em',
+                lineHeight: 1.05,
+                margin: 0,
+              }}
+            >
+              Bonjour {user?.email?.split('@')[0]}.
             </h1>
-            <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+            <p style={{ color: '#6B7280', marginTop: '0.65rem', fontSize: '1rem', lineHeight: 1.55 }}>
               Prêt à prescrire un bilan en moins d'une minute.
             </p>
           </div>
           <NewBilanWizard patients={wizardPatients} />
         </div>
 
-        {/* ============ ONBOARDING (au-dessus si pas complet) ============ */}
+        {/* Onboarding */}
         {(!onboarding.hasCreatedPatient || !onboarding.hasAssignedTest || !onboarding.hasCompletedTest) && (
-          <OnboardingChecklist {...onboarding} />
+          <div className="elx-fade-up elx-delay-1" style={{ marginBottom: '2.5rem' }}>
+            <OnboardingChecklist {...onboarding} />
+          </div>
         )}
 
-        {/* ============ BILANS EN ATTENTE ============ */}
-        <section style={{ marginBottom: '2.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Clock size={18} color="var(--primary)" />
-              Bilans en attente
+        {/* Bilans en attente */}
+        <section className="elx-fade-up elx-delay-2" style={{ marginBottom: '3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <h2
+              style={{
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: '#9CA3AF',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.55rem',
+              }}
+            >
+              <Clock size={14} strokeWidth={2} /> Bilans en attente
               {pendingRequests.length > 0 && (
                 <span
                   style={{
-                    background: 'var(--primary)',
+                    background: '#0E1217',
                     color: 'white',
-                    fontSize: '0.7rem',
-                    padding: '0.1rem 0.5rem',
-                    borderRadius: 'var(--radius-full)',
+                    fontSize: '0.65rem',
+                    padding: '0.1rem 0.55rem',
+                    borderRadius: '9999px',
                     fontWeight: 700,
+                    letterSpacing: '0.05em',
                   }}
                 >
                   {pendingRequests.length}
@@ -166,23 +183,23 @@ export default async function PractitionerPage() {
           {pendingRequests.length === 0 ? (
             <div
               style={{
-                padding: '1.25rem',
-                background: 'var(--surface)',
-                border: '1px dashed var(--border)',
-                borderRadius: 'var(--radius-md)',
-                color: 'var(--text-secondary)',
-                fontSize: '0.9rem',
+                padding: '2rem',
+                background: 'white',
+                border: '1px dashed #E5E7EB',
+                borderRadius: '1.25rem',
+                color: '#6B7280',
+                fontSize: '0.95rem',
                 textAlign: 'center',
               }}
             >
               Aucun bilan en attente de réponse.
             </div>
           ) : (
-            <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: '1.25rem', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
               {pendingRequests.map((req, index) => {
                 const testIds = JSON.parse(req.questionnaireIds || '[]');
                 const tests = testIds.map((id: string) => QUESTIONNAIRES[id as keyof typeof QUESTIONNAIRES]);
-                const hasTherapistTest = tests.some((t: any) => t?.administrationType === 'therapist');
+                const hasTherapistTest = tests.some((t: { administrationType?: string } | undefined) => t?.administrationType === 'therapist');
                 const patient = req.clinicalRecord?.patient;
                 if (!patient) return null;
 
@@ -193,8 +210,8 @@ export default async function PractitionerPage() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      padding: '1rem 1.25rem',
-                      borderBottom: index < pendingRequests.length - 1 ? '1px solid var(--border)' : 'none',
+                      padding: '1.1rem 1.5rem',
+                      borderBottom: index < pendingRequests.length - 1 ? '1px solid #F3F4F6' : 'none',
                       flexWrap: 'wrap',
                       gap: '0.75rem',
                     }}
@@ -202,27 +219,28 @@ export default async function PractitionerPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flex: 1, minWidth: 0 }}>
                       <span
                         style={{
-                          background: '#FEF08A',
-                          color: '#854D0E',
-                          padding: '0.15rem 0.55rem',
-                          borderRadius: 'var(--radius-full)',
-                          fontSize: '0.7rem',
+                          background: '#0E1217',
+                          color: 'white',
+                          padding: '0.2rem 0.65rem',
+                          borderRadius: '9999px',
+                          fontSize: '0.62rem',
                           fontWeight: 700,
+                          letterSpacing: '0.12em',
                           textTransform: 'uppercase',
                           flexShrink: 0,
                         }}
                       >
-                        Attente
+                        En attente
                       </span>
                       <div style={{ minWidth: 0 }}>
                         <Link
                           href={`/practitioner/patient-history?id=${patient.id}`}
-                          style={{ fontWeight: 600, color: 'var(--text-primary)', textDecoration: 'none', fontSize: '0.95rem' }}
+                          style={{ fontWeight: 600, color: '#0E1217', textDecoration: 'none', fontSize: '0.95rem' }}
                         >
                           {patientLabel(patient)}
                         </Link>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {tests.map((t: any) => t?.title || 'Test').join(' · ')}
+                        <p style={{ color: '#6B7280', fontSize: '0.8rem', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {tests.map((t: { title?: string } | undefined) => t?.title || 'Test').join(' · ')}
                         </p>
                       </div>
                     </div>
@@ -233,19 +251,21 @@ export default async function PractitionerPage() {
                         <Link
                           href={`/test/${req.anonymousCode}`}
                           style={{
-                            background: 'var(--primary)',
+                            background: '#0E1217',
                             color: 'white',
-                            padding: '0.45rem 0.9rem',
-                            borderRadius: 'var(--radius-full)',
-                            fontWeight: 600,
-                            fontSize: '0.8rem',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '9999px',
+                            fontWeight: 700,
+                            fontSize: '0.72rem',
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
                             textDecoration: 'none',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '0.3rem',
+                            gap: '0.35rem',
                           }}
                         >
-                          <Send size={13} /> Remplir
+                          <Send size={12} strokeWidth={2.5} /> Remplir
                         </Link>
                       )}
                     </div>
@@ -256,20 +276,32 @@ export default async function PractitionerPage() {
           )}
         </section>
 
-        {/* ============ PATIENTS ============ */}
-        <section>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+        {/* Patients */}
+        <section className="elx-fade-up elx-delay-3">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <h2
+              style={{
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: '#9CA3AF',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.55rem',
+              }}
+            >
               Mes patients
               <span
                 style={{
-                  marginLeft: '0.5rem',
-                  background: 'var(--surface-hover)',
-                  color: 'var(--text-secondary)',
-                  fontSize: '0.7rem',
-                  padding: '0.1rem 0.5rem',
-                  borderRadius: 'var(--radius-full)',
-                  fontWeight: 600,
+                  background: '#F3F4F6',
+                  color: '#0E1217',
+                  fontSize: '0.65rem',
+                  padding: '0.1rem 0.55rem',
+                  borderRadius: '9999px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
                 }}
               >
                 {patients.length}
@@ -280,22 +312,22 @@ export default async function PractitionerPage() {
           {patients.length === 0 ? (
             <div
               style={{
-                padding: '3rem 1.5rem',
-                background: 'var(--surface)',
-                border: '1px dashed var(--border)',
-                borderRadius: 'var(--radius-md)',
+                padding: '3.5rem 1.5rem',
+                background: 'white',
+                border: '1px dashed #E5E7EB',
+                borderRadius: '1.25rem',
                 textAlign: 'center',
               }}
             >
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: '0.25rem' }}>
-                Aucun patient pour l'instant
+              <p style={{ color: '#0E1217', fontWeight: 700, fontSize: '1.05rem', margin: '0 0 0.5rem' }}>
+                Aucun patient pour l'instant.
               </p>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                Cliquez sur « + Nouveau bilan » pour créer votre premier patient.
+              <p style={{ color: '#6B7280', fontSize: '0.9rem', margin: 0 }}>
+                Cliquez sur « Nouveau bilan » pour créer votre premier patient.
               </p>
             </div>
           ) : (
-            <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: '1.25rem', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
               {patients.map((patient, index) => {
                 const latestAssessment = patient.clinicalRecord?.assessments?.[0];
                 return (
@@ -307,19 +339,19 @@ export default async function PractitionerPage() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      padding: '0.9rem 1.25rem',
-                      borderBottom: index < patients.length - 1 ? '1px solid var(--border)' : 'none',
+                      padding: '1.1rem 1.5rem',
+                      borderBottom: index < patients.length - 1 ? '1px solid #F3F4F6' : 'none',
                       textDecoration: 'none',
-                      transition: 'background 0.15s',
+                      transition: 'background 0.15s ease',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0, flex: 1 }}>
                       <div
                         style={{
-                          width: '36px',
-                          height: '36px',
+                          width: '40px',
+                          height: '40px',
                           borderRadius: '50%',
-                          background: 'var(--primary-light)',
+                          background: '#0E1217',
                           color: 'white',
                           display: 'flex',
                           alignItems: 'center',
@@ -327,15 +359,16 @@ export default async function PractitionerPage() {
                           fontWeight: 700,
                           fontSize: '0.85rem',
                           flexShrink: 0,
+                          letterSpacing: '0.02em',
                         }}
                       >
                         {patientInitials(patient)}
                       </div>
                       <div style={{ minWidth: 0 }}>
-                        <h4 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+                        <h4 style={{ fontWeight: 600, color: '#0E1217', fontSize: '0.98rem', margin: 0 }}>
                           {patientLabel(patient)}
                         </h4>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '0.1rem 0 0 0' }}>
+                        <p style={{ fontSize: '0.82rem', color: '#6B7280', margin: '0.15rem 0 0 0' }}>
                           {patient.clinicalRecord?.pathology || 'Pathologie non renseignée'}
                         </p>
                       </div>
@@ -343,14 +376,14 @@ export default async function PractitionerPage() {
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
                       <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 500, margin: 0 }}>
+                        <p style={{ fontSize: '0.82rem', color: '#0E1217', fontWeight: 500, margin: 0 }}>
                           {latestAssessment ? latestAssessment.timelineAnchor.replace(/_/g, ' ') : 'Aucun bilan'}
                         </p>
-                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>
+                        <p style={{ fontSize: '0.72rem', color: '#9CA3AF', margin: 0 }}>
                           {latestAssessment ? new Date(latestAssessment.timestamp).toLocaleDateString('fr-FR') : ''}
                         </p>
                       </div>
-                      <ChevronRight size={16} color="var(--text-secondary)" />
+                      <ArrowRight size={14} strokeWidth={2} color="#0E1217" />
                     </div>
                   </Link>
                 );

@@ -1,6 +1,6 @@
 import { getPatientHistory } from '@/lib/data';
 import Link from 'next/link';
-import { ChevronLeft, User, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText, ClipboardList, BookOpen } from 'lucide-react';
+import { ArrowLeft, Calendar, Activity, Database, TrendingUp, Dumbbell, Video, FileText, ClipboardList, BookOpen } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import PrintButton from '@/components/PrintButton';
 import AssignTestsModal from '@/components/AssignTestsModal';
@@ -26,9 +26,17 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
   if (!patient || !patient.clinicalRecord) {
     return (
-      <main style={{ padding: '2rem 1rem', background: 'var(--background)', minHeight: '100vh', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>Aucun dossier patient trouvé.</h2>
-        <Link href="/practitioner" style={{ color: 'var(--primary)', marginTop: '1rem', display: 'inline-block' }}>Retour</Link>
+      <main style={{ background: 'white', color: '#0E1217', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 1.5rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '420px' }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: '1rem' }}>Dossier</p>
+          <h1 style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2.2rem)', fontWeight: 800, color: '#0E1217', letterSpacing: '-0.025em', margin: 0 }}>Aucun dossier patient trouvé.</h1>
+          <Link
+            href="/practitioner"
+            style={{ marginTop: '2rem', display: 'inline-flex', alignItems: 'center', gap: '0.6rem', padding: '0.95rem 1.75rem', background: '#0E1217', color: 'white', textDecoration: 'none', borderRadius: '9999px', fontWeight: 700, fontSize: '0.82rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}
+          >
+            Retour au tableau de bord
+          </Link>
+        </div>
       </main>
     );
   }
@@ -38,87 +46,126 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
   const exercises = record.exercises || [];
   const sessionNotes = record.sessionNotes || [];
 
+  const patientInitials = `${patient.firstName?.[0] ?? ''}${patient.lastName?.[0] ?? ''}`.toUpperCase() || patient.identifier?.slice(0, 2).toUpperCase() || '?';
+
   return (
-    <main style={{ padding: '2rem 1rem', background: 'var(--background)', minHeight: '100vh' }}>
-      <nav className="no-print" style={{ maxWidth: '1000px', margin: '0 auto 2rem auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Link 
-          href="/practitioner" 
-          style={{ 
-            color: 'var(--text-secondary)', 
-            fontWeight: 600, 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            background: 'var(--surface)',
-            borderRadius: 'var(--radius-full)',
-            border: '1px solid var(--border)'
+    <main style={{ background: 'white', color: '#0E1217', minHeight: '100vh' }}>
+      <header className="no-print" style={{ borderBottom: '1px solid rgba(14,18,23,0.06)' }}>
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '1.25rem 2rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
           }}
         >
-          <ChevronLeft size={20} />
-          Retour au mode Praticien
-        </Link>
-
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Link href="/practitioner" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
+            <Activity size={20} color="#0E1217" strokeWidth={2.4} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0E1217', letterSpacing: '-0.01em' }}>AssesMe</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#9CA3AF', letterSpacing: '0.18em', marginTop: '0.1rem' }}>FICHE PATIENT</span>
+            </div>
+          </Link>
           <Link
-            href={`/practitioner/library?patientId=${patient.id}&recordId=${record.id}&patientName=${encodeURIComponent(patient.firstName ?? patient.identifier ?? 'Patient')}`}
+            href="/practitioner"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.5rem',
-              background: 'var(--surface)',
-              color: 'var(--primary)',
-              padding: '0.5rem 1rem',
-              borderRadius: 'var(--radius-full)',
-              fontWeight: 600,
-              border: '1px solid var(--primary)',
+              gap: '0.4rem',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: '#0E1217',
               textDecoration: 'none',
-              fontSize: '0.875rem',
             }}
           >
-            <BookOpen size={16} /> Bibliothèque
+            <ArrowLeft size={14} strokeWidth={2.5} />
+            Tableau de bord
           </Link>
-          <PortalLinkButton recordId={record.id} patientName={patient.firstName ?? patient.identifier ?? 'Patient'} />
-          <AssignTestsModal recordId={record.id} />
-          <PrintButton />
         </div>
-      </nav>
+      </header>
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-        <MedicalHeader />
-        
-        {/* Patient Identity Card */}
-        <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <div style={{ background: 'var(--surface-hover)', padding: '1.5rem', borderRadius: '50%' }}>
-            <User size={48} color="var(--primary)" />
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 1.5rem 5rem', display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+        {/* Hero patient */}
+        <div className="elx-fade-up" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: '#0E1217',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 700,
+                fontSize: '1.4rem',
+                letterSpacing: '0.02em',
+                flexShrink: 0,
+              }}
+            >
+              {patientInitials}
+            </div>
+            <div>
+              <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: '0.4rem' }}>
+                Dossier N° {record.id.split('-')[0].toUpperCase()}
+              </p>
+              <h1 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 800, color: '#0E1217', letterSpacing: '-0.025em', lineHeight: 1.1, margin: 0 }}>
+                {patient.firstName} {patient.lastName}
+              </h1>
+            </div>
           </div>
-          <div>
-            <h1 style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
-              {patient.firstName} {patient.lastName}
-            </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem' }}>
-              Dossier N° {record.id.split('-')[0].toUpperCase()}
-            </p>
+
+          <div className="no-print" style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Link
+              href={`/practitioner/library?patientId=${patient.id}&recordId=${record.id}&patientName=${encodeURIComponent(patient.firstName ?? patient.identifier ?? 'Patient')}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                background: 'white',
+                color: '#0E1217',
+                padding: '0.55rem 1rem',
+                borderRadius: '9999px',
+                fontWeight: 600,
+                border: '1px solid #E5E7EB',
+                textDecoration: 'none',
+                fontSize: '0.82rem',
+              }}
+            >
+              <BookOpen size={15} strokeWidth={2} /> Bibliothèque
+            </Link>
+            <PortalLinkButton recordId={record.id} patientName={patient.firstName ?? patient.identifier ?? 'Patient'} />
+            <AssignTestsModal recordId={record.id} />
+            <PrintButton />
           </div>
         </div>
+
+        <MedicalHeader />
 
         {/* Graphiques d'évolution (Recharts) */}
         {assessments.length > 0 && (
-          <div className="no-print">
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <TrendingUp size={24} color="var(--primary)" />
-              Tableau de Bord Clinique
+          <section className="no-print">
+            <h2 style={{ fontSize: '0.7rem', fontWeight: 600, color: '#9CA3AF', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+              <TrendingUp size={14} strokeWidth={2} color="#0E1217" />
+              Tableau de bord clinique
             </h2>
             <EvolutionChart assessments={assessments} />
-          </div>
+          </section>
         )}
 
         {/* Plan de Traitement à Domicile (HEP) */}
         <div style={{ marginTop: '1rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Dumbbell size={24} color="var(--primary)" />
-              Plan de Traitement à Domicile
+            <h2 style={{ fontSize: '0.7rem', fontWeight: 600, color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '0.5rem', letterSpacing: '0.18em', textTransform: 'uppercase', margin: 0 }}>
+              <Dumbbell size={14} strokeWidth={2} color="#0E1217" />
+              Plan de traitement à domicile
             </h2>
             <AddExerciseModal recordId={record.id} patientId={patient.id} />
           </div>
@@ -167,8 +214,8 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
         {/* Demandes de Bilans en Attente */}
         <div style={{ marginTop: '1rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <ClipboardList size={24} color="var(--primary)" />
+          <h2 style={{ fontSize: '0.7rem', fontWeight: 600, color: '#9CA3AF', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+            <ClipboardList size={14} strokeWidth={2} color="#0E1217" />
             Bilans en attente
           </h2>
           
@@ -197,7 +244,7 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                      <span style={{ background: '#FEF08A', color: '#854D0E', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                      <span style={{ background: '#0E1217', color: 'white', padding: '0.2rem 0.7rem', borderRadius: '9999px', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                         En attente
                       </span>
                       <CopyLinkButton link={`/fill?requestId=${req.id}`} />
@@ -219,8 +266,8 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
 
         {/* Timeline of Assessments (Raw Data) */}
         <div style={{ marginTop: '1rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Activity size={24} color="var(--primary)" />
+          <h2 style={{ fontSize: '0.7rem', fontWeight: 600, color: '#9CA3AF', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+            <Activity size={14} strokeWidth={2} color="#0E1217" />
             Historique détaillé des évaluations
           </h2>
 
@@ -384,9 +431,9 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                                     </div>
                                   )}
                                   {qDef.decisionAlgorithm && (
-                                    <div style={{ background: '#FEF3C7', padding: '0.75rem', borderRadius: 'var(--radius-sm)' }}>
-                                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#92400E', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Algorithme d'Interprétation</span>
-                                      <p style={{ fontSize: '0.875rem', color: '#92400E', margin: 0, fontWeight: 500 }}>{qDef.decisionAlgorithm}</p>
+                                    <div style={{ background: '#F3F4F6', padding: '0.85rem 1rem', borderRadius: '0.6rem', border: '1px solid #E5E7EB', borderLeft: '3px solid #0E1217' }}>
+                                      <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: '#0E1217', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Algorithme d'interprétation</span>
+                                      <p style={{ fontSize: '0.88rem', color: '#0E1217', margin: 0, fontWeight: 500, lineHeight: 1.5 }}>{qDef.decisionAlgorithm}</p>
                                     </div>
                                   )}
                                   {qDef.therapeuticInterventions && (
@@ -439,9 +486,9 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
         {/* Journal des Séances (SOAP Notes) */}
         <div style={{ marginTop: '1rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <FileText size={24} color="var(--primary)" />
-              Journal des Séances
+            <h2 style={{ fontSize: '0.7rem', fontWeight: 600, color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '0.5rem', letterSpacing: '0.18em', textTransform: 'uppercase', margin: 0 }}>
+              <FileText size={14} strokeWidth={2} color="#0E1217" />
+              Journal des séances
             </h2>
             <AddNoteModal recordId={record.id} />
           </div>

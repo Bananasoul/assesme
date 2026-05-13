@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useMemo, useTransition } from 'react';
+import React, { useState, useMemo, useTransition, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import {
   X,
@@ -139,42 +140,48 @@ export default function NewBilanWizard({ patients }: Props) {
     }
   };
 
-  // ============ Bouton déclencheur ============
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          padding: '1rem 1.75rem',
-          background: 'var(--primary)',
-          color: 'white',
-          borderRadius: 'var(--radius-full)',
-          fontWeight: 600,
-          fontSize: '1rem',
-          boxShadow: 'var(--shadow-md)',
-          border: 'none',
-          cursor: 'pointer',
-          transition: 'transform 0.15s',
-        }}
-        onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.97)')}
-        onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-      >
-        <Plus size={20} />
-        Nouveau bilan
-      </button>
-    );
+  // Portail monté seulement côté client (SSR-safe)
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const trigger = (
+    <button
+      onClick={() => setIsOpen(true)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        padding: '1rem 1.75rem',
+        background: 'var(--primary)',
+        color: 'white',
+        borderRadius: 'var(--radius-full)',
+        fontWeight: 600,
+        fontSize: '1rem',
+        boxShadow: 'var(--shadow-md)',
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'transform 0.15s',
+      }}
+      onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.97)')}
+      onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+    >
+      <Plus size={20} />
+      Nouveau bilan
+    </button>
+  );
+
+  if (!isOpen || !mounted) {
+    return trigger;
   }
 
-  return (
+  const modal = (
     <div
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0,0,0,0.55)',
-        backdropFilter: 'blur(4px)',
+        background: 'rgba(14, 18, 23, 0.72)',
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -185,14 +192,15 @@ export default function NewBilanWizard({ patients }: Props) {
       <div
         className="animate-slide-up"
         style={{
-          background: 'var(--surface)',
-          borderRadius: 'var(--radius-lg)',
+          background: 'white',
+          borderRadius: '1.25rem',
+          border: '1px solid #E5E7EB',
           width: '100%',
           maxWidth: '780px',
           maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: 'var(--shadow-lg)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0,0,0,0.05)',
           overflow: 'hidden',
         }}
       >
@@ -286,7 +294,7 @@ export default function NewBilanWizard({ patients }: Props) {
           }}
         >
           {error && (
-            <div style={{ color: '#B91C1C', fontSize: '0.85rem', fontWeight: 500 }}>⚠ {error}</div>
+            <div style={{ color: '#0E1217', fontSize: '0.85rem', fontWeight: 600 }}>⚠ {error}</div>
           )}
           <div style={{ display: 'flex', gap: '0.75rem', marginLeft: 'auto' }}>
             {step > 1 && step < 4 && (
@@ -367,6 +375,13 @@ export default function NewBilanWizard({ patients }: Props) {
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      {trigger}
+      {createPortal(modal, document.body)}
+    </>
   );
 }
 
@@ -530,7 +545,7 @@ function InlineCreatePatient({ onCreated, onCancel }: { onCreated: (id: string) 
       </div>
 
       {error && (
-        <div style={{ padding: '0.6rem 0.75rem', background: '#FEE2E2', color: '#B91C1C', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', fontWeight: 500 }}>
+        <div style={{ padding: '0.6rem 0.75rem', background: '#F3F4F6', color: '#0E1217', borderRadius: 'var(--radius-sm)', fontSize: '0.85rem', fontWeight: 600, border: '1px solid #E5E7EB' }}>
           {error}
         </div>
       )}
@@ -670,7 +685,7 @@ function Step3Tests({
                   alignItems: 'flex-start',
                   gap: '0.85rem',
                   padding: '1rem 1.15rem',
-                  background: isSel ? 'rgba(99, 102, 241, 0.06)' : 'var(--surface)',
+                  background: isSel ? '#F9FAFB' : 'var(--surface)',
                   border: `1.5px solid ${isSel ? 'var(--primary)' : 'var(--border)'}`,
                   borderRadius: 'var(--radius-md)',
                   cursor: 'pointer',
@@ -711,7 +726,7 @@ function Step3Tests({
                         alignItems: 'flex-start',
                         gap: '0.4rem',
                         padding: '0.5rem 0.65rem',
-                        background: 'rgba(99, 102, 241, 0.08)',
+                        background: '#F3F4F6',
                         borderRadius: '6px',
                         fontSize: '0.85rem',
                         color: 'var(--text-primary)',
@@ -765,7 +780,7 @@ function Step4Send({
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <div style={{ display: 'inline-flex', padding: '1rem', background: '#DCFCE7', color: '#16a34a', borderRadius: '50%', marginBottom: '1rem' }}>
+      <div style={{ display: 'inline-flex', padding: '1rem', background: '#F3F4F6', color: '#0E1217', borderRadius: '50%', marginBottom: '1rem', border: '1px solid #E5E7EB' }}>
         <Check size={32} />
       </div>
       <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
@@ -812,7 +827,7 @@ function Step4Send({
               justifyContent: 'center',
               gap: '0.4rem',
               padding: '0.65rem 1rem',
-              background: copied ? '#16a34a' : 'var(--surface-hover)',
+              background: copied ? '#0E1217' : 'var(--surface-hover)',
               color: copied ? 'white' : 'var(--text-primary)',
               border: 'none',
               borderRadius: 'var(--radius-md)',
@@ -832,7 +847,7 @@ function Step4Send({
               justifyContent: 'center',
               gap: '0.4rem',
               padding: '0.65rem 1rem',
-              background: '#25D366',
+              background: '#374151',
               color: 'white',
               textDecoration: 'none',
               borderRadius: 'var(--radius-md)',

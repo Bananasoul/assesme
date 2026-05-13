@@ -110,17 +110,20 @@ export default function EvolutionChart({ assessments }: Props) {
               fontSize: '0.75rem',
               fontWeight: 600,
               display: 'inline-block',
-              backgroundColor: data.isSignificant 
-                ? (data.isImprovement ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)')
-                : 'rgba(156, 163, 175, 0.1)',
-              color: data.isSignificant 
-                ? (data.isImprovement ? '#16a34a' : '#dc2626')
-                : '#6b7280'
+              backgroundColor: data.isSignificant
+                ? (data.isImprovement ? '#0E1217' : '#FFFFFF')
+                : '#F3F4F6',
+              color: data.isSignificant
+                ? (data.isImprovement ? '#FFFFFF' : '#0E1217')
+                : '#6B7280',
+              border: data.isSignificant && !data.isImprovement ? '1px solid #0E1217' : '1px solid transparent',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase'
             }}>
               {data.isSignificant ? (
-                data.isImprovement ? `🟢 Amélioration Clinique (${data.diff > 0 ? '+' : ''}${data.diff} pts)` : `🔴 Dégradation Clinique (${data.diff > 0 ? '+' : ''}${data.diff} pts)`
+                data.isImprovement ? `↑ Amélioration clinique (${data.diff > 0 ? '+' : ''}${data.diff} pts)` : `↓ Dégradation clinique (${data.diff > 0 ? '+' : ''}${data.diff} pts)`
               ) : (
-                `⚪ Non significatif (${data.diff > 0 ? '+' : ''}${data.diff} pts)`
+                `— Non significatif (${data.diff > 0 ? '+' : ''}${data.diff} pts)`
               )}
             </div>
           )}
@@ -137,7 +140,7 @@ export default function EvolutionChart({ assessments }: Props) {
         const maxScoreForType = data[0]?.maxScore || 100;
         
         // Define colors based on type (just to make it look nice)
-        const color = type === 'ODI' ? '#3b82f6' : type === 'TAMPA' ? '#ec4899' : 'var(--primary)';
+        const color = type === 'ODI' ? '#0E1217' : type === 'TAMPA' ? '#0E1217' : 'var(--primary)';
 
         return (
           <div key={type} style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)' }}>
@@ -196,17 +199,20 @@ export default function EvolutionChart({ assessments }: Props) {
                         borderRadius: '0.25rem',
                         fontSize: '0.75rem',
                         fontWeight: 600,
-                        backgroundColor: d.isSignificant 
-                          ? (d.isImprovement ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)')
-                          : 'rgba(156, 163, 175, 0.1)',
-                        color: d.isSignificant 
-                          ? (d.isImprovement ? '#16a34a' : '#dc2626')
-                          : '#6b7280'
+                        backgroundColor: d.isSignificant
+                          ? (d.isImprovement ? '#0E1217' : '#FFFFFF')
+                          : '#F3F4F6',
+                        color: d.isSignificant
+                          ? (d.isImprovement ? '#FFFFFF' : '#0E1217')
+                          : '#6B7280',
+                        border: d.isSignificant && !d.isImprovement ? '1px solid #0E1217' : '1px solid transparent',
+                        letterSpacing: '0.05em',
+                        textTransform: 'uppercase'
                       }}>
                         {d.isSignificant ? (
-                          d.isImprovement ? `🟢 Amélioration (${d.diff > 0 ? '+' : ''}${d.diff} pts)` : `🔴 Dégradation (${d.diff > 0 ? '+' : ''}${d.diff} pts)`
+                          d.isImprovement ? `↑ Amélioration (${d.diff > 0 ? '+' : ''}${d.diff} pts)` : `↓ Dégradation (${d.diff > 0 ? '+' : ''}${d.diff} pts)`
                         ) : (
-                          `⚪ Non significatif (${d.diff > 0 ? '+' : ''}${d.diff} pts)`
+                          `— Non significatif (${d.diff > 0 ? '+' : ''}${d.diff} pts)`
                         )}
                       </div>
                     </div>

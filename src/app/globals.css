@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Core Colors */
-  --primary: #4F46E5; /* Indigo 600 - Trust, Clinical */
-  --primary-light: #818CF8;
-  --primary-dark: #3730A3;
-  
-  --secondary: #10B981; /* Emerald 500 - Success, Fun */
-  --secondary-light: #34D399;
-  
-  --accent: #F43F5E; /* Rose 500 - Pain scale, Alerts */
-  --accent-light: #FB7185;
+  /* Core Colors — palette noir & blanc uniquement */
+  --primary: #0E1217;        /* near-black */
+  --primary-light: #374151;  /* gray 700 — utilisé comme dark surface */
+  --primary-dark: #000000;
+
+  --secondary: #374151;
+  --secondary-light: #6B7280;
+
+  --accent: #0E1217;         /* pas de rose */
+  --accent-light: #6B7280;
 
   /* Surface Colors */
   --background: #F9FAFB; /* Gray 50 */
@@ -36,17 +36,6 @@
 
 .print-only {
   display: none !important;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #111827;
-    --surface: #1F2937;
-    --surface-hover: #374151;
-    --text-primary: #F9FAFB;
-    --text-secondary: #9CA3AF;
-    --border: #374151;
-  }
 }
 
 html {
@@ -138,7 +127,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #8B5CF6;
+  color: #0E1217;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -147,7 +136,7 @@ button {
   transition: color 0.25s ease, gap 0.25s ease;
 }
 .elx-link:hover {
-  color: #6D28D9;
+  color: #4B5563;
   gap: 0.85rem;
 }
 
@@ -278,6 +267,37 @@ button {
 
 .patient-row:hover {
   background: var(--surface-hover);
+}
+
+/* ============================================================
+   Questions défilantes (marquee horizontal continu)
+   ============================================================ */
+.elx-questions {
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.elx-questions__track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  animation: elxQuestionMarquee 120s linear infinite;
+}
+.elx-questions__item {
+  flex: 0 0 auto;
+  padding: 0 3rem;
+  white-space: nowrap;
+  font-style: italic;
+  font-weight: 600;
+  color: #0E1217;
+}
+
+@keyframes elxQuestionMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 /* === PRINT / PDF EXPORT === */

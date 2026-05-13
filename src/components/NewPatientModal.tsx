@@ -136,8 +136,8 @@ export default function NewPatientModal({ triggerLabel, minimal = false, onCreat
           <div
             style={{
               padding: '0.75rem 1rem',
-              background: '#FEE2E2',
-              color: '#B91C1C',
+              background: '#F3F4F6',
+              color: '#0E1217',
               borderRadius: 'var(--radius-md)',
               marginBottom: '1rem',
               fontSize: '0.875rem',
