@@ -144,6 +144,7 @@ export async function createPatient(formData: FormData) {
     return { success: true, patientId: patient.id };
   } catch (error) {
     console.error('Error creating patient:', error);
-    return { error: 'Une erreur est survenue lors de la création du patient.' };
+    const detail = error instanceof Error ? error.message : String(error);
+    return { error: `Création impossible : ${detail}` };
   }
 }
