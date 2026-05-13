@@ -1,3 +1,67 @@
+/**
+ * Services hospitaliers où la kinésithérapie est régulièrement présente.
+ * Liste pensée pour un CHU. Ajoute/retire selon le contexte.
+ */
+export const DEPARTMENTS = [
+  'Gériatrie',
+  'Orthopédie',
+  'Traumatologie',
+  'Chirurgie orthopédique',
+  'Médecine du sport',
+  'Rhumatologie',
+  'Médecine physique et réadaptation',
+  'Neurologie',
+  'Neurochirurgie',
+  'Réadaptation neurologique',
+  'Cardiologie',
+  'Réadaptation cardiaque',
+  'Chirurgie cardio-thoracique',
+  'Pneumologie',
+  'Soins intensifs / Réanimation',
+  'Médecine interne',
+  'Chirurgie abdominale / digestive',
+  'Oncologie',
+  'Soins palliatifs',
+  'Algologie / Douleur chronique',
+  'ORL / Vestibulaire',
+  'Pédiatrie',
+  'Pelvi-périnéologie',
+  'Gynéco-obstétrique',
+  'Urgences',
+] as const;
+
+export type Department = (typeof DEPARTMENTS)[number];
+
+/**
+ * Indications post-opératoires / pathologies fréquentes pour lesquelles
+ * une combinaison de tests est généralement recommandée.
+ */
+export const INDICATIONS: { label: string; tests: string[]; departments: Department[] }[] = [
+  { label: 'PTH (prothèse totale de hanche)', tests: ['hoos', 'hoos-full', 'tug', '6mwt', 'nprs'], departments: ['Orthopédie', 'Chirurgie orthopédique', 'Gériatrie'] },
+  { label: 'PTG (prothèse totale de genou)', tests: ['koos', 'koos-full', 'tug', 'lefs', 'nprs'], departments: ['Orthopédie', 'Chirurgie orthopédique', 'Gériatrie'] },
+  { label: 'Clou gamma / Fracture du col du fémur', tests: ['tug', 'bbs', 'tinetti', '6mwt', 'nprs', 'hoos'], departments: ['Traumatologie', 'Gériatrie'] },
+  { label: 'Chute / Risque de chute', tests: ['bbs', 'tinetti', 'tug', 'fabq', 'mrs'], departments: ['Gériatrie', 'Neurologie'] },
+  { label: 'Amputation MI', tests: ['lefs', '6mwt', 'bbs', 'tinetti', 'nprs'], departments: ['Traumatologie', 'Médecine physique et réadaptation'] },
+  { label: 'Ostéosynthèse MI', tests: ['lefs', 'nprs', 'psfs', '6mwt'], departments: ['Traumatologie', 'Orthopédie'] },
+  { label: 'Ostéosynthèse MS', tests: ['quickdash', 'nprs', 'psfs', 'prwe'], departments: ['Traumatologie', 'Orthopédie'] },
+  { label: 'Tendinopathie achilléenne', tests: ['visa-a', 'nprs', 'psfs', 'faos'], departments: ['Médecine du sport', 'Orthopédie'] },
+  { label: 'Tendinopathie rotulienne', tests: ['visa-p', 'nprs', 'psfs', 'koos'], departments: ['Médecine du sport', 'Orthopédie'] },
+  { label: 'Coiffe des rotateurs / SCAR', tests: ['spadi', 'constant', 'quickdash', 'nprs'], departments: ['Orthopédie', 'Médecine du sport'] },
+  { label: 'Lombalgie aiguë / subaiguë', tests: ['start-back', 'rmdq', 'odi', 'nprs', 'fabq'], departments: ['Rhumatologie', 'Médecine physique et réadaptation'] },
+  { label: 'Lombalgie chronique', tests: ['odi', 'rmdq', 'tampa', 'pcs', 'fabq', 'orebro', 'hads'], departments: ['Algologie / Douleur chronique', 'Rhumatologie', 'Médecine physique et réadaptation'] },
+  { label: 'Cervicalgie / Whiplash', tests: ['ndi', 'nprs', 'tampa', 'fabq'], departments: ['Rhumatologie', 'Médecine physique et réadaptation'] },
+  { label: 'Entorse de cheville / Reconstruction ligamentaire', tests: ['faos', 'faos-full', 'nprs', 'lefs'], departments: ['Médecine du sport', 'Traumatologie'] },
+  { label: 'Reconstruction LCA', tests: ['ikdc', 'koos', 'lefs', 'nprs'], departments: ['Médecine du sport', 'Chirurgie orthopédique'] },
+  { label: 'AVC / Hémiplégie', tests: ['mrs', 'bbs', 'tinetti', 'tug', '6mwt'], departments: ['Neurologie', 'Réadaptation neurologique'] },
+  { label: 'Vertige / Trouble vestibulaire', tests: ['dhi', 'bbs', 'tinetti'], departments: ['ORL / Vestibulaire', 'Neurologie'] },
+  { label: 'Douleur neuropathique', tests: ['dn4', 'nprs', 'pcs', 'hads'], departments: ['Algologie / Douleur chronique', 'Neurologie'] },
+  { label: 'Insuffisance cardiaque / Réadaptation cardiaque', tests: ['6mwt', 'nprs', 'hads', 'psfs'], departments: ['Cardiologie', 'Réadaptation cardiaque'] },
+  { label: 'BPCO / Pneumopathie', tests: ['6mwt', 'nprs', 'hads'], departments: ['Pneumologie'] },
+  { label: 'Post-réa / Sevrage prolongé', tests: ['6mwt', 'nprs', 'mrs', 'hads'], departments: ['Soins intensifs / Réanimation', 'Médecine physique et réadaptation'] },
+  { label: 'Chirurgie abdominale / Post-op digestive', tests: ['6mwt', 'nprs', 'psfs', 'hads'], departments: ['Chirurgie abdominale / digestive'] },
+  { label: 'Oncologie / Déconditionnement', tests: ['6mwt', 'nprs', 'hads', 'psfs', 'fabq'], departments: ['Oncologie', 'Soins palliatifs'] },
+];
+
 export type Option = {
   id: string;
   label: string;
@@ -34,6 +98,14 @@ export type QuestionnaireDef = {
     exercises: string[];
     education: string[];
   };
+
+  /**
+   * Services hospitaliers où ce test est pertinent.
+   * Permet au kiné de filtrer la bibliothèque par contexte clinique
+   * (ex: « kiné en service de gériatrie » → BBS, Tinetti, TUG, 6MWT…).
+   * Un test peut appartenir à plusieurs services.
+   */
+  departments?: Department[];
 
   references?: {
     /** Titre court ou nom de la référence */
@@ -73,6 +145,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Algologie / Douleur chronique', 'Rhumatologie', 'Médecine physique et réadaptation'],
     clinicalValue: 'Le score de Tampa (TSK) est fondamental pour évaluer la kinésiophobie (peur du mouvement) chez les patients souffrant de douleurs musculo-squelettiques chroniques, particulièrement lombaires. Il permet de distinguer un patient dont la limitation est purement mécanique d\'un patient bloqué par des appréhensions psychologiques.',
     decisionAlgorithm: 'Score > 37 : Kinésiophobie élevée (Drapeau Jaune). Le traitement direct de la mécanique (ex: renforcement intensif immédiat) risque d\'échouer ou d\'aggraver la douleur. Score < 37 : Faible kinésiophobie, approche mécanique classique recommandée.',
     therapeuticInterventions: {
@@ -178,6 +251,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Lombaire',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Rhumatologie', 'Médecine physique et réadaptation'],
     clinicalValue: 'Le STarT Back Tool est le premier test à réaliser face à une lombalgie récente. Il stratifie instantanément les patients en fonction de leur pronostic de chronicité. Il permet d\'allouer les bonnes ressources au bon patient, évitant la sur-médicalisation des cas simples et la sous-médicalisation des cas complexes.',
     decisionAlgorithm: 'Bas risque (Total < 4) : Excellente évolution naturelle. Moyen risque (Total >= 4, sous-score psy <= 3) : Risque de chronicité modéré, nécessite une thérapie physique standard. Haut risque (Sous-score psy >= 4) : Fort risque de chronicité psycho-sociale, nécessite une approche Cognitive-Comportementale (CBT) couplée à la kinésithérapie.',
     therapeuticInterventions: {
@@ -270,6 +344,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Cervical',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Rhumatologie', 'Médecine du sport', 'Médecine physique et réadaptation'],
     clinicalValue: 'Le NDI est le standard de référence pour évaluer l\'impact des cervicalgies sur les activités de la vie quotidienne. Il est très sensible aux changements cliniques, idéal pour objectiver l\'efficacité de vos traitements.',
     decisionAlgorithm: '0-8% : Aucune incapacité. 10-28% : Légère (Traitement conservateur simple). 30-48% : Modérée. 50-68% : Sévère (Évaluer les signes neurologiques périphériques). 70-100% : Complète (Avis médical urgent, suspicion de compression radiculaire ou myélopathie).',
     therapeuticInterventions: {
@@ -677,6 +752,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Lombaire',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Rhumatologie', 'Médecine physique et réadaptation', 'Algologie / Douleur chronique'],
     clinicalValue: 'L\'ODI est l\'outil orthopédique de référence pour la lombalgie sévère. Il évalue spécifiquement comment la douleur lombaire ou sciatique affecte la capacité du patient à gérer sa vie quotidienne (soins personnels, levage, marche, sommeil).',
     decisionAlgorithm: '0-20% : Incapacité minime (Rassurance, conseils). 21-40% : Modérée (Kinésithérapie active). 41-60% : Sévère (La douleur domine la vie du patient, investigation approfondie nécessaire). > 60% : Très sévère à Handicapé (Intervention médicale ou chirurgicale souvent envisagée).',
     therapeuticInterventions: {
@@ -1084,6 +1160,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Épaule',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Médecine du sport', 'Rhumatologie'],
     clinicalValue: 'Le SPADI divise ses scores en Douleur (5 items) et Incapacité (8 items). C\'est le test le plus complet pour le syndrome sous-acromial, les ruptures de coiffe et les capsulites rétractiles.',
     decisionAlgorithm: 'Un ratio Douleur > Incapacité suggère une pathologie très irritative (ex: tendinopathie calcifiante aiguë, phase chaude de capsulite) nécessitant une modulation de la douleur. Un ratio Incapacité > Douleur oriente vers un déficit de force, de contrôle moteur ou une raideur structurelle nécessitant de la charge mécanique.',
     therapeuticInterventions: {
@@ -1924,6 +2001,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Lombaire',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Rhumatologie', 'Médecine physique et réadaptation'],
     clinicalValue: 'Contrairement à l\'ODI (qui vise les cas sévères), le RMDQ est idéal pour la lombalgie aiguë ou légère à modérée. Ses questions courtes avec des réponses Oui/Non le rendent très rapide et facile à comprendre pour les patients.',
     decisionAlgorithm: 'Score < 4 : Limitations mineures. 4-11 : Limitations modérées. > 11 : Limitations sévères. Un changement clinique pertinent (MCID) correspond à une évolution de 30% du score initial ou de 4 à 5 points.',
     therapeuticInterventions: {
@@ -2355,6 +2433,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Hanche',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Chirurgie orthopédique', 'Gériatrie', 'Rhumatologie'],
     clinicalValue: 'Le HOOS-PS est essentiel pour détecter, évaluer et suivre la coxarthrose (arthrose de la hanche) ou les conflits fémoro-acétabulaires. Il guide la décision entre un traitement conservateur et une orientation chirurgicale (Prothèse Totale de Hanche).',
     decisionAlgorithm: 'Un score global bas avec de fortes limitations sur les items de flexion (s\'asseoir/mettre ses chaussettes) est typique d\'une coxarthrose avancée. Une non-amélioration après 3 mois de traitement conservateur bien conduit justifie un avis chirurgical.',
     therapeuticInterventions: {
@@ -2549,6 +2628,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Genou',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Chirurgie orthopédique', 'Médecine du sport', 'Rhumatologie'],
     clinicalValue: 'Le KOOS-PS est incontournable pour la gonarthrose, les syndromes fémoro-patellaires et les suites de lésions méniscales ou ligamentaires. Il est très réactif aux gains de la rééducation fonctionnelle.',
     decisionAlgorithm: 'Identifie les déficits spécifiques : difficulté aux escaliers = probable déficit ou inhibition du quadriceps / problème fémoro-patellaire. Difficulté aux torsions = instabilité ligamentaire ou lésion méniscale. Gain clinique significatif (MCID) = 8 à 10 points.',
     therapeuticInterventions: {
@@ -2802,6 +2882,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Général',
     administrationType: 'auto',
+    departments: ['Algologie / Douleur chronique', 'Oncologie', 'Cardiologie', 'Réadaptation cardiaque', 'Médecine physique et réadaptation', 'Rhumatologie'],
     clinicalValue: 'Bien que l\'on soit kinésithérapeute, le dépistage de l\'état psychologique est crucial. L\'anxiété et la dépression amplifient le signal nociceptif (douleur) et réduisent drastiquement l\'observance aux exercices de rééducation.',
     decisionAlgorithm: 'Sous-score Anxiété (A) ou Dépression (D) : 0-7 = Normal. 8-10 = Limite / À surveiller. 11-21 = Problème clinique probable. Un score >= 11 dans l\'une des catégories justifie une communication transparente avec le patient et une réorientation vers son médecin traitant ou un psychologue.',
     therapeuticInterventions: {
@@ -2934,6 +3015,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Membre Sup.',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Traumatologie', 'Médecine du sport', 'Rhumatologie'],
     clinicalValue: 'Le QuickDASH est le test le plus performant pour l\'ensemble du membre supérieur, car le bras, l\'épaule et la main travaillent toujours ensemble (chaîne cinétique). Idéal pour les troubles musculo-squelettiques (TMS) professionnels.',
     decisionAlgorithm: 'Le score est calculé sur 100 (pire état). Un score élevé avec des difficultés de force (ex: ouvrir un bocal) oriente vers une pathologie distale (tendinopathie du poignet/coude, canal carpien). Un score élevé sur les tâches amples oriente vers l\'épaule. MCID : 14 points.',
     therapeuticInterventions: {
@@ -3025,6 +3107,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Membre Inf.',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Traumatologie', 'Gériatrie', 'Médecine physique et réadaptation'],
     clinicalValue: 'Le LEFS offre une vision globale de la fonction du membre inférieur. Son grand avantage est sa validité sur une multitude de pathologies : entorse de cheville, fasciite plantaire, tendinopathie rotulienne, etc.',
     decisionAlgorithm: 'Score sur 80 (80 = fonction parfaite). Un score bas (<40) nécessite l\'utilisation d\'aides techniques et un travail en chaîne ouverte. Un score élevé (>60) indique que le patient est prêt pour des exercices fonctionnels avancés (sauts, course, changements de direction).',
     therapeuticInterventions: {
@@ -3095,6 +3178,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Neurologique',
     administrationType: 'therapist',
+    departments: ['Neurologie', 'Réadaptation neurologique', 'Gériatrie'],
     clinicalValue: 'La Modified Rankin Scale (mRS) est l\'échelle universelle en neurologie pour quantifier le handicap global post-AVC. Elle sert de boussole pour fixer les objectifs de rééducation : vise-t-on le retour à l\'emploi ou la sécurisation des transferts à domicile ?',
     decisionAlgorithm: 'Score 0-1 : Excellent pronostic, retour à une vie normale. Score 2-3 : Indépendance possible pour la marche, mais handicap limitant le travail. Cible la rééducation à la marche et l\'équilibre. Score 4-5 : Dépendance sévère. La priorité est la prévention des complications de décubitus, la verticalisation et l\'aide aux aidants familiaux.',
     therapeuticInterventions: {
@@ -3150,6 +3234,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Neurologique',
     administrationType: 'therapist',
+    departments: ['Gériatrie', 'Neurologie', 'Réadaptation neurologique', 'Médecine physique et réadaptation'],
     clinicalValue: 'La Berg Balance Scale (BBS) est le gold-standard pour l\'équilibre statique et dynamique. C\'est l\'outil le plus précis pour évaluer objectivement le risque de chute chez la personne âgée ou souffrant de troubles neurologiques.',
     decisionAlgorithm: 'Score < 45/56 : Le patient a un risque de chute avéré. La prescription d\'une aide à la marche (canne, déambulateur) est fortement recommandée. La rééducation doit cibler l\'équilibre. Score > 45 : Risque faible, on peut se concentrer sur l\'endurance et la force globale.',
     therapeuticInterventions: {
@@ -3297,6 +3382,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Neurologique',
     administrationType: 'auto',
+    departments: ['ORL / Vestibulaire', 'Neurologie'],
     clinicalValue: 'Le DHI est essentiel en rééducation vestibulaire. Il quantifie l\'impact physique, émotionnel et fonctionnel des vertiges et de l\'instabilité (ex: VPPB, névrite vestibulaire, maladie de Menière).',
     decisionAlgorithm: '16-34 : Léger. 36-52 : Modéré. > 54 : Sévère. Un sous-score physique élevé indique que les vertiges sont déclenchés par les mouvements de tête (typique du VPPB). Un sous-score émotionnel élevé nécessite de rassurer le patient sur la nature bénigne de son vertige.',
     therapeuticInterventions: {
@@ -3361,6 +3447,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Orthopédique', 'Membre Inférieur', 'Tendon', 'Achille'],
     estimatedTime: '3-5 min',
     administrationType: 'auto',
+    departments: ['Médecine du sport', 'Orthopédie'],
     maxScore: 100,
     clinicalValue: 'Le VISA-A est le test validé de référence pour évaluer la douleur et la fonction dans la tendinopathie d\'Achille. Il est essentiel pour déterminer la tolérance à la charge du tendon et guider la progression de la rééducation (isométrique -> isotonique lourd -> pliométrique).',
     decisionAlgorithm: 'Score < 50 : Tendinopathie sévère ou très réactive. Repos relatif, gestion de la charge et isométrique prioritaire. Score 50-80 : Tendinopathie modérée, phase de renforcement lourd lent (HSR) indiquée. Score > 80 : Reprise progressive des activités pliométriques et sportives (Energy Storage Phase). MCID: 10-12 points.',
@@ -3469,6 +3556,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Orthopédique', 'Genou', 'Tendon', 'Sport'],
     estimatedTime: '3-5 min',
     administrationType: 'auto',
+    departments: ['Médecine du sport', 'Orthopédie'],
     maxScore: 100,
     clinicalValue: 'Le VISA-P est spécifiquement conçu pour quantifier la douleur et l\'incapacité liées au tendon rotulien, pathologie très fréquente dans les sports de saut (basket, volley). Il permet de dicter le timing de réintroduction des sauts.',
     decisionAlgorithm: 'Score < 50 : Douleur limitant fortement l\'activité. Isométrique de type leg extension (45s) pour l\'effet analgésique cortical. Score 50-80 : Phase de renforcement lourd (Squat décliné, leg press lourd lent). Score > 80 : Introduction des tâches d\'accumulation d\'énergie (sauts, changements de direction rapides).',
@@ -3575,6 +3663,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Neurologique', 'Gériatrie', 'Équilibre'],
     estimatedTime: '2 min',
     administrationType: 'therapist',
+    departments: ['Gériatrie', 'Neurologie', 'Réadaptation neurologique', 'Médecine physique et réadaptation'],
     maxScore: 60,
     clinicalValue: 'Le TUG est un test physique essentiel (à chronométrer par le thérapeute). Le patient part assis d\'une chaise avec accoudoirs, se lève, marche 3 mètres, fait demi-tour, revient et s\'assoit. Il évalue la force des jambes, l\'équilibre dynamique et la vitesse de marche en une seule tâche écologique.',
     decisionAlgorithm: '< 10 secondes : Mobilité normale. 10 - 19 secondes : Mobilité légèrement altérée. 20 - 29 secondes : Mobilité réduite, risque de chute avéré (une aide à la marche doit être envisagée). >= 30 secondes : Mobilité très réduite, dépendance pour de nombreuses ADL (activités de la vie quotidienne).',
@@ -3620,6 +3709,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Lombaire', 'Psychologique', 'Général'],
     estimatedTime: '5-7 min',
     administrationType: 'auto',
+    departments: ['Algologie / Douleur chronique', 'Rhumatologie', 'Médecine physique et réadaptation'],
     maxScore: 96,
     clinicalValue: 'Le FABQ est essentiel pour détecter les patients lombalgiques qui développent une phobie du mouvement (kinesiophobie). Il comprend 2 sous-échelles : FABQ-Physique et FABQ-Travail. Il explique souvent pourquoi un traitement purement biomécanique échoue si les croyances ne sont pas adressées.',
     decisionAlgorithm: 'FABQ-Physique > 14 (sur 24) : Forte peur liée à l\'activité physique. Une exposition graduelle est nécessaire. FABQ-Travail > 34 (sur 42) : Fort risque de non-retour au travail (indicateur pronostique majeur d\'invalidité prolongée). L\'éducation aux neurosciences de la douleur est prioritaire.',
@@ -3686,6 +3776,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     tags: ['Général', 'Fonctionnel'],
     estimatedTime: '3 min',
     administrationType: 'therapist',
+    departments: ['Médecine physique et réadaptation', 'Oncologie', 'Cardiologie', 'Réadaptation cardiaque', 'Chirurgie abdominale / digestive', 'Orthopédie', 'Traumatologie'],
     maxScore: 10,
     clinicalValue: 'C\'est l\'outil le plus centré sur le patient. Au lieu d\'imposer des questions standardisées qui peuvent ne pas concerner le patient, celui-ci identifie 3 à 5 activités importantes pour LUI qu\'il ne peut plus faire ou qui sont difficiles (ex: jouer du violon, porter son petit-fils).',
     decisionAlgorithm: 'Un score bas définit les objectifs prioritaires de la rééducation. Le PSFS est extrêmement réactif au changement clinique. Un gain de 2 points sur l\'échelle de 10 est considéré comme un changement cliniquement significatif (MCID) validant l\'efficacité de votre traitement.',
@@ -3766,6 +3857,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Général',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Traumatologie', 'Rhumatologie', 'Algologie / Douleur chronique', 'Oncologie', 'Médecine physique et réadaptation', 'Soins intensifs / Réanimation', 'Cardiologie', 'Pneumologie', 'Chirurgie abdominale / digestive', 'Pédiatrie', 'Soins palliatifs'],
     clinicalValue: 'Outil universel d\'évaluation de l\'intensité douloureuse. Plus fiable et plus rapide que l\'EVA, recommandé par l\'IMMPACT pour le suivi de toute douleur chronique. Doit être complété systématiquement à chaque consultation comme indicateur principal de douleur.',
     decisionAlgorithm: 'Score 0–3 : douleur légère, pas d\'antalgique requis, rééducation active possible. Score 4–6 : douleur modérée, adaptation du dosage, antalgiques au besoin. Score 7–10 : douleur sévère, prioriser le contrôle de la douleur avant la mise en charge. Un changement ≥ 2 points = cliniquement significatif.',
     therapeuticInterventions: {
@@ -3834,6 +3926,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Général',
     administrationType: 'auto',
+    departments: ['Algologie / Douleur chronique', 'Rhumatologie', 'Médecine physique et réadaptation'],
     clinicalValue: 'Le catastrophisme est l\'un des plus puissants prédicteurs de chronicisation et de mauvais pronostic en douleur musculo-squelettique. Le PCS objective trois dimensions : la rumination, l\'amplification et le sentiment d\'impuissance. Indispensable en complément du TAMPA pour caractériser le profil psycho-comportemental du douloureux chronique.',
     decisionAlgorithm: 'Score < 20 : catastrophisme faible, pas d\'intervention spécifique requise. Score 20–29 : catastrophisme modéré, intégrer l\'éducation à la douleur dès les premières séances. Score ≥ 30 : catastrophisme élevé, drapeau jaune majeur — orienter vers une approche cognitivo-comportementale et envisager une co-prise en charge psychologique.',
     therapeuticInterventions: {
@@ -3899,6 +3992,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Général',
     administrationType: 'therapist',
+    departments: ['Algologie / Douleur chronique', 'Neurologie', 'Rhumatologie', 'Oncologie'],
     clinicalValue: 'Le DN4 est l\'outil de référence pour différencier une douleur nociceptive d\'une douleur neuropathique. Cette distinction conditionne la stratégie : la prise en charge mécanique seule échouera face à une composante neuropathique non identifiée. À utiliser systématiquement face à toute douleur chronique avec irradiation, brûlure ou paresthésies.',
     decisionAlgorithm: 'Score ≥ 4/10 : composante neuropathique probable (sensibilité 83 %, spécificité 90 %). Orienter vers un médecin pour discussion d\'un traitement spécifique (anticonvulsivant, antidépresseur tricyclique). Adapter la rééducation : désensibilisation, imagerie motrice, éviter les techniques douloureuses. Score < 4 : douleur principalement nociceptive, approche mécanique classique.',
     therapeuticInterventions: {
@@ -3970,6 +4064,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Général',
     administrationType: 'auto',
+    departments: ['Rhumatologie', 'Médecine physique et réadaptation', 'Algologie / Douleur chronique'],
     clinicalValue: 'Extension du START Back à toutes les douleurs musculo-squelettiques (pas uniquement lombaires). Cet outil de stratification identifie en 10 questions les patients à haut risque de chronicisation et d\'incapacité prolongée — particulièrement utile en pratique privée pour orienter précocement la prise en charge.',
     decisionAlgorithm: 'Score < 50 : risque faible, prise en charge standard. Score 50–60 : risque modéré, intégrer une composante éducative et un suivi rapproché. Score > 60 : risque élevé de chronicisation et d\'arrêt prolongé — envisager une prise en charge multidisciplinaire dès le début (psychologue, médecin du travail).',
     therapeuticInterventions: {
@@ -4080,6 +4175,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Membre Sup.',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Orthopédie', 'Traumatologie', 'Médecine du sport', 'Rhumatologie'],
     clinicalValue: 'Référence pour le poignet — plus spécifique que le QuickDASH qui couvre tout le membre supérieur. Particulièrement réactif après fracture du radius distal, tendinopathie de De Quervain, post-chirurgie du tunnel carpien. Distingue clairement la part douleur (50 %) et la part fonction (50 %).',
     decisionAlgorithm: 'Score 0–20 : retentissement léger, rééducation orientée gains de mobilité fine. Score 20–50 : retentissement modéré, équilibre travail manuel + renforcement progressif. Score > 50 : retentissement sévère — prioriser le contrôle douloureux et la fonction de base avant le renforcement. Un changement ≥ 11,5 points = cliniquement significatif.',
     therapeuticInterventions: {
@@ -4168,6 +4264,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Général',
     administrationType: 'therapist',
+    departments: ['Cardiologie', 'Réadaptation cardiaque', 'Pneumologie', 'Soins intensifs / Réanimation', 'Oncologie', 'Gériatrie', 'Médecine physique et réadaptation', 'Chirurgie cardio-thoracique', 'Chirurgie abdominale / digestive'],
     clinicalValue: 'Test sous-maximal le plus utilisé pour évaluer la capacité fonctionnelle d\'endurance. Indispensable en pathologie cardio-respiratoire, neurologique (post-AVC, Parkinson, SEP) et gériatrique. Indicateur global de la "réserve" du patient pour les activités de la vie quotidienne.',
     decisionAlgorithm: 'Distance < 300 m : déconditionnement sévère, prioriser la réhabilitation à l\'effort sub-maximal supervisé. 300–450 m : capacité limitée, objectifs d\'endurance à intégrer en complément. > 450 m : capacité conservée. Comparer à la valeur prédite par âge et taille (équations d\'Enright). Un gain ≥ 50 m est cliniquement significatif.',
     therapeuticInterventions: {
@@ -4244,6 +4341,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Genou',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Médecine du sport', 'Chirurgie orthopédique', 'Orthopédie'],
     clinicalValue: 'Référence pour le genou sportif (jeune adulte) — plus pertinent que KOOS qui est plutôt orienté arthrose. Particulièrement utilisé pour le suivi post-reconstruction LCA, lésion méniscale, instabilité fémoro-patellaire. Distingue clairement les symptômes (douleur, gonflement, blocage) et la fonction sportive (course, saut, pivot).',
     decisionAlgorithm: 'Score < 50 : retentissement sévère, retour au sport très probablement compromis sans rééducation prolongée. 50–75 : récupération partielle, focaliser sur la stabilité dynamique et les sauts contrôlés. > 75 : bonne récupération, intégrer la pliométrie et le travail spécifique au sport pratiqué. Un gain ≥ 11,5 points = changement cliniquement significatif.',
     therapeuticInterventions: {
@@ -4476,6 +4574,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Épaule',
     category: 'Orthopédique',
     administrationType: 'both',
+    departments: ['Orthopédie', 'Médecine du sport', 'Rhumatologie', 'Traumatologie'],
     clinicalValue: 'Référence post-opératoire pour l\'épaule. La version originale combine auto-évaluation (douleur + ADL : 35 points) ET examen clinique avec goniométrie (mobilités + force : 65 points). Cette version reproduit les 35 points patient-reported, à compléter par le score d\'examen clinique au cabinet pour le score total.',
     decisionAlgorithm: 'Score patient < 15/35 : retentissement sévère sur la vie quotidienne. Score 15–25 : retentissement modéré. Score > 25 : retentissement faible. Le score total (avec examen) est interprété ainsi : < 55 = mauvais, 55–80 = moyen, 81–90 = bon, > 90 = excellent.',
     therapeuticInterventions: {
@@ -4580,6 +4679,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Cheville',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Médecine du sport', 'Traumatologie', 'Orthopédie'],
     clinicalValue: 'Version courte validée du FAOS, plus spécifique que le LEFS. Très réactif sur les instabilités chroniques de cheville, les tendinopathies du tibialis postérieur, les fasciites plantaires et le post-opératoire. Cible la fonction physique principalement.',
     decisionAlgorithm: 'Score 0–30 : retentissement sévère, focaliser sur la stabilité de cheville et la reprise d\'appui progressive. 30–70 : retentissement modéré, intégrer le renforcement excentrique et la proprioception unipodale. > 70 : récupération avancée, intégrer la pliométrie et la reprise sportive.',
     therapeuticInterventions: {
@@ -4650,6 +4750,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Général',
     category: 'Neurologique',
     administrationType: 'therapist',
+    departments: ['Gériatrie', 'Neurologie', 'Réadaptation neurologique'],
     clinicalValue: 'Référence en gériatrie pour quantifier le risque de chute. Plus rapide que la Berg Balance Scale et plus discriminant pour la marche. Compose un score équilibre (16/28) et un score marche (12/28). Particulièrement utile chez les personnes âgées et les patients neurologiques.',
     decisionAlgorithm: 'Score ≥ 25 : risque de chute faible. 19–24 : risque modéré, prescrire une aide à la marche et adapter le domicile. ≤ 18 : risque ÉLEVÉ de chute, l\'aide technique est indispensable et la rééducation à l\'équilibre devient prioritaire.',
     therapeuticInterventions: {
@@ -4832,6 +4933,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Genou',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Médecine du sport', 'Chirurgie orthopédique', 'Orthopédie', 'Rhumatologie'],
     clinicalValue: 'Version complète et de référence du KOOS. Préférée à la version PS pour le suivi détaillé d\'une gonarthrose, d\'une reconstruction LCA ou d\'une PTG, car elle distingue 5 dimensions cliniquement indépendantes (vs 1 score global pour KOOS-PS). Cible recommandée par OMERACT-OARSI.',
     decisionAlgorithm: 'Chaque sous-échelle est normalisée 0–100 (100 = pas de problème). La version courte KOOS-PS suffit pour un dépistage rapide ; cette version complète est indispensable pour la recherche, le suivi détaillé et la communication multidisciplinaire. MCID : 8-10 points par sous-échelle.',
     therapeuticInterventions: {
@@ -4952,6 +5054,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Hanche',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Chirurgie orthopédique', 'Gériatrie', 'Orthopédie', 'Rhumatologie'],
     clinicalValue: 'Version complète et de référence du HOOS. Préférée à la version PS pour le suivi détaillé d\'une coxarthrose, d\'un conflit fémoro-acétabulaire ou d\'une PTH. Différencie 5 dimensions cliniquement indépendantes.',
     decisionAlgorithm: 'Chaque sous-échelle normalisée 0–100 (100 = pas de problème). Pour les suivis post-PTH, comparer les sous-échelles Douleur (effet immédiat) et Sport/QoL (récupération à 6 mois). MCID : 8-10 points par sous-échelle.',
     therapeuticInterventions: {
@@ -5050,6 +5153,7 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     bodyPart: 'Cheville',
     category: 'Orthopédique',
     administrationType: 'auto',
+    departments: ['Médecine du sport', 'Traumatologie', 'Orthopédie'],
     clinicalValue: 'Version complète et de référence du FAOS. Plus détaillée que la version PS, indispensable pour le suivi d\'une instabilité chronique de cheville, d\'une tendinopathie du tibialis postérieur ou d\'un post-opératoire de cheville/pied.',
     decisionAlgorithm: 'Chaque sous-échelle normalisée 0–100. Comparer l\'évolution des sous-échelles Douleur et Sport pour évaluer la trajectoire de récupération sportive après entorse / chirurgie. MCID : 9 points.',
     therapeuticInterventions: {

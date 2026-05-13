@@ -2,9 +2,10 @@
 
 import React, { useState, useTransition, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ClipboardList, X, Check, Copy, MessageCircle } from 'lucide-react';
+import { ClipboardList, X, Check, Copy, MessageCircle, Smartphone, Stethoscope, Users } from 'lucide-react';
 import { createAnonymousSession } from '@/app/actions/anonymousSession';
 import { QUESTIONNAIRES } from '@/data/questionnaires';
+import { DEPARTMENTS, INDICATIONS, type Department } from '@/data/questionnaires';
 import { QRCodeSVG } from 'qrcode.react';
 
 type Props = {
@@ -16,13 +17,19 @@ export default function AssignTestsModal({ recordId }: Props) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | ''>('');
+  const [selectedIndication, setSelectedIndication] = useState<string>('');
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  // Indications proposées en fonction du service choisi
+  const visibleIndications = selectedDepartment
+    ? INDICATIONS.filter((ind) => ind.departments.includes(selectedDepartment))
+    : INDICATIONS;
 
   // Categories for grouping
   const CATEGORIES = [
@@ -34,11 +41,12 @@ export default function AssignTestsModal({ recordId }: Props) {
     { id: 'Général', label: 'Général / Psycho', icon: '🎯', matchTags: ['Général', 'Psychologique', 'Fonctionnel'] },
   ];
 
-  // Filter tests based on search term (tags selection removed for simpler UI with categories)
+  // Filter tests by search term + service hospitalier
   const filteredTests = Object.values(QUESTIONNAIRES).filter(q => {
-    const matchesSearch = q.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch = q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           q.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
+    const matchesDept = !selectedDepartment || q.departments?.includes(selectedDepartment as Department);
+    return matchesSearch && matchesDept;
   });
 
   // Group tests
@@ -176,15 +184,66 @@ export default function AssignTestsModal({ recordId }: Props) {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', flex: 1, overflow: 'hidden' }}>
-                {/* Filtres Haut (Recherche & Pilules) */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <input 
-                    type="text" 
-                    placeholder="Rechercher un questionnaire..." 
+                {/* Filtres Haut : Service · Indication · Recherche */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: '0.4rem' }}>
+                        Service hospitalier
+                      </label>
+                      <select
+                        value={selectedDepartment}
+                        onChange={(e) => { setSelectedDepartment(e.target.value as Department | ''); setSelectedIndication(''); }}
+                        style={{ width: '100%', padding: '0.7rem 0.85rem', borderRadius: '0.7rem', border: '1px solid #E5E7EB', background: 'white', color: '#0E1217', outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem' }}
+                      >
+                        <option value="">Tous les services</option>
+                        {DEPARTMENTS.map((d) => (
+                          <option key={d} value={d}>{d}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: '0.4rem' }}>
+                        Indication / Pathologie
+                      </label>
+                      <select
+                        value={selectedIndication}
+                        onChange={(e) => {
+                          setSelectedIndication(e.target.value);
+                          const ind = INDICATIONS.find((i) => i.label === e.target.value);
+                          if (ind) setSelectedTests(ind.tests);
+                        }}
+                        style={{ width: '100%', padding: '0.7rem 0.85rem', borderRadius: '0.7rem', border: '1px solid #E5E7EB', background: 'white', color: '#0E1217', outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem' }}
+                      >
+                        <option value="">— Choisir pour pré-sélectionner —</option>
+                        {visibleIndications.map((i) => (
+                          <option key={i.label} value={i.label}>{i.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Rechercher un questionnaire…"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', background: 'var(--background)', color: 'var(--text-primary)', outline: 'none' }}
+                    style={{ width: '100%', padding: '0.75rem 0.85rem', borderRadius: '0.7rem', border: '1px solid #E5E7EB', background: 'white', color: '#0E1217', outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem' }}
                   />
+
+                  {/* Légende des icônes administration */}
+                  <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'center', fontSize: '0.72rem', color: '#6B7280', flexWrap: 'wrap' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <Smartphone size={13} strokeWidth={2} /> Auto-administré (patient)
+                    </span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <Stethoscope size={13} strokeWidth={2} /> Réalisé en cabinet (thérapeute)
+                    </span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <Users size={13} strokeWidth={2} /> Mixte
+                    </span>
+                  </div>
                 </div>
 
                 {/* Main area (Tests grouped) */}
@@ -230,17 +289,23 @@ export default function AssignTestsModal({ recordId }: Props) {
                                   <p style={{ fontSize: '0.75rem', color: isSelected ? 'rgba(255,255,255,0.75)' : '#6B7280', margin: 0 }}>{q.estimatedTime}</p>
                                   {q.administrationType && (
                                     <span style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '0.3rem',
                                       fontSize: '0.62rem',
-                                      padding: '0.2rem 0.55rem',
+                                      padding: '0.22rem 0.6rem',
                                       borderRadius: '9999px',
                                       fontWeight: 700,
                                       letterSpacing: '0.08em',
                                       textTransform: 'uppercase',
-                                      background: isSelected ? 'white' : (q.administrationType === 'auto' ? '#F3F4F6' : '#0E1217'),
+                                      background: isSelected ? 'white' : (q.administrationType === 'auto' ? '#F3F4F6' : q.administrationType === 'therapist' ? '#0E1217' : '#374151'),
                                       color: isSelected ? '#0E1217' : (q.administrationType === 'auto' ? '#0E1217' : 'white'),
-                                      border: `1px solid ${isSelected ? 'white' : (q.administrationType === 'auto' ? '#E5E7EB' : '#0E1217')}`,
+                                      border: `1px solid ${isSelected ? 'white' : (q.administrationType === 'auto' ? '#E5E7EB' : q.administrationType === 'therapist' ? '#0E1217' : '#374151')}`,
                                     }}>
-                                      {q.administrationType === 'auto' ? 'Auto-administré' : q.administrationType === 'therapist' ? 'Thérapeute' : 'Mixte'}
+                                      {q.administrationType === 'auto' && <Smartphone size={11} strokeWidth={2.4} />}
+                                      {q.administrationType === 'therapist' && <Stethoscope size={11} strokeWidth={2.4} />}
+                                      {q.administrationType === 'both' && <Users size={11} strokeWidth={2.4} />}
+                                      {q.administrationType === 'auto' ? 'Patient' : q.administrationType === 'therapist' ? 'Thérapeute' : 'Mixte'}
                                     </span>
                                   )}
                                 </div>
