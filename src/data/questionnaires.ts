@@ -36,9 +36,24 @@ export type QuestionnaireDef = {
   };
 
   references?: {
+    /** Titre court ou nom de la référence */
     title: string;
+    /** Auteur·trice·s (ex: "Kori SH, Miller RP, Todd DD") */
+    authors?: string;
+    /** Journal ou source bibliographique */
+    journal?: string;
+    /** Année de publication */
+    year?: number;
+    /** DOI canonique (sans préfixe https://doi.org/) ; ex: "10.1097/00007632-200011150-00017" */
+    doi?: string;
+    /** Lien direct (PubMed, JSTOR, etc.) si pas de DOI */
     url?: string;
-    type: 'methodology' | 'scientific_article';
+    /**
+     * - `primary_source` : publication fondatrice du test (où AssesMe le sourcent)
+     * - `scientific_article` : étude de validation, méta-analyse, étude psychométrique
+     * - `methodology` : manuel de scoring, ligne directrice, document de référence
+     */
+    type: 'primary_source' | 'methodology' | 'scientific_article';
   }[];
 
   questions: Question[];
@@ -72,10 +87,29 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
+        title: 'Kinisophobia: a new view of chronic pain behavior',
+        authors: 'Kori SH, Miller RP, Todd DD',
+        journal: 'Pain Management',
+        year: 1990,
+        type: 'primary_source',
+      },
+      {
+        title: 'Fear of movement/(re)injury in chronic low back pain and its relation to behavioral performance',
+        authors: 'Vlaeyen JWS, Kole-Snijders AMJ, Boeren RGB, van Eek H',
+        journal: 'Pain',
+        year: 1995,
+        doi: '10.1016/0304-3959(95)00073-2',
+        type: 'scientific_article',
+      },
+      {
         title: 'The Tampa Scale for Kinesiophobia: further examination of psychometric properties',
+        authors: 'French DJ, France CR, Vigneau F, French JA, Evans RT',
+        journal: 'Pain',
+        year: 2007,
+        doi: '10.1016/j.pain.2006.10.027',
         url: 'https://pubmed.ncbi.nlm.nih.gov/15324776/',
-        type: 'scientific_article'
-      }
+        type: 'scientific_article',
+      },
     ],
     // TSK-17 : 17 items, échelle de Likert 1–4.
     // Items inversés : 4, 8, 12, 16 (affirmations positives à recoder 5 − valeur).
@@ -158,9 +192,21 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
+        title: 'A primary care back pain screening tool: identifying patient subgroups for initial treatment',
+        authors: 'Hill JC, Dunn KM, Lewis M, Mullis R, Main CJ, Foster NE, Hay EM',
+        journal: 'Arthritis & Rheumatism',
+        year: 2008,
+        doi: '10.1002/art.23563',
+        type: 'primary_source',
+      },
+      {
         title: 'Subgrouping patients with low back pain in primary care: STarT Back Tool',
-        type: 'methodology'
-      }
+        authors: 'Hill JC, Whitehurst DGT, Lewis M, et al.',
+        journal: 'The Lancet',
+        year: 2011,
+        doi: '10.1016/S0140-6736(11)60937-9',
+        type: 'scientific_article',
+      },
     ],
     // STarT Back Tool: 9 items.
     // Items 1-8: échelle "Pas d'accord" (0) / "D'accord" (1).
@@ -239,8 +285,20 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The Neck Disability Index: a study of reliability and validity',
-        type: 'scientific_article'
-      }
+        authors: 'Vernon H, Mior S',
+        journal: 'Journal of Manipulative and Physiological Therapeutics',
+        year: 1991,
+        url: 'https://pubmed.ncbi.nlm.nih.gov/1834753/',
+        type: 'primary_source',
+      },
+      {
+        title: 'The Neck Disability Index: state-of-the-art, 1991–2008',
+        authors: 'Vernon H',
+        journal: 'Journal of Manipulative and Physiological Therapeutics',
+        year: 2008,
+        doi: '10.1016/j.jmpt.2008.08.006',
+        type: 'scientific_article',
+      },
     ],
     questions: [
       {
@@ -633,9 +691,21 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
+        title: 'The Oswestry low back pain disability questionnaire',
+        authors: 'Fairbank JC, Couper J, Davies JB, O\'Brien JP',
+        journal: 'Physiotherapy',
+        year: 1980,
+        url: 'https://pubmed.ncbi.nlm.nih.gov/6450426/',
+        type: 'primary_source',
+      },
+      {
         title: 'The Oswestry Disability Index',
-        type: 'scientific_article'
-      }
+        authors: 'Fairbank JCT, Pynsent PB',
+        journal: 'Spine',
+        year: 2000,
+        doi: '10.1097/00007632-200011150-00017',
+        type: 'scientific_article',
+      },
     ],
     questions: [
       {
@@ -1026,7 +1096,24 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Correction des postures d\'enroulement des épaules'
       ]
     },
-    references: [{ title: 'The Shoulder Pain and Disability Index: The Construct Validity and Responsiveness', type: 'scientific_article' }],
+    references: [
+      {
+        title: 'Development of a shoulder pain and disability index',
+        authors: 'Roach KE, Budiman-Mak E, Songsiridej N, Lertratanakul Y',
+        journal: 'Arthritis Care & Research',
+        year: 1991,
+        doi: '10.1002/art.1790040403',
+        type: 'primary_source',
+      },
+      {
+        title: 'The Shoulder Pain and Disability Index: the construct validity and responsiveness of a region-specific disability measure',
+        authors: 'Williams JW, Holleman DR, Simel DL',
+        journal: 'Journal of Rheumatology',
+        year: 1995,
+        url: 'https://pubmed.ncbi.nlm.nih.gov/7562759/',
+        type: 'scientific_article',
+      },
+    ],
     questions: [
       {
             "id": "spadi_p1",
@@ -1849,7 +1936,24 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Promotion du mouvement comme solution antalgique'
       ]
     },
-    references: [{ title: 'A study of the natural history of back pain', type: 'scientific_article' }],
+    references: [
+      {
+        title: 'A study of the natural history of back pain. Part I: Development of a reliable and sensitive measure of disability in low-back pain',
+        authors: 'Roland M, Morris R',
+        journal: 'Spine',
+        year: 1983,
+        doi: '10.1097/00007632-198303000-00004',
+        type: 'primary_source',
+      },
+      {
+        title: 'The Roland–Morris Disability Questionnaire and the Oswestry Disability Questionnaire',
+        authors: 'Roland M, Fairbank J',
+        journal: 'Spine',
+        year: 2000,
+        doi: '10.1097/00007632-200012150-00006',
+        type: 'scientific_article',
+      },
+    ],
     questions: [
       {
             "id": "rmdq1",
@@ -2263,7 +2367,16 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Utilisation précoce d\'une canne du côté opposé pour décharger l\'articulation'
       ]
     },
-    references: [{ title: 'Hip disability and osteoarthritis outcome score (HOOS)', type: 'scientific_article' }],
+    references: [
+      {
+        title: 'Hip disability and osteoarthritis outcome score (HOOS) — validity and responsiveness in total hip replacement',
+        authors: 'Nilsdotter AK, Lohmander LS, Klässbo M, Roos EM',
+        journal: 'BMC Musculoskeletal Disorders',
+        year: 2003,
+        doi: '10.1186/1471-2474-4-10',
+        type: 'primary_source',
+      },
+    ],
     questions: [
       {
             "id": "hoos_ps1",
@@ -2448,7 +2561,16 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Optimisation de la cadence en course à pied pour réduire les chocs'
       ]
     },
-    references: [{ title: 'Knee injury and Osteoarthritis Outcome Score (KOOS)', type: 'scientific_article' }],
+    references: [
+      {
+        title: 'Knee Injury and Osteoarthritis Outcome Score (KOOS) — development of a self-administered outcome measure',
+        authors: 'Roos EM, Roos HP, Lohmander LS, Ekdahl C, Beynnon BD',
+        journal: 'Journal of Orthopaedic & Sports Physical Therapy',
+        year: 1998,
+        doi: '10.2519/jospt.1998.28.2.88',
+        type: 'primary_source',
+      },
+    ],
     questions: [
       {
             "id": "koos_ps1",
@@ -2810,11 +2932,17 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Gestion de la charge d\'entraînement pour les sportifs (tennis, escalade)'
       ]
     },
-    references: [{
-      title: 'Development of the QuickDASH: comparison of three item-reduction approaches (Beaton et al., 2005)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/15866967/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'Development of the QuickDASH: comparison of three item-reduction approaches',
+        authors: 'Beaton DE, Wright JG, Katz JN; Upper Extremity Collaborative Group',
+        journal: 'Journal of Bone and Joint Surgery (American)',
+        year: 2005,
+        doi: '10.2106/JBJS.D.02060',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/15866967/',
+        type: 'primary_source',
+      },
+    ],
     // QuickDASH-11: 11 items (6 fonction + 1 social + 2 douleur + 2 autres). Score 1-5 par item.
     // Formule: ((sum/n) - 1) × 25 → 0-100. Min 10 réponses sur 11 requises.
     questions: [
@@ -2959,7 +3087,24 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Conseils sur l\'adaptation stricte du lieu de vie (salle de bain, lits médicalisés)'
       ]
     },
-    references: [{ title: 'The Modified Rankin Scale in Acute Stroke Trials', type: 'scientific_article', url: 'https://pubmed.ncbi.nlm.nih.gov/' }],
+    references: [
+      {
+        title: 'Interobserver agreement for the assessment of handicap in stroke patients',
+        authors: 'van Swieten JC, Koudstaal PJ, Visser MC, Schouten HJ, van Gijn J',
+        journal: 'Stroke',
+        year: 1988,
+        doi: '10.1161/01.STR.19.5.604',
+        type: 'primary_source',
+      },
+      {
+        title: 'Reliability of the modified Rankin Scale: a systematic review',
+        authors: 'Quinn TJ, Dawson J, Walters MR, Lees KR',
+        journal: 'Stroke',
+        year: 2009,
+        doi: '10.1161/STROKEAHA.109.557256',
+        type: 'scientific_article',
+      },
+    ],
     questions: [
       { id: 'mrs1', text: "Sélectionnez le niveau de handicap du patient :", options: [
         { id: '0', label: '0 - Aucun symptôme du tout', value: 0 },
@@ -3193,9 +3338,13 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The VISA-A questionnaire: a valid and reliable index of the clinical severity of Achilles tendinopathy',
+        authors: 'Robinson JM, Cook JL, Purdam C, Visentini PJ, Ross J, Maffulli N, Taunton JE, Khan KM',
+        journal: 'British Journal of Sports Medicine',
+        year: 2001,
+        doi: '10.1136/bjsm.35.5.335',
         url: 'https://pubmed.ncbi.nlm.nih.gov/11533405/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     // VISA-A: 8 items, scores variables. Total 0-100, plus haut = mieux. MCID 6,5 à 17 pts.
     questions: [
@@ -3297,9 +3446,13 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The VISA score: an index of severity of symptoms in patients with jumper\'s knee (patellar tendinosis)',
+        authors: 'Visentini PJ, Khan KM, Cook JL, Kiss ZS, Harcourt PR, Wark JD; Victorian Institute of Sport Tendon Study Group',
+        journal: 'Journal of Science and Medicine in Sport',
+        year: 1998,
+        doi: '10.1016/S1440-2440(98)80011-1',
         url: 'https://pubmed.ncbi.nlm.nih.gov/9536867/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     // VISA-P: 8 items, total 0-100. MCID ~13 pts (sports de saut).
     questions: [
@@ -3399,9 +3552,13 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'The Timed "Up & Go": a test of basic functional mobility for frail elderly persons',
+        authors: 'Podsiadlo D, Richardson S',
+        journal: 'Journal of the American Geriatrics Society',
+        year: 1991,
+        doi: '10.1111/j.1532-5415.1991.tb01616.x',
         url: 'https://pubmed.ncbi.nlm.nih.gov/1991946/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       {
@@ -3757,9 +3914,21 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'Development of a short form of the Örebro Musculoskeletal Pain Screening Questionnaire (Linton et al., 2011)',
+        title: 'A population-based study of spinal pain among 35–45-year-old individuals — early identification of psychosocial risk factors',
+        authors: 'Linton SJ, Halldén K',
+        journal: 'The Clinical Journal of Pain',
+        year: 1998,
+        doi: '10.1097/00002508-199809000-00007',
+        type: 'primary_source',
+      },
+      {
+        title: 'Development of a short form of the Örebro Musculoskeletal Pain Screening Questionnaire',
+        authors: 'Linton SJ, Nicholas M, MacDonald S',
+        journal: 'Spine',
+        year: 2011,
+        doi: '10.1097/BRS.0b013e3181d8a4d4',
         url: 'https://pubmed.ncbi.nlm.nih.gov/21588086/',
-        type: 'scientific_article' as const
+        type: 'scientific_article',
       }
     ],
     questions: [

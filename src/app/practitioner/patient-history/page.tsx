@@ -457,14 +457,43 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                                   )}
                                   {qDef.references && qDef.references.length > 0 && (
                                     <div>
-                                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Méthodologie & Preuves</span>
-                                      <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                                        {qDef.references.map((ref, i) => (
-                                          <li key={i}>
-                                            {ref.url ? <a href={ref.url} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)' }}>{ref.title}</a> : ref.title}
-                                            <span style={{ fontStyle: 'italic', marginLeft: '0.5rem' }}>({ref.type === 'methodology' ? 'Méthodologie' : 'Article scientifique'})</span>
-                                          </li>
-                                        ))}
+                                      <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Méthodologie & preuves</span>
+                                      <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                                        {[...qDef.references]
+                                          .sort((a, b) => {
+                                            const order = { primary_source: 0, scientific_article: 1, methodology: 2 } as const;
+                                            return order[a.type] - order[b.type];
+                                          })
+                                          .map((ref, i) => {
+                                            const href = ref.doi ? `https://doi.org/${ref.doi}` : ref.url;
+                                            const typeLabel = ref.type === 'primary_source' ? 'Source du test' : ref.type === 'methodology' ? 'Méthodologie' : 'Article scientifique';
+                                            const citation = [ref.authors, ref.year, ref.journal].filter(Boolean).join(' · ');
+                                            return (
+                                              <li
+                                                key={i}
+                                                style={{
+                                                  fontSize: '0.8rem',
+                                                  lineHeight: 1.5,
+                                                  padding: ref.type === 'primary_source' ? '0.5rem 0.75rem' : 0,
+                                                  background: ref.type === 'primary_source' ? '#F9FAFB' : 'transparent',
+                                                  border: ref.type === 'primary_source' ? '1px solid #E5E7EB' : 'none',
+                                                  borderLeft: ref.type === 'primary_source' ? '3px solid #0E1217' : 'none',
+                                                  borderRadius: ref.type === 'primary_source' ? '0.4rem' : 0,
+                                                }}
+                                              >
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'baseline' }}>
+                                                  <span style={{ fontSize: '0.58rem', fontWeight: 700, color: ref.type === 'primary_source' ? '#0E1217' : '#9CA3AF', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{typeLabel}</span>
+                                                  {ref.doi && <span style={{ fontSize: '0.65rem', color: '#6B7280', fontFamily: 'ui-monospace, monospace' }}>DOI: {ref.doi}</span>}
+                                                </div>
+                                                {href ? (
+                                                  <a href={href} target="_blank" rel="noreferrer" style={{ color: '#0E1217', textDecoration: 'underline', textUnderlineOffset: '3px', fontWeight: 600, display: 'block', marginTop: '0.15rem' }}>{ref.title}</a>
+                                                ) : (
+                                                  <span style={{ color: '#0E1217', fontWeight: 600, display: 'block', marginTop: '0.15rem' }}>{ref.title}</span>
+                                                )}
+                                                {citation && <div style={{ fontSize: '0.72rem', color: '#6B7280', fontStyle: 'italic', marginTop: '0.1rem' }}>{citation}</div>}
+                                              </li>
+                                            );
+                                          })}
                                       </ul>
                                     </div>
                                   )}

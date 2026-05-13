@@ -186,33 +186,70 @@ export default function TestDetailPanel({ test, patientContext = null }: Props) 
       {/* Références */}
       <Section icon={<BookOpen size={18} />} title="Références scientifiques">
         {test.references && test.references.length > 0 ? (
-          <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'grid', gap: '0.5rem' }}>
-            {test.references.map((r, i) => (
-              <li key={i}>
-                {r.url ? (
-                  <a
-                    href={r.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      color: 'var(--primary)',
-                      textDecoration: 'none',
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {r.title} <ExternalLink size={13} />
-                  </a>
-                ) : (
-                  <span style={{ color: 'var(--text-primary)' }}>{r.title}</span>
-                )}
-                <span style={{ marginLeft: '0.4rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                  ({r.type === 'methodology' ? 'méthodologie' : 'article scientifique'})
-                </span>
-              </li>
-            ))}
+          <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'grid', gap: '0.85rem' }}>
+            {[...test.references]
+              .sort((a, b) => {
+                const order = { primary_source: 0, scientific_article: 1, methodology: 2 } as const;
+                return order[a.type] - order[b.type];
+              })
+              .map((r, i) => {
+              const href = r.doi ? `https://doi.org/${r.doi}` : r.url;
+              const typeLabel =
+                r.type === 'primary_source'
+                  ? 'Source du test'
+                  : r.type === 'methodology'
+                    ? 'Méthodologie'
+                    : 'Article scientifique';
+              const citation = [r.authors, r.year, r.journal].filter(Boolean).join(' · ');
+              return (
+                <li
+                  key={i}
+                  style={{
+                    background: r.type === 'primary_source' ? '#F9FAFB' : 'transparent',
+                    border: r.type === 'primary_source' ? '1px solid #E5E7EB' : 'none',
+                    borderLeft: r.type === 'primary_source' ? '3px solid #0E1217' : 'none',
+                    borderRadius: r.type === 'primary_source' ? '0.6rem' : 0,
+                    padding: r.type === 'primary_source' ? '0.75rem 1rem' : 0,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '0.62rem', fontWeight: 700, color: r.type === 'primary_source' ? '#0E1217' : '#9CA3AF', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                      {typeLabel}
+                    </span>
+                    {r.doi && (
+                      <span style={{ fontSize: '0.68rem', color: '#6B7280', fontFamily: 'ui-monospace, monospace' }}>DOI: {r.doi}</span>
+                    )}
+                  </div>
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        color: '#0E1217',
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '3px',
+                        lineHeight: 1.5,
+                        marginTop: '0.3rem',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {r.title} <ExternalLink size={13} />
+                    </a>
+                  ) : (
+                    <span style={{ color: '#0E1217', fontWeight: 600, display: 'block', marginTop: '0.3rem' }}>{r.title}</span>
+                  )}
+                  {citation && (
+                    <div style={{ fontSize: '0.78rem', color: '#6B7280', marginTop: '0.2rem', fontStyle: 'italic' }}>
+                      {citation}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <NotProvided>Aucune référence renseignée.</NotProvided>
