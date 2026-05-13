@@ -2814,11 +2814,25 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Déculpabilisation du patient face à son ressenti'
       ]
     },
-    references: [{
-      title: 'The Hospital Anxiety and Depression Scale (Zigmond & Snaith, 1983)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/6880820/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'The Hospital Anxiety and Depression Scale',
+        authors: 'Zigmond AS, Snaith RP',
+        journal: 'Acta Psychiatrica Scandinavica',
+        year: 1983,
+        doi: '10.1111/j.1600-0447.1983.tb09716.x',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/6880820/',
+        type: 'primary_source',
+      },
+      {
+        title: 'The validity of the Hospital Anxiety and Depression Scale: an updated literature review',
+        authors: 'Bjelland I, Dahl AA, Haug TT, Neckelmann D',
+        journal: 'Journal of Psychosomatic Research',
+        year: 2002,
+        doi: '10.1016/S0022-3999(01)00296-3',
+        type: 'scientific_article',
+      },
+    ],
     // HADS-14: 7 items anxiété (impairs A) + 7 items dépression (pairs D). Score 0-21 par sous-échelle.
     // Les valeurs des options sont déjà calibrées item par item (pas de reverseScore flag nécessaire).
     questions: [
@@ -3023,11 +3037,17 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Prévention des récidives par un programme d\'échauffement'
       ]
     },
-    references: [{
-      title: 'The Lower Extremity Functional Scale (LEFS): scale development, measurement properties, and clinical application (Binkley et al., 1999)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/10201543/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'The Lower Extremity Functional Scale (LEFS): scale development, measurement properties, and clinical application',
+        authors: 'Binkley JM, Stratford PW, Lott SA, Riddle DL; North American Orthopaedic Rehabilitation Research Network',
+        journal: 'Physical Therapy',
+        year: 1999,
+        doi: '10.1093/ptj/79.4.371',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/10201543/',
+        type: 'primary_source',
+      },
+    ],
     // LEFS-20: 20 items, échelle 0-4. Score 0-80. Plus haut = meilleure fonction.
     questions: [
       'Votre travail habituel, vos tâches ménagères ou vos activités scolaires.',
@@ -3142,11 +3162,25 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Apprentissage de la manœuvre de relevé du sol en cas de chute'
       ]
     },
-    references: [{
-      title: 'Measuring balance in the elderly: validation of an instrument (Berg et al., 1989)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/2486138/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'Measuring balance in the elderly: preliminary development of an instrument',
+        authors: 'Berg K, Wood-Dauphinee S, Williams JI, Gayton D',
+        journal: 'Physiotherapy Canada',
+        year: 1989,
+        doi: '10.3138/ptc.41.6.304',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/2486138/',
+        type: 'primary_source',
+      },
+      {
+        title: 'The Balance Scale: reliability assessment with elderly residents and patients with an acute stroke',
+        authors: 'Berg KO, Wood-Dauphinee SL, Williams JI',
+        journal: 'Scandinavian Journal of Rehabilitation Medicine',
+        year: 1995,
+        url: 'https://pubmed.ncbi.nlm.nih.gov/7792547/',
+        type: 'scientific_article',
+      },
+    ],
     // BBS-14: 14 items, échelle 0-4 chacun. Score 0-56. Plus haut = meilleur équilibre.
     // Cut-offs: <45 = risque chute avéré, <40 = risque élevé.
     questions: [
@@ -3269,11 +3303,17 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
       exercises: ['Rééducation vestibulaire (habituation, manœuvres)', 'Adaptation oculomotrice'],
       education: ['Gestion de l\'anxiété liée aux vertiges', 'Mouvements cervicaux contrôlés']
     },
-    references: [{
-      title: 'The development of the Dizziness Handicap Inventory (Jacobson & Newman, 1990)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/2317323/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'The development of the Dizziness Handicap Inventory',
+        authors: 'Jacobson GP, Newman CW',
+        journal: 'Archives of Otolaryngology — Head and Neck Surgery',
+        year: 1990,
+        doi: '10.1001/archotol.1990.01870040046011',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/2317323/',
+        type: 'primary_source',
+      },
+    ],
     // DHI-25: 25 items, 3 sous-échelles (P)hysique 7×4=28, (F)onctionnel 9×4=36, (E)motionnel 9×4=36.
     // Score total 0-100. Échelle de réponse: Oui (4) / Parfois (2) / Non (0).
     questions: [
@@ -3595,10 +3635,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'A questionnaire on the perceptions of patients about physical activity and work',
+        title: 'A Fear-Avoidance Beliefs Questionnaire (FABQ) and the role of fear-avoidance beliefs in chronic low back pain and disability',
+        authors: 'Waddell G, Newton M, Henderson I, Somerville D, Main CJ',
+        journal: 'Pain',
+        year: 1993,
+        doi: '10.1016/0304-3959(93)90127-B',
         url: 'https://pubmed.ncbi.nlm.nih.gov/8422742/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     // FABQ-16: 16 items, échelle 0-6.
     // Sous-échelle Physique (FABQ-PA): items 2, 3, 4, 5 (max 24). Cut-off > 14.
@@ -3657,10 +3701,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'The patient-specific functional scale: pharmacokinetics and clinimetric properties',
+        title: 'Assessing disability and change on individual patients: a report of a patient specific measure',
+        authors: 'Stratford P, Gill C, Westaway M, Binkley J',
+        journal: 'Physiotherapy Canada',
+        year: 1995,
+        doi: '10.3138/ptc.47.4.258',
         url: 'https://pubmed.ncbi.nlm.nih.gov/8290618/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       {
@@ -3730,11 +3778,25 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Différencier "douleur acceptable" (≤ 3) et "douleur stop" (≥ 5) pendant les auto-rééducations'
       ]
     },
-    references: [{
-      title: 'Studies comparing Numerical Rating Scales, Verbal Rating Scales, and Visual Analogue Scales for assessment of pain intensity',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/21621130/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'Measures of adult pain: Visual Analog Scale for Pain (VAS Pain), Numeric Rating Scale for Pain (NRS Pain), McGill Pain Questionnaire (MPQ), Short-Form McGill Pain Questionnaire (SF-MPQ), Chronic Pain Grade Scale (CPGS), Short Form-36 Bodily Pain Scale (SF-36 BPS), and Measure of Intermittent and Constant Osteoarthritis Pain (ICOAP)',
+        authors: 'Hawker GA, Mian S, Kendzerska T, French M',
+        journal: 'Arthritis Care & Research',
+        year: 2011,
+        doi: '10.1002/acr.20543',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/21621130/',
+        type: 'scientific_article',
+      },
+      {
+        title: 'Studies comparing Numerical Rating Scales, Verbal Rating Scales, and Visual Analogue Scales for assessment of pain intensity in adults: a systematic literature review',
+        authors: 'Hjermstad MJ, Fayers PM, Haugen DF, et al.',
+        journal: 'Journal of Pain and Symptom Management',
+        year: 2011,
+        doi: '10.1016/j.jpainsymman.2010.08.016',
+        type: 'methodology',
+      },
+    ],
     questions: [
       {
         id: 'nprs1',
@@ -3786,10 +3848,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'The Pain Catastrophizing Scale: development and validation (Sullivan et al., 1995)',
+        title: 'The Pain Catastrophizing Scale: development and validation',
+        authors: 'Sullivan MJL, Bishop SR, Pivik J',
+        journal: 'Psychological Assessment',
+        year: 1995,
+        doi: '10.1037/1040-3590.7.4.524',
         url: 'https://pubmed.ncbi.nlm.nih.gov/7644250/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       'Je me dis que je ne pourrai jamais supporter cela.',
@@ -3849,9 +3915,13 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'Comparison of pain syndromes associated with nervous or somatic lesions and development of a new neuropathic pain diagnostic questionnaire (DN4)',
+        authors: 'Bouhassira D, Attal N, Alchaar H, et al.',
+        journal: 'Pain',
+        year: 2005,
+        doi: '10.1016/j.pain.2004.12.010',
         url: 'https://pubmed.ncbi.nlm.nih.gov/15733628/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       ...[
@@ -4025,10 +4095,22 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'Development of an upper extremity outcome measure: the DASH (and PRWE comparative validity)',
+        title: 'Development of a scale for patient rating of wrist pain and disability',
+        authors: 'MacDermid JC',
+        journal: 'Journal of Hand Therapy',
+        year: 1996,
+        doi: '10.1016/S0894-1130(96)80076-7',
         url: 'https://pubmed.ncbi.nlm.nih.gov/8773720/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
+      {
+        title: 'The Patient-Rated Wrist Evaluation (PRWE) — User Manual',
+        authors: 'MacDermid JC',
+        journal: 'McMaster University',
+        year: 2007,
+        url: 'https://srs-mcmaster.ca/wp-content/uploads/2015/05/PRWE-User-Manual.pdf',
+        type: 'methodology',
+      },
     ],
     questions: [
       // --- Sous-échelle douleur (5 items, 0-10) ---
@@ -4101,9 +4183,13 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'ATS Statement: Guidelines for the Six-Minute Walk Test',
+        authors: 'ATS Committee on Proficiency Standards for Clinical Pulmonary Function Laboratories',
+        journal: 'American Journal of Respiratory and Critical Care Medicine',
+        year: 2002,
+        doi: '10.1164/ajrccm.166.1.at1102',
         url: 'https://pubmed.ncbi.nlm.nih.gov/12091180/',
-        type: 'methodology' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       {
@@ -4174,9 +4260,13 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     references: [
       {
         title: 'Development and validation of the International Knee Documentation Committee Subjective Knee Form',
+        authors: 'Irrgang JJ, Anderson AF, Boland AL, Harner CD, Kurosaka M, Neyret P, Richmond JC, Shelborne KD',
+        journal: 'American Journal of Sports Medicine',
+        year: 2001,
+        doi: '10.1177/03635465010290051301',
         url: 'https://pubmed.ncbi.nlm.nih.gov/11522305/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       {
@@ -4401,10 +4491,22 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'A clinical method of functional assessment of the shoulder (Constant & Murley, 1987)',
+        title: 'A clinical method of functional assessment of the shoulder',
+        authors: 'Constant CR, Murley AHG',
+        journal: 'Clinical Orthopaedics and Related Research',
+        year: 1987,
+        doi: '10.1097/00003086-198701000-00023',
         url: 'https://pubmed.ncbi.nlm.nih.gov/3791738/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
+      {
+        title: 'A review of the Constant score: modifications and guidelines for its use',
+        authors: 'Constant CR, Gerber C, Emery RJH, Søjbjerg JO, Gohlke F, Boileau P',
+        journal: 'Journal of Shoulder and Elbow Surgery',
+        year: 2008,
+        doi: '10.1016/j.jse.2007.06.022',
+        type: 'methodology',
+      },
     ],
     questions: [
       {
@@ -4493,10 +4595,23 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
+        title: 'Validation of the Foot and Ankle Outcome Score for ankle ligament reconstruction',
+        authors: 'Roos EM, Brandsson S, Karlsson J',
+        journal: 'Foot & Ankle International',
+        year: 2001,
+        doi: '10.1177/107110070102201004',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11722069/',
+        type: 'primary_source',
+      },
+      {
         title: 'A short version of the Foot and Ankle Outcome Score (FAOS-PS)',
+        authors: 'Hunt KJ, Hurwit D',
+        journal: 'Clinical Orthopaedics and Related Research',
+        year: 2013,
+        doi: '10.1007/s11999-013-3001-z',
         url: 'https://pubmed.ncbi.nlm.nih.gov/19854671/',
-        type: 'scientific_article' as const
-      }
+        type: 'scientific_article',
+      },
     ],
     questions: [
       ...[
@@ -4550,10 +4665,14 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
     },
     references: [
       {
-        title: 'Performance-Oriented Assessment of Mobility Problems in Elderly Patients (Tinetti, 1986)',
+        title: 'Performance-oriented assessment of mobility problems in elderly patients',
+        authors: 'Tinetti ME',
+        journal: 'Journal of the American Geriatrics Society',
+        year: 1986,
+        doi: '10.1111/j.1532-5415.1986.tb05480.x',
         url: 'https://pubmed.ncbi.nlm.nih.gov/3944402/',
-        type: 'scientific_article' as const
-      }
+        type: 'primary_source',
+      },
     ],
     questions: [
       // === Équilibre (16 points) ===
@@ -4726,11 +4845,17 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Gestion de la peur du mouvement si QoL bas malgré ADL préservé'
       ]
     },
-    references: [{
-      title: 'Knee injury and Osteoarthritis Outcome Score (KOOS) - development of a self-administered outcome measure (Roos et al., 1998)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/9699158/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'Knee Injury and Osteoarthritis Outcome Score (KOOS) — development of a self-administered outcome measure',
+        authors: 'Roos EM, Roos HP, Lohmander LS, Ekdahl C, Beynnon BD',
+        journal: 'Journal of Orthopaedic & Sports Physical Therapy',
+        year: 1998,
+        doi: '10.2519/jospt.1998.28.2.88',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/9699158/',
+        type: 'primary_source',
+      },
+    ],
     questions: [
       // SYMPTÔMES (7 items)
       ...[
@@ -4840,11 +4965,17 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Activités à privilégier : vélo, natation (faible charge)'
       ]
     },
-    references: [{
-      title: 'Hip disability and osteoarthritis outcome score (HOOS) - validity and responsiveness (Nilsdotter et al., 2003)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/12777184/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'Hip disability and osteoarthritis outcome score (HOOS) — validity and responsiveness in total hip replacement',
+        authors: 'Nilsdotter AK, Lohmander LS, Klässbo M, Roos EM',
+        journal: 'BMC Musculoskeletal Disorders',
+        year: 2003,
+        doi: '10.1186/1471-2474-4-10',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/12777184/',
+        type: 'primary_source',
+      },
+    ],
     questions: [
       // SYMPTÔMES (5 items)
       ...[
@@ -4932,11 +5063,17 @@ export const QUESTIONNAIRES: Record<string, QuestionnaireDef> = {
         'Auto-rééducation à domicile : protocole 3×/jour'
       ]
     },
-    references: [{
-      title: 'Validation of the Foot and Ankle Outcome Score for ankle ligament reconstruction (Roos et al., 2001)',
-      url: 'https://pubmed.ncbi.nlm.nih.gov/11722069/',
-      type: 'scientific_article' as const
-    }],
+    references: [
+      {
+        title: 'Validation of the Foot and Ankle Outcome Score for ankle ligament reconstruction',
+        authors: 'Roos EM, Brandsson S, Karlsson J',
+        journal: 'Foot & Ankle International',
+        year: 2001,
+        doi: '10.1177/107110070102201004',
+        url: 'https://pubmed.ncbi.nlm.nih.gov/11722069/',
+        type: 'primary_source',
+      },
+    ],
     questions: [
       // SYMPTÔMES (7 items)
       ...[
