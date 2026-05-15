@@ -310,24 +310,24 @@ export default async function PatientHistoryPage({ searchParams }: Props) {
                       const evolution = !isBaseline && baseline ? compareToBaseline(q.type, q.score, baseline.score) : null;
                       const evoTone = evolution ? toneStyles(evolution.tone) : null;
                       return (
-                        <div key={q.id} style={{ background: 'var(--surface-hover)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
-                          <h4 style={{ fontWeight: 600, color: 'var(--primary)', marginBottom: '0.5rem' }}>{q.type}</h4>
-                          <div style={{ display: 'flex', alignItems: 'end', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '2rem', fontWeight: 700, lineHeight: 1, color: tone?.accent ?? 'inherit' }}>{q.score}</span>
-                            <span style={{ color: 'var(--text-secondary)', paddingBottom: '4px' }}>/ {q.maxScore}</span>
+                        <div key={q.id} style={{ background: 'white', padding: '1.25rem', borderRadius: '0.85rem', border: '1px solid #E5E7EB' }}>
+                          <h4 style={{ fontSize: '0.62rem', fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.65rem' }}>{q.type}</h4>
+                          <div style={{ display: 'flex', alignItems: 'end', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                            <span style={{ fontSize: '2.5rem', fontWeight: 800, lineHeight: 1, color: '#0E1217', letterSpacing: '-0.02em' }}>{q.score}</span>
+                            <span style={{ color: '#9CA3AF', paddingBottom: '6px', fontSize: '0.95rem' }}>/ {q.maxScore}</span>
                             {interp && (
                               <span
                                 style={{
                                   marginLeft: 'auto',
-                                  padding: '0.2rem 0.6rem',
-                                  borderRadius: 'var(--radius-full)',
+                                  padding: '0.3rem 0.75rem',
+                                  borderRadius: '9999px',
                                   background: tone!.bg,
                                   color: tone!.text,
                                   border: `1px solid ${tone!.border}`,
-                                  fontSize: '0.7rem',
+                                  fontSize: '0.62rem',
                                   fontWeight: 700,
                                   textTransform: 'uppercase',
-                                  letterSpacing: '0.03em',
+                                  letterSpacing: '0.1em',
                                 }}
                               >
                                 {interp.label}
