@@ -270,6 +270,100 @@ button {
 }
 
 /* ============================================================
+   Reveal au scroll — `<Reveal>` ajoute .is-visible quand l'élément entre
+   dans le viewport. Les variations (-up, -fade, -draw) règlent le motif.
+   ============================================================ */
+.elx-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.elx-reveal.is-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+.elx-reveal--fade {
+  transform: none;
+  transition: opacity 1.2s ease-out;
+}
+.elx-reveal--scale {
+  transform: scale(0.94);
+  transform-origin: center;
+}
+.elx-reveal--scale.is-visible {
+  transform: scale(1);
+}
+
+/* Décalage des enfants dans une grille révélée en cascade */
+.elx-stagger > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.elx-stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: none; }
+.elx-stagger.is-visible > *:nth-child(2) { transition-delay: 0.15s; opacity: 1; transform: none; }
+.elx-stagger.is-visible > *:nth-child(3) { transition-delay: 0.25s; opacity: 1; transform: none; }
+.elx-stagger.is-visible > *:nth-child(4) { transition-delay: 0.35s; opacity: 1; transform: none; }
+.elx-stagger.is-visible > *:nth-child(5) { transition-delay: 0.45s; opacity: 1; transform: none; }
+.elx-stagger.is-visible > *:nth-child(6) { transition-delay: 0.55s; opacity: 1; transform: none; }
+.elx-stagger.is-visible > *:nth-child(n+7) { transition-delay: 0.65s; opacity: 1; transform: none; }
+
+/* Lignes SVG qui se dessinent */
+.elx-draw-line {
+  stroke-dasharray: var(--dash-len, 600);
+  stroke-dashoffset: var(--dash-len, 600);
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.is-visible .elx-draw-line {
+  stroke-dashoffset: 0;
+}
+
+/* Apparition de mots un par un — utile pour titres longs */
+.elx-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.is-visible .elx-word {
+  opacity: 1;
+  transform: none;
+}
+
+/* Halo discret derrière le hero (rayon de lumière qui pulse doucement) */
+@keyframes elxHaloPulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.04); }
+}
+.elx-halo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 0%, rgba(14, 18, 23, 0.06), transparent 60%);
+  animation: elxHaloPulse 8s ease-in-out infinite;
+}
+
+/* Curseur ascenseur pour la démo de scoring */
+.elx-score-track {
+  position: relative;
+  height: 6px;
+  background: #F3F4F6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.elx-score-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #0E1217;
+  border-radius: 9999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
    Questions défilantes (marquee horizontal continu)
    ============================================================ */
 .elx-questions {
