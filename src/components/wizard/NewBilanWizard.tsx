@@ -790,21 +790,38 @@ function Step4Send({
         Pour <strong>{patientLabel}</strong>
       </p>
 
-      {/* Code */}
+      {/* Code patient — carte blanche, bord noir, texte noir bien lisible */}
       <div
         style={{
           display: 'inline-block',
-          padding: '1rem 2rem',
-          background: 'var(--primary-light)',
-          borderRadius: 'var(--radius-md)',
-          border: '2px dashed var(--primary)',
-          marginBottom: '1.5rem',
+          padding: '1.25rem 2.25rem',
+          background: 'white',
+          borderRadius: '1rem',
+          border: '2px dashed #0E1217',
+          marginBottom: '1.75rem',
         }}
       >
-        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-dark)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+        <p
+          style={{
+            fontSize: '0.65rem',
+            fontWeight: 700,
+            color: '#9CA3AF',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            marginBottom: '0.45rem',
+          }}
+        >
           Code patient
         </p>
-        <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.1em' }}>
+        <div
+          style={{
+            fontSize: '2.25rem',
+            fontWeight: 800,
+            color: '#0E1217',
+            letterSpacing: '0.1em',
+            lineHeight: 1,
+          }}
+        >
           {code}
         </div>
       </div>
@@ -812,30 +829,32 @@ function Step4Send({
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'center', marginBottom: '1.5rem' }}>
         {/* QR */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div style={{ background: 'white', padding: '0.85rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+          <div style={{ background: 'white', padding: '0.85rem', borderRadius: '0.75rem', border: '1px solid #E5E7EB' }}>
             <QRCodeSVG value={link} size={140} />
           </div>
         </div>
 
-        {/* Actions */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {/* Actions — 3 boutons hiérarchisés en monochrome */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
           <button
             onClick={onCopy}
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.4rem',
-              padding: '0.65rem 1rem',
-              background: copied ? '#0E1217' : 'var(--surface-hover)',
-              color: copied ? 'white' : 'var(--text-primary)',
-              border: 'none',
-              borderRadius: 'var(--radius-md)',
+              gap: '0.45rem',
+              padding: '0.75rem 1rem',
+              background: copied ? '#0E1217' : 'white',
+              color: copied ? 'white' : '#0E1217',
+              border: `1px solid ${copied ? '#0E1217' : '#E5E7EB'}`,
+              borderRadius: '0.65rem',
               fontWeight: 600,
+              fontSize: '0.88rem',
               cursor: 'pointer',
+              fontFamily: 'inherit',
             }}
           >
-            <Copy size={14} /> {copied ? 'Copié !' : 'Copier le lien'}
+            <Copy size={14} strokeWidth={2.2} /> {copied ? 'Copié !' : 'Copier le lien'}
           </button>
           <a
             href={`https://wa.me/?text=${whatsappMsg}`}
@@ -845,16 +864,18 @@ function Step4Send({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.4rem',
-              padding: '0.65rem 1rem',
-              background: '#374151',
-              color: 'white',
+              gap: '0.45rem',
+              padding: '0.75rem 1rem',
+              background: 'white',
+              color: '#0E1217',
               textDecoration: 'none',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: '0.65rem',
               fontWeight: 600,
+              fontSize: '0.88rem',
+              border: '1px solid #0E1217',
             }}
           >
-            <MessageCircle size={14} /> WhatsApp
+            <MessageCircle size={14} strokeWidth={2.2} /> WhatsApp
           </a>
           <a
             href={`mailto:?subject=Votre bilan fonctionnel&body=${whatsappMsg}`}
@@ -862,13 +883,15 @@ function Step4Send({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.4rem',
-              padding: '0.65rem 1rem',
-              background: 'var(--primary)',
+              gap: '0.45rem',
+              padding: '0.75rem 1rem',
+              background: '#0E1217',
               color: 'white',
               textDecoration: 'none',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: '0.65rem',
               fontWeight: 600,
+              fontSize: '0.88rem',
+              border: '1px solid #0E1217',
             }}
           >
             Email
@@ -876,7 +899,7 @@ function Step4Send({
         </div>
       </div>
 
-      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+      <p style={{ fontSize: '0.82rem', color: '#6B7280', lineHeight: 1.5 }}>
         Le patient peut scanner le QR code en cabinet ou recevoir le lien à distance.
       </p>
     </div>
